@@ -1,0 +1,64 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/vboxuser/it-interview-trainer"
+      ],
+      "description": "Доступ к файловой системе проекта для чтения и записи файлов"
+    },
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "sqlite:///./interview_trainer.db"
+      ],
+      "description": "Доступ к базе данных для выполнения SQL запросов"
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "description": "Управление долгосрочной памятью и контекстом сессий"
+    },
+    "websearch": {
+      "command": "npx",
+      "args": [
+        "websearch-mcp"
+      ],
+      "env": {
+        "API_URL": "http://localhost:3001",
+        "MAX_SEARCH_RESULT": "5"
+      },
+      "description": "Поиск в интернете через локальный crawler сервис"
+    },
+    "search": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "mcp/search"
+      ],
+      "description": "Веб-поиск через DuckDuckGo (новости, картинки, видео)"
+    },
+    "qdrant": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@qdrant/mcp-server-qdrant",
+        "--collection",
+        "interview_knowledge",
+        "--url",
+        "http://localhost:6333"
+      ],
+      "description": "Векторная память для семантического поиска по документации"
+    }
+  },
+  "$version": 3
+}
