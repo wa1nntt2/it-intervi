@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from slowapi.errors import RateLimitExceeded  # Обработчик ошибок rate limiting
 from slowapi.middleware import SlowAPIMiddleware
 
-from app.database.engine import Base, engine
+from app.database.engine import Base, engine, SessionLocal
 from app.database.seed import seed_database
 from app.core.config import settings
 from app.core.limiter import limiter
@@ -17,6 +17,44 @@ from app.models import user, profession, question, answer, ordering_item, sessio
 
 # Импорт API роутеров (endpoint'ов)
 from app.api import auth, professions, questions, sessions, users, progress
+
+
+def apply_migrations():
+    """
+    Применение миграций Alembic при запуске приложения.
+    Если миграции еще не применены, создаем таблицы через create_all.
+    """
+    try:
+        from alembic import command
+        from alembic.config import Config
+        from pathlib import Path
+        
+        backend_dir = Path(__file__).parent.parent
+        alembic_cfg = Config(backend_dir / "alembic.ini")
+        
+        # Проверяем, есть ли уже примененные миграции
+        from alembic.script import ScriptDirectory
+        from alembic.runtime.migration import MigrationContext
+        
+        script = ScriptDirectory.from_config(alembic_cfg)
+        
+        with engine.connect() as conn:
+            context = MigrationContext.configure(conn)
+            current_rev = context.get_current_revision()
+            
+            if current_rev is None:
+                # Миграции не применены - создаем таблицы старым способом
+                # для обратной совместимости
+                print("⚠️  Миграции не найдены, создаем таблицы через create_all()...")
+                Base.metadata.create_all(bind=engine)
+            else:
+                # Миграции уже применены
+                print(f"✅ Миграции применены (текущая ревизия: {current_rev})")
+                
+    except Exception as e:
+        print(f"⚠️  Ошибка при проверке миграций: {e}")
+        print("Создаем таблицы через create_all()...")
+        Base.metadata.create_all(bind=engine)
 
 
 def rate_limit_exception_handler(request: Request, exc: RateLimitExceeded):
@@ -59,11 +97,10 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # Создание таблиц базы данных из моделей SQLAlchemy
-    Base.metadata.create_all(bind=engine)
+    # Применение миграций или создание таблиц
+    apply_migrations()
 
     # Сидирование базы данных начальными данными
-    from app.database.engine import SessionLocal
     db = SessionLocal()
     try:
         seed_database(db)

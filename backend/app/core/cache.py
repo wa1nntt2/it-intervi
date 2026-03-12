@@ -2,12 +2,14 @@ from collections import OrderedDict
 from typing import Any, Optional
 import threading
 
+from app.core.config import settings
+
 
 class LRUCache:
     """LRU кэш для кэширования вопросов и других данных"""
-    
-    def __init__(self, capacity: int = 100):
-        self.capacity = capacity
+
+    def __init__(self, capacity: Optional[int] = None):
+        self.capacity = capacity if capacity is not None else settings.CACHE_CAPACITY
         self.cache: OrderedDict = OrderedDict()
         self.lock = threading.Lock()
     

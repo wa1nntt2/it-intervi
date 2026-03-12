@@ -1,24 +1,56 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Header
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Header, Query
 from sqlalchemy.orm import Session
 from typing import Optional, List
 import json
 import csv
 import io
+from math import ceil
 
 from app.database.engine import get_db
 from app.models.question import Question
 from app.models.profession import Profession
-from app.api.schemas import QuestionCreate, QuestionUpdate, QuestionResponse
+from app.api.schemas import QuestionCreate, QuestionUpdate, QuestionResponse, PaginatedQuestions
 
 router = APIRouter(prefix="/questions", tags=["questions"])
 
 
-@router.get("/", response_model=list[QuestionResponse])
-def get_questions(profession_id: int = None, db: Session = Depends(get_db)):
+@router.get("/", response_model=PaginatedQuestions)
+def get_questions(
+    profession_id: Optional[int] = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db)
+):
+    """
+    Получить вопросы с пагинацией.
+    
+    Args:
+        profession_id: Фильтр по профессии
+        page: Номер страницы (начиная с 1)
+        page_size: Размер страницы (1-100)
+        db: Сессия базы данных
+    """
     query = db.query(Question)
     if profession_id:
         query = query.filter(Question.profession_id == profession_id)
-    return query.all()
+    
+    # Получаем общее количество
+    total = query.count()
+    total_pages = ceil(total / page_size) if total > 0 else 1
+    
+    # Применяем пагинацию
+    offset = (page - 1) * page_size
+    questions = query.offset(offset).limit(page_size).all()
+    
+    return PaginatedQuestions(
+        items=questions,
+        meta={
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "total_pages": total_pages
+        }
+    )
 
 
 @router.post("/", response_model=QuestionResponse)

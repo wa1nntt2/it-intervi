@@ -7,14 +7,17 @@ from sqlalchemy import func, extract
 from typing import Optional
 from datetime import datetime, date
 from pydantic import BaseModel
+from math import ceil
 
 from app.database.engine import get_db
 from app.models.session import Session
 from app.models.question import Question
 from app.models.user import User
 from app.models.profession import Profession
-from app.api.schemas import SessionResponse
+from app.api.schemas import SessionResponse, PaginatedSessions, SessionListItem
 from app.core.security import decode_token
+from app.api.auth import get_current_user as auth_get_current_user
+from app.core.config import settings
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])  # Префикс /api/sessions
 
@@ -25,26 +28,26 @@ class SessionCreate(BaseModel):
     difficulty: Optional[str] = "junior"  # "intern", "junior", "middle"
 
 
-def get_current_user(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)) -> Optional[User]:
+async def get_current_user(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)) -> Optional[User]:
     """
     Получение текущего пользователя из JWT токена.
-    
+    Использует функцию из auth модуля.
+
     Args:
         authorization: Заголовок Authorization с JWT токеном
         db: Сессия базы данных
-    
+
     Returns:
         User или None если токен невалиден
     """
     if not authorization or not authorization.startswith("Bearer "):
         return None
     token = authorization.split(" ")[1]
-    payload = decode_token(token)
-    if not payload or "sub" not in payload:
+    try:
+        user = await auth_get_current_user(token, db)
+        return user
+    except Exception:
         return None
-    email = payload["sub"]
-    user = db.query(User).filter(User.email == email).first()
-    return user
 
 
 class SessionStatsResponse(BaseModel):
@@ -57,23 +60,6 @@ class SessionStatsResponse(BaseModel):
     today_sessions: int  # Сессий сегодня
     this_week_sessions: int  # Сессий за неделю
     this_month_sessions: int  # Сессий за месяц
-
-
-class SessionListItem(BaseModel):
-    """Схема элемента списка сессий"""
-    id: int
-    profession_id: int
-    profession_name: str  # Название профессии
-    user_id: Optional[int]
-    user_email: Optional[str]  # Email пользователя (если есть)
-    question_ids: list[int]  # ID вопросов в сессии
-    status: str
-    score: int  # Количество правильных ответов
-    created_at: datetime
-    completed_at: Optional[datetime]
-
-    class Config:
-        from_attributes = True
 
 
 @router.get("/stats", response_model=SessionStatsResponse)
@@ -146,37 +132,44 @@ def get_session_stats(
     )
 
 
-@router.get("/", response_model=list[SessionListItem])
+@router.get("/", response_model=PaginatedSessions)
 def get_sessions(
     status_filter: Optional[str] = Query(None, alias="status"),  # Фильтр по статусу
     profession_id: Optional[int] = Query(None),  # Фильтр по профессии
     user_id: Optional[int] = Query(None),  # Фильтр по пользователю
     date_from: Optional[date] = Query(None),  # Фильтр по дате (от)
     date_to: Optional[date] = Query(None),  # Фильтр по дате (до)
+    page: int = Query(1, ge=1),  # Номер страницы
+    page_size: int = Query(20, ge=1, le=100),  # Размер страницы
     db: Session = Depends(get_db)
 ):
     """
-    Получить список сессий с фильтрами.
-    
+    Получить список сессий с фильтрами и пагинацией.
+
     Доступные фильтры:
     - status: "active", "completed", "failed"
     - profession_id: ID профессии
     - user_id: ID пользователя
     - date_from/date_to: Диапазон дат
-    
+
     Args:
         status_filter: Фильтр по статусу
         profession_id: Фильтр по профессии
         user_id: Фильтр по пользователю
         date_from: Дата начала диапазона
         date_to: Дата конца диапазона
+        page: Номер страницы
+        page_size: Размер страницы (1-100)
         db: Сессия базы данных
-    
+
     Returns:
-        list[SessionListItem]: Список сессий
+        PaginatedSessions: Пагинированный список сессий
     """
-    query = db.query(Session).join(Profession, Session.profession_id == Profession.id).outerjoin(User, Session.user_id == User.id)
-    
+    query = db.query(Session).options(
+        joinedload(Session.profession),
+        joinedload(Session.user)
+    ).join(Profession, Session.profession_id == Profession.id).outerjoin(User, Session.user_id == User.id)
+
     if status_filter:
         query = query.filter(Session.status == status_filter)
     if profession_id:
@@ -187,9 +180,15 @@ def get_sessions(
         query = query.filter(func.date(Session.created_at) >= date_from)
     if date_to:
         query = query.filter(func.date(Session.created_at) <= date_to)
+
+    # Получаем общее количество
+    total = query.count()
+    total_pages = ceil(total / page_size) if total > 0 else 1
     
-    sessions = query.order_by(Session.created_at.desc()).all()
-    
+    # Применяем пагинацию
+    offset = (page - 1) * page_size
+    sessions = query.order_by(Session.created_at.desc()).offset(offset).limit(page_size).all()
+
     result = []
     for s in sessions:
         result.append(SessionListItem(
@@ -204,8 +203,16 @@ def get_sessions(
             created_at=s.created_at,
             completed_at=s.completed_at
         ))
-    
-    return result
+
+    return PaginatedSessions(
+        items=result,
+        meta={
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "total_pages": total_pages
+        }
+    )
 
 
 @router.post("/", response_model=SessionResponse)
@@ -226,7 +233,20 @@ def create_session(session_data: SessionCreate, db: Session = Depends(get_db), a
     """
     import random
 
-    user = get_current_user(authorization, db)
+    # Получаем пользователя (функция async, но вызываем в sync контексте)
+    # Поэтому используем простой вариант с извлечением токена из заголовка
+    user = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split(" ")[1]
+        try:
+            from app.core.security import decode_token
+            payload = decode_token(token, expected_type="access")
+            if payload:
+                email = payload.get("sub")
+                if email:
+                    user = db.query(User).filter(User.email == email).first()
+        except Exception:
+            pass  # Если токен невалиден, user останется None
 
     # Фильтрация вопросов по профессии и сложности
     query = db.query(Question).filter(
@@ -245,9 +265,9 @@ def create_session(session_data: SessionCreate, db: Session = Depends(get_db), a
             Question.profession_id == session_data.profession_id
         ).all()
 
-    # Перемешиваем вопросы и берём первые 20
+    # Перемешиваем вопросы и берём первые N (из настроек)
     random.shuffle(questions)
-    selected_questions = questions[:20]
+    selected_questions = questions[:settings.QUESTIONS_PER_SESSION]
 
     new_session = Session(
         profession_id=session_data.profession_id,

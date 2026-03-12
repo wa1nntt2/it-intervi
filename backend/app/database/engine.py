@@ -6,10 +6,13 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 from app.core.config import settings
 
+# URL базы данных для Alembic
+DATABASE_URL = settings.DATABASE_URL
+
 # Создание движка SQLAlchemy для подключения к базе данных
 # check_same_thread=False требуется для SQLite при использовании в многопоточном режиме
 engine = create_engine(
-    settings.DATABASE_URL,
+    DATABASE_URL,
     connect_args={"check_same_thread": False}
 )
 

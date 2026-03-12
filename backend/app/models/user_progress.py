@@ -16,11 +16,11 @@ class UserProgress(Base):
     __tablename__ = "user_progress"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True)  # Связь 1:1 с пользователем
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True, index=True)  # Связь 1:1 с пользователем
 
     # Уровень и опыт
-    xp = Column(Integer, default=0)  # Накопленный опыт
-    level = Column(Integer, default=1)  # Текущий уровень
+    xp = Column(Integer, default=0, index=True)  # Накопленный опыт
+    level = Column(Integer, default=1, index=True)  # Текущий уровень
 
     # Статистика прохождения
     total_sessions = Column(Integer, default=0)  # Всего сессий пройдено

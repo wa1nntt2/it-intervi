@@ -32,13 +32,15 @@ export default function SessionNew() {
     
     const loadData = async () => {
       try {
-        const [professionsData, progressData] = await Promise.all([
+        const [professionsResponse, progressData] = await Promise.all([
           professionsApi.getAll(),
           progressApi.getMyProgress().catch(() => null)
         ])
-        
+
         if (abortController.signal.aborted) return
-        
+
+        // API теперь возвращает { items: [...], meta: {...} }
+        const professionsData = professionsResponse.items || professionsResponse
         setProfessions(professionsData)
         if (progressData) setUserProgress(progressData)
       } catch (err) {

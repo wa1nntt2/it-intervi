@@ -2,7 +2,7 @@
 # Содержит функции для хеширования паролей и работы с JWT токенами
 
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Dict, Any
 from jose import JWTError, jwt, JWTError as JoseJWTError
 from passlib.context import CryptContext
 
@@ -15,11 +15,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Проверка соответствия пароля хешу.
-    
+
     Args:
         plain_password: Пароль в открытом виде
         hashed_password: Хешированный пароль из базы данных
-    
+
     Returns:
         True если пароль верный, False иначе
     """
@@ -29,24 +29,24 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     """
     Хеширование пароля.
-    
+
     Args:
         password: Пароль в открытом виде
-    
+
     Returns:
         Хешированный пароль
     """
     return pwd_context.hash(password)
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     """
     Создание access токена для аутентификации пользователя.
-    
+
     Args:
         data: Данные для кодирования (обычно email пользователя)
         expires_delta: Время действия токена (по умолчанию из настроек)
-    
+
     Returns:
         JWT токен в виде строки
     """
@@ -61,14 +61,14 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return encoded_jwt
 
 
-def create_refresh_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+def create_refresh_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     """
     Создание refresh токена для обновления access токена.
-    
+
     Args:
         data: Данные для кодирования
         expires_delta: Время действия токена (по умолчанию из настроек)
-    
+
     Returns:
         JWT токен для обновления сессии
     """
@@ -83,14 +83,14 @@ def create_refresh_token(data: dict, expires_delta: Optional[timedelta] = None) 
     return encoded_jwt
 
 
-def decode_token(token: str, expected_type: str = "access") -> Optional[dict]:
+def decode_token(token: str, expected_type: str = "access") -> Optional[Dict[str, Any]]:
     """
     Декодирование JWT токена с проверкой типа.
-    
+
     Args:
         token: JWT токен для декодирования
         expected_type: Ожидаемый тип токена ('access' или 'refresh')
-    
+
     Returns:
         Расшифрованные данные токена или None если токен невалиден
     """
@@ -104,14 +104,30 @@ def decode_token(token: str, expected_type: str = "access") -> Optional[dict]:
         return None
 
 
-def validate_refresh_token(token: str) -> Optional[dict]:
+def validate_refresh_token(token: str) -> Optional[Dict[str, Any]]:
     """
     Валидация refresh токена.
-    
+
     Args:
         token: Refresh токен для проверки
-    
+
     Returns:
         Расшифрованные данные или None
     """
     return decode_token(token, expected_type="refresh")
+
+
+def get_cookie_config() -> Dict[str, Any]:
+    """
+    Конфигурация для HTTP-only cookies.
+    
+    Returns:
+        Словарь с параметрами cookie для установки в Response
+    """
+    return {
+        "httponly": True,
+        "secure": not settings.DEBUG,  # Secure только в production
+        "samesite": "lax",
+        "max_age": settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,  # в секундах
+        "path": "/",
+    }

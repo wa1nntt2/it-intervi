@@ -43,6 +43,13 @@ class Token(BaseModel):
     token_type: str = "bearer"  # Тип токена
 
 
+class TokenCookie(BaseModel):
+    """Схема ответа с токенами в cookies"""
+    access_token: str  # Access токен (возвращается в теле для совместимости)
+    token_type: str = "bearer"  # Тип токена
+    message: str = "Токены установлены в cookies"  # Сообщение для клиента
+
+
 class TokenRefresh(BaseModel):
     """Схема запроса на refresh токена"""
     refresh_token: str
@@ -155,3 +162,50 @@ class SessionResponse(SessionBase):
 
     class Config:
         from_attributes = True
+
+
+# === Схемы пагинации ===
+
+class PaginationMeta(BaseModel):
+    """Мета-информация о пагинации"""
+    total: int  # Общее количество записей
+    page: int  # Текущая страница
+    page_size: int  # Размер страницы
+    total_pages: int  # Общее количество страниц
+
+
+# === Схемы для сессий (нужны для избежания циклических импортов) ===
+
+class SessionListItem(BaseModel):
+    """Схема элемента списка сессий"""
+    id: int
+    profession_id: int
+    profession_name: str  # Название профессии
+    user_id: Optional[int]  # ID пользователя
+    user_email: Optional[str]  # Email пользователя (если есть)
+    question_ids: list[int]  # ID вопросов в сессии
+    status: str
+    score: int  # Количество правильных ответов
+    created_at: datetime
+    completed_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class PaginatedQuestions(BaseModel):
+    """Пагинированный список вопросов"""
+    items: list[QuestionResponse]
+    meta: PaginationMeta
+
+
+class PaginatedSessions(BaseModel):
+    """Пагинированный список сессий"""
+    items: list[SessionListItem]
+    meta: PaginationMeta
+
+
+class PaginatedProfessions(BaseModel):
+    """Пагинированный список профессий"""
+    items: list[ProfessionResponse]
+    meta: PaginationMeta

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useAuthStore } from '../stores/authStore'
+import { useAuthStore, User } from '../stores/authStore'
 import { authApi } from '../services/api'
 
 export default function Login() {
@@ -16,12 +16,15 @@ export default function Login() {
     setError('')
     setLoading(true)
     try {
-      const data = await authApi.login(email, password)
-      // Сначала сохраняем токены с временным user объектом
-      login(data.access_token, data.refresh_token, { id: 0, email })
-      // Затем получаем полную информацию о пользователе
-      const userInfo = await authApi.getCurrentUser()
-      login(data.access_token, data.refresh_token, userInfo)
+      const loginResponse = await authApi.login(email, password)
+      // Access токен из ответа, refresh токен в HttpOnly cookie
+      const accessToken = loginResponse.access_token
+      
+      // Получаем полную информацию о пользователе
+      const userInfo: User = await authApi.getCurrentUser()
+      
+      // Сохраняем токен и данные пользователя в store
+      login(accessToken, userInfo)
       navigate('/')
     } catch (err: any) {
       const msg = err?.response?.data?.detail || err?.message || 'Неверный email или пароль'
