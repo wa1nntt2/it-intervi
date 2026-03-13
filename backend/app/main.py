@@ -1,6 +1,7 @@
 # Основной модуль приложения FastAPI
 # Точка входа для backend сервера
 
+import os
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware  # Middleware для поддержки CORS
 from fastapi.responses import JSONResponse
@@ -100,12 +101,13 @@ def create_app() -> FastAPI:
     # Применение миграций или создание таблиц
     apply_migrations()
 
-    # Сидирование базы данных начальными данными
-    db = SessionLocal()
-    try:
-        seed_database(db)
-    finally:
-        db.close()
+    # Сидирование базы данных начальными данными (отключаем для тестов)
+    if not os.environ.get("SKIP_SEED"):
+        db = SessionLocal()
+        try:
+            seed_database(db)
+        finally:
+            db.close()
 
     # Регистрация API роутеров с префиксом /api
     app.include_router(auth.router, prefix="/api")

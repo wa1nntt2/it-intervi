@@ -10,6 +10,7 @@ from app.database.engine import Base, get_db, engine, SessionLocal
 # Устанавливаем переменные окружения для тестов
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-min-32-chars-12345"
 os.environ["DEBUG"] = "true"
+os.environ["SKIP_SEED"] = "true"  # Отключаем seed данные для тестов
 
 # Используем in-memory SQLite для тестов
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
