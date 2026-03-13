@@ -99,37 +99,29 @@ frontend-tests:
     - when: always
 
 # ============================================
-# Docker Build
+# Docker Build (Kaniko - без Docker daemon)
 # ============================================
 docker-build-backend:
   stage: build
-  image: docker:24-dind
+  image: gcr.io/kaniko-project/executor:debug
   tags:
     - docker
-  services:
-    - name: docker:24-dind
-      command: ["--tls=false"]
+  entrypoint: [""]
   variables:
-    DOCKER_HOST: "tcp://localhost:2375"
-    DOCKER_TLS_CERTDIR: ""
-    DOCKER_DRIVER: overlay2
+    DOCKER_CONFIG: "/kaniko/.docker"
   before_script:
-    - apk add --no-cache curl
+    - mkdir -p /kaniko/.docker
     - |
-      for i in $(seq 1 30); do
-        if docker info >/dev/null 2>&1; then
-          echo "✅ Docker daemon ready"
-          break
-        fi
-        echo "⏳ Waiting for Docker daemon... ($i/30)"
-        sleep 1
-      done
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin "$DOCKER_REGISTRY"
+      echo "{\"auths\":{\"$DOCKER_REGISTRY\":{\"username\":\"$DOCKER_USER\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
   script:
-    - echo "🐳 Сборка Docker образа backend..."
-    - docker build -t "$BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$BACKEND_IMAGE:latest" ./backend
-    - docker push "$BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA"
-    - docker push "$BACKEND_IMAGE:latest"
+    - echo "🐳 Сборка Docker образа backend через Kaniko..."
+    - /kaniko/executor \
+        --context ./backend \
+        --dockerfile ./backend/Dockerfile \
+        --destination $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA \
+        --destination $BACKEND_IMAGE:latest \
+        --cache=true \
+        --cache-copy-layers=true
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
@@ -138,33 +130,25 @@ docker-build-backend:
 
 docker-build-frontend:
   stage: build
-  image: docker:24-dind
+  image: gcr.io/kaniko-project/executor:debug
   tags:
     - docker
-  services:
-    - name: docker:24-dind
-      command: ["--tls=false"]
+  entrypoint: [""]
   variables:
-    DOCKER_HOST: "tcp://localhost:2375"
-    DOCKER_TLS_CERTDIR: ""
-    DOCKER_DRIVER: overlay2
+    DOCKER_CONFIG: "/kaniko/.docker"
   before_script:
-    - apk add --no-cache curl
+    - mkdir -p /kaniko/.docker
     - |
-      for i in $(seq 1 30); do
-        if docker info >/dev/null 2>&1; then
-          echo "✅ Docker daemon ready"
-          break
-        fi
-        echo "⏳ Waiting for Docker daemon... ($i/30)"
-        sleep 1
-      done
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin "$DOCKER_REGISTRY"
+      echo "{\"auths\":{\"$DOCKER_REGISTRY\":{\"username\":\"$DOCKER_USER\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
   script:
-    - echo "🐳 Сборка Docker образа frontend..."
-    - docker build -t "$FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$FRONTEND_IMAGE:latest" ./frontend
-    - docker push "$FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA"
-    - docker push "$FRONTEND_IMAGE:latest"
+    - echo "🐳 Сборка Docker образа frontend через Kaniko..."
+    - /kaniko/executor \
+        --context ./frontend \
+        --dockerfile ./frontend/Dockerfile \
+        --destination $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA \
+        --destination $FRONTEND_IMAGE:latest \
+        --cache=true \
+        --cache-copy-layers=true
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
