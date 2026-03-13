@@ -64,9 +64,7 @@ backend-tests:
   environment:
     name: test
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "develop"
+    - when: always
 
 # ============================================
 # Frontend Tests & Build
@@ -95,9 +93,7 @@ frontend-tests:
       - frontend/dist/
     expire_in: 1 week
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "develop"
+    - when: always
 
 # ============================================
 # Docker Build
@@ -120,11 +116,8 @@ docker-build-backend:
     - docker push "$BACKEND_IMAGE:latest"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-      variables:
-        DOCKER_TLS_CERTDIR: "/certs"
     - if: $CI_COMMIT_BRANCH == "develop"
-      variables:
-        DOCKER_TLS_CERTDIR: "/certs"
+    - if: $CI_COMMIT_BRANCH =~ /^release\//
 
 docker-build-frontend:
   stage: build
@@ -144,11 +137,8 @@ docker-build-frontend:
     - docker push "$FRONTEND_IMAGE:latest"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-      variables:
-        DOCKER_TLS_CERTDIR: "/certs"
     - if: $CI_COMMIT_BRANCH == "develop"
-      variables:
-        DOCKER_TLS_CERTDIR: "/certs"
+    - if: $CI_COMMIT_BRANCH =~ /^release\//
 
 # ============================================
 # Security Scan
@@ -172,8 +162,7 @@ security-scan-python:
       - bandit-report.json
     expire_in: 1 week
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
+    - when: always
 
 security-scan-frontend:
   stage: security
@@ -193,8 +182,7 @@ security-scan-frontend:
       - frontend/npm-audit-report.json
     expire_in: 1 week
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
+    - when: always
 
 # ============================================
 # Deploy to Staging (только для main)
@@ -217,6 +205,7 @@ deploy-staging:
     url: https://staging.example.com
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
   when: manual
   needs:
     - backend-tests
