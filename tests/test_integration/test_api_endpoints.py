@@ -3,15 +3,23 @@ Integration тесты для вопросов и сессий.
 """
 
 import pytest
+import uuid
 from fastapi.testclient import TestClient
+
+
+def generate_unique_email():
+    """Генерирует уникальный email для теста"""
+    return f"test_{uuid.uuid4().hex[:8]}@example.com"
 
 
 @pytest.fixture
 def authenticated_client(client: TestClient, test_profession):
     """Фикстура с аутентифицированным клиентом"""
+    email = generate_unique_email()
+    
     # Регистрируем тестового пользователя
     client.post("/api/auth/register", json={
-        "email": "questions@example.com",
+        "email": email,
         "password": "Questions123"
     })
 
@@ -19,7 +27,7 @@ def authenticated_client(client: TestClient, test_profession):
     login_response = client.post(
         "/api/auth/login",
         data={
-            "username": "questions@example.com",
+            "username": email,
             "password": "Questions123"
         }
     )

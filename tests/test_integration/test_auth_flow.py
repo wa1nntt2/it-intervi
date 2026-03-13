@@ -186,8 +186,8 @@ class TestCSRFIntegration:
         )
 
         assert login_response.status_code == 200
-        data = login_response.json()
-        assert "csrf_token" in data
+        # CSRF токен теперь в cookies, а не в JSON
+        assert "csrf_token" in login_response.cookies
 
     def test_get_csrf_token_endpoint(self, client: TestClient):
         """Тест endpoint получения CSRF токена"""
