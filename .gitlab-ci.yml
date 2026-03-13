@@ -90,7 +90,7 @@ frontend-tests:
     - echo "🏗️ Сборка frontend..."
     - npm run build
   artifacts:
-    when: success
+    when: on_success
     paths:
       - frontend/dist/
     expire_in: 1 week
