@@ -103,10 +103,11 @@ frontend-tests:
 # ============================================
 docker-build-backend:
   stage: build
-  image: gcr.io/kaniko-project/executor:debug
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   tags:
     - docker
-  entrypoint: [""]
   variables:
     DOCKER_CONFIG: "/kaniko/.docker"
   before_script:
@@ -130,10 +131,11 @@ docker-build-backend:
 
 docker-build-frontend:
   stage: build
-  image: gcr.io/kaniko-project/executor:debug
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   tags:
     - docker
-  entrypoint: [""]
   variables:
     DOCKER_CONFIG: "/kaniko/.docker"
   before_script:
