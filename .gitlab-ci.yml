@@ -39,8 +39,9 @@ backend-tests:
     - pip install --upgrade pip
     - pip install virtualenv
     - cd backend
-    # Очищаем старый venv чтобы избежать проблем с кэшем
-    - rm -rf venv
+    # Очищаем старый venv и кэш Python чтобы избежать проблем
+    - rm -rf venv __pycache__ .pytest_cache .coverage
+    - rm -rf app/__pycache__ app/*/__pycache__ app/*/*/__pycache__
     - virtualenv venv
     - source venv/bin/activate
     - pip install -r requirements.txt
@@ -51,7 +52,8 @@ backend-tests:
     - flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics || true
     - flake8 app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - echo "Running pytest..."
-    - pytest ../tests/ -v --tb=short --cov=app --cov-report=html --cov-report=xml
+    # Отключаем кэш pytest чтобы избежать проблем с закэшированными тестами
+    - pytest ../tests/ -v --tb=short --cov=app --cov-report=html --cov-report=xml --cache-clear
   artifacts:
     when: always
     paths:
