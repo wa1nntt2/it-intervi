@@ -11,8 +11,8 @@ def test_get_questions(client: TestClient):
     assert isinstance(data["items"], list)
 
 
-def test_get_questions_by_profession(client: TestClient):
-    response = client.get("/api/questions/?profession_id=1")
+def test_get_questions_by_profession(client: TestClient, test_profession):
+    response = client.get(f"/api/questions/?profession_id={test_profession.id}")
     assert response.status_code == 200
 
 

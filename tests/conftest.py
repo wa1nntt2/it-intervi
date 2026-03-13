@@ -11,6 +11,7 @@ os.environ["DEBUG"] = "true"
 os.environ["SKIP_SEED"] = "true"  # Отключаем seed данные для тестов
 
 from app.database.engine import Base, get_db, engine, SessionLocal
+from app.models.profession import Profession
 
 # Используем in-memory SQLite для тестов
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -66,6 +67,19 @@ def client(db_session):
         yield test_client
 
 
+@pytest.fixture(scope="function", autouse=True)
+def setup_test_data(db_session):
+    """Автоматически создает тестовую профессию для всех тестов"""
+    profession = Profession(
+        name="TestProfession",
+        description="Test profession for unit tests"
+    )
+    db_session.add(profession)
+    db_session.commit()
+    db_session.refresh(profession)
+    return profession
+
+
 @pytest.fixture
 def test_user():
     """Фикстура с тестовым пользователем"""
@@ -77,16 +91,17 @@ def test_user():
 
 @pytest.fixture
 def test_profession(db_session):
-    """Фикстура с тестовой профессией"""
-    from app.models.profession import Profession
-
-    profession = Profession(
-        name="TestProfession",
-        description="Test profession for unit tests"
-    )
-    db_session.add(profession)
-    db_session.commit()
-    db_session.refresh(profession)
+    """Фикстура с тестовой профессией (для явного использования)"""
+    # Возвращаем профессию из setup_test_data
+    profession = db_session.query(Profession).first()
+    if not profession:
+        profession = Profession(
+            name="TestProfession",
+            description="Test profession for unit tests"
+        )
+        db_session.add(profession)
+        db_session.commit()
+        db_session.refresh(profession)
     return profession
 
 
