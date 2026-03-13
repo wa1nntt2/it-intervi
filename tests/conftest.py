@@ -1,16 +1,16 @@
 import pytest
-import os
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
 
-from app.database.engine import Base, get_db, engine, SessionLocal
-
-# Устанавливаем переменные окружения для тестов
+# Устанавливаем переменные окружения ДО импорта app модулей
+import os
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-min-32-chars-12345"
 os.environ["DEBUG"] = "true"
 os.environ["SKIP_SEED"] = "true"  # Отключаем seed данные для тестов
+
+from app.database.engine import Base, get_db, engine, SessionLocal
 
 # Используем in-memory SQLite для тестов
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
