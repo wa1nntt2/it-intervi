@@ -211,11 +211,6 @@ deploy-staging:
     - echo "Commit: $CI_COMMIT_SHORT_SHA"
     - echo "Backend image: $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA"
     - echo "Frontend image: $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA"
-    # Здесь добавьте ваши команды деплоя
-    # Пример для docker-compose:
-    # - curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-    # - chmod +x /usr/local/bin/docker-compose
-    # - docker-compose -f docker-compose.staging.yml up -d
     - echo "✅ Деплой завершен (placeholder)"
   environment:
     name: staging
@@ -244,7 +239,6 @@ deploy-production:
     - echo "Tag: $CI_COMMIT_TAG"
     - echo "Backend image: $BACKEND_IMAGE:$CI_COMMIT_TAG"
     - echo "Frontend image: $FRONTEND_IMAGE:$CI_COMMIT_TAG"
-    # Здесь добавьте ваши команды деплоя на production
     - echo "✅ Production деплой завершен (placeholder)"
   environment:
     name: production
