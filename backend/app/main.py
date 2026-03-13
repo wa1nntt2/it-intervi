@@ -25,24 +25,29 @@ def apply_migrations():
     Применение миграций Alembic при запуске приложения.
     Если миграции еще не применены, создаем таблицы через create_all.
     """
+    # Отключаем миграции для тестов
+    if os.getenv("SKIP_MIGRATIONS"):
+        print("⏭️  Пропускаем миграции (SKIP_MIGRATIONS=true)")
+        return
+    
     try:
         from alembic import command
         from alembic.config import Config
         from pathlib import Path
-        
+
         backend_dir = Path(__file__).parent.parent
         alembic_cfg = Config(backend_dir / "alembic.ini")
-        
+
         # Проверяем, есть ли уже примененные миграции
         from alembic.script import ScriptDirectory
         from alembic.runtime.migration import MigrationContext
-        
+
         script = ScriptDirectory.from_config(alembic_cfg)
-        
+
         with engine.connect() as conn:
             context = MigrationContext.configure(conn)
             current_rev = context.get_current_revision()
-            
+
             if current_rev is None:
                 # Миграции не применены - создаем таблицы старым способом
                 # для обратной совместимости
@@ -51,7 +56,7 @@ def apply_migrations():
             else:
                 # Миграции уже применены
                 print(f"✅ Миграции применены (текущая ревизия: {current_rev})")
-                
+
     except Exception as e:
         print(f"⚠️  Ошибка при проверке миграций: {e}")
         print("Создаем таблицы через create_all()...")

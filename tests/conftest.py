@@ -9,6 +9,7 @@ import os
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-min-32-chars-12345"
 os.environ["DEBUG"] = "true"
 os.environ["SKIP_SEED"] = "true"  # Отключаем seed данные для тестов
+os.environ["SKIP_MIGRATIONS"] = "true"  # Отключаем миграции Alembic для тестов
 
 from app.database.engine import Base, get_db, engine, SessionLocal
 
@@ -16,7 +17,11 @@ from app.database.engine import Base, get_db, engine, SessionLocal
 from app.models import user, profession, question, answer, session, ordering_item, user_progress
 
 # Используем in-memory SQLite для тестов
+# StaticPool гарантирует что все соединения используют одну in-memory БД
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+
+# Для in-memory SQLite нужен специальный pool чтобы все соединения использовали одну БД
+from sqlalchemy.pool import StaticPool
 
 # Включаем foreign keys для SQLite ДО создания engine
 # Это критично для работы FOREIGN KEY constraints
@@ -28,38 +33,24 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 test_engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False}
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
 
 
 @pytest.fixture(scope="function")
 def db_session():
-    # Включаем foreign keys перед созданием таблиц
+    # Включаем foreign keys
     with test_engine.connect() as conn:
         conn.execute(text("PRAGMA foreign_keys=ON"))
         conn.commit()
     
-    # Создаем все таблицы в in-memory БД
-    Base.metadata.create_all(bind=test_engine)
-    
-    # Создаем сессию и тестовую профессию
     db = TestingSessionLocal()
     try:
-        # Создаем тестовую профессию с ID=1 для всех тестов
-        from app.models.profession import Profession
-        profession = Profession(
-            id=1,
-            name="TestProfession",
-            description="Test profession for unit tests"
-        )
-        db.add(profession)
-        db.commit()
         yield db
     finally:
         db.close()
-        # Очищаем все таблицы после теста
-        Base.metadata.drop_all(bind=test_engine)
 
 
 @pytest.fixture(scope="function")
@@ -70,19 +61,39 @@ def client(db_session):
         finally:
             pass
 
-    # Переопределяем engine в main.py чтобы использовать тестовый engine
+    # Переопределяем engine и SessionLocal в main.py
     from app import main
+    from app.database.engine import get_db
     main.engine = test_engine
     main.SessionLocal = TestingSessionLocal
 
+    # Создаем таблицы и тестовую профессию
+    Base.metadata.create_all(bind=test_engine)
+    from app.models.profession import Profession
+    profession = Profession(
+        id=1,
+        name="TestProfession",
+        description="Test profession for unit tests"
+    )
+    db_session.add(profession)
+    db_session.commit()
+
     # Пересоздаем приложение с тестовым engine
     test_app = main.create_app()
+    
+    # Переопределяем зависимость get_db в приложении
+    test_app.dependency_overrides[get_db] = override_get_db
 
     # Отключаем rate limiting для тестов
     test_app.state.limiter.enabled = False
 
-    with TestClient(test_app) as test_client:
-        yield test_client
+    try:
+        with TestClient(test_app) as test_client:
+            yield test_client
+    finally:
+        # Очищаем все таблицы после теста
+        db_session.rollback()
+        Base.metadata.drop_all(bind=test_engine)
 
 
 @pytest.fixture(scope="function")
