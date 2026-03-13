@@ -43,12 +43,13 @@ backend-tests:
     - source venv/bin/activate
     - pip install -r requirements.txt
     - pip install -r requirements-dev.txt
+    - export PYTHONPATH="${PYTHONPATH}:${PWD}"
   script:
     - echo "Running flake8 linter..."
     - flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics || true
     - flake8 app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - echo "Running pytest..."
-    - pytest tests/ -v --tb=short --cov=app --cov-report=html --cov-report=xml
+    - pytest ../tests/ -v --tb=short --cov=app --cov-report=html --cov-report=xml
   artifacts:
     when: always
     paths:
