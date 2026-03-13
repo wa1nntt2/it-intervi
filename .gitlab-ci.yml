@@ -1,0 +1,242 @@
+# GitLab CI/CD Pipeline для IT Interview Trainer
+# Fullstack приложение: FastAPI backend + React frontend
+
+stages:
+  - test
+  - build
+  - security
+  - deploy
+
+# Переменные окружения для всего pipeline
+variables:
+  PYTHON_VERSION: "3.11"
+  NODE_VERSION: "18"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
+  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm-cache"
+  # GitLab Registry настройки
+  DOCKER_REGISTRY: "$CI_REGISTRY"
+  BACKEND_IMAGE: "$CI_REGISTRY_IMAGE/backend"
+  FRONTEND_IMAGE: "$CI_REGISTRY_IMAGE/frontend"
+
+# Кэширование для ускорения сборок
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .pip-cache/
+    - .npm-cache/
+    - backend/venv/
+    - frontend/node_modules/
+
+# ============================================
+# Backend Tests
+# ============================================
+backend-tests:
+  stage: test
+  image: python:${PYTHON_VERSION}-slim
+  tags:
+    - docker
+  before_script:
+    - pip install --upgrade pip
+    - pip install virtualenv
+    - cd backend
+    # Очищаем старый venv и кэш Python чтобы избежать проблем
+    - rm -rf venv __pycache__ .pytest_cache .coverage
+    - rm -rf app/__pycache__ app/*/__pycache__ app/*/*/__pycache__
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+    - pip install -r requirements-dev.txt
+    - export PYTHONPATH="${PYTHONPATH}:${PWD}"
+  script:
+    - echo "Running flake8 linter..."
+    - flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics || true
+    - flake8 app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - echo "Running pytest..."
+    # Отключаем кэш pytest чтобы избежать проблем с закэшированными тестами
+    - pytest ../tests/ -v --tb=short --cov=app --cov-report=html --cov-report=xml --cache-clear
+  artifacts:
+    when: always
+    paths:
+      - backend/htmlcov/
+      - backend/coverage.xml
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: backend/coverage.xml
+    expire_in: 1 week
+  environment:
+    name: test
+  rules:
+    - when: always
+
+# ============================================
+# Frontend Tests & Build
+# ============================================
+frontend-tests:
+  stage: test
+  image: node:${NODE_VERSION}-alpine
+  tags:
+    - docker
+  before_script:
+    - cd frontend
+    - npm ci --cache .npm-cache --prefer-offline
+  script:
+    - echo "Running ESLint..."
+    - npm run lint || true
+    - echo "Running TypeScript type check..."
+    - npx tsc --noEmit
+    - echo "Building frontend..."
+    - npm run build
+  artifacts:
+    when: on_success
+    paths:
+      - frontend/dist/
+    expire_in: 1 week
+  rules:
+    - when: always
+
+# ============================================
+# Docker Build
+# ============================================
+docker-build-backend:
+  stage: build
+  image: docker:24-dind
+  tags:
+    - docker
+  services:
+    - docker:24-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+  script:
+    - echo "🐳 Сборка Docker образа backend..."
+    - docker build -t "$BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$BACKEND_IMAGE:latest" ./backend
+    - docker push "$BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker push "$BACKEND_IMAGE:latest"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH =~ /^release\//
+
+docker-build-frontend:
+  stage: build
+  image: docker:24-dind
+  tags:
+    - docker
+  services:
+    - docker:24-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+  script:
+    - echo "🐳 Сборка Docker образа frontend..."
+    - docker build -t "$FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$FRONTEND_IMAGE:latest" ./frontend
+    - docker push "$FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker push "$FRONTEND_IMAGE:latest"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH =~ /^release\//
+
+# ============================================
+# Security Scan
+# ============================================
+security-scan-python:
+  stage: security
+  image: python:${PYTHON_VERSION}-slim
+  tags:
+    - docker
+  allow_failure: true
+  before_script:
+    - pip install safety bandit
+  script:
+    - echo "Scanning Python dependencies (safety)..."
+    - safety check -r backend/requirements.txt || true
+    - echo "Static code analysis (bandit)..."
+    - bandit -r backend/app/ -f json -o bandit-report.json || true
+  artifacts:
+    when: always
+    paths:
+      - bandit-report.json
+    expire_in: 1 week
+  rules:
+    - when: always
+
+security-scan-frontend:
+  stage: security
+  image: node:${NODE_VERSION}-alpine
+  tags:
+    - docker
+  allow_failure: true
+  before_script:
+    - cd frontend
+    - npm ci --cache .npm-cache --prefer-offline
+  script:
+    - echo "Auditing npm dependencies..."
+    - npm audit --audit-level=high --json > npm-audit-report.json || true
+  artifacts:
+    when: always
+    paths:
+      - frontend/npm-audit-report.json
+    expire_in: 1 week
+  rules:
+    - when: always
+
+# ============================================
+# Deploy to Staging (только для main)
+# ============================================
+deploy-staging:
+  stage: deploy
+  image: alpine:latest
+  tags:
+    - docker
+  before_script:
+    - apk add --no-cache curl jq
+  script:
+    - echo "Deploying to staging environment..."
+    - echo "Commit:$CI_COMMIT_SHORT_SHA"
+    - echo "Backend image:$BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - echo "Frontend image:$FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - echo "Deploy completed (placeholder)"
+  environment:
+    name: staging
+    url: https://staging.example.com
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+  when: manual
+  needs:
+    - backend-tests
+    - frontend-tests
+    - docker-build-backend
+    - docker-build-frontend
+
+# ============================================
+# Deploy to Production (только теги)
+# ============================================
+deploy-production:
+  stage: deploy
+  image: alpine:latest
+  tags:
+    - docker
+  before_script:
+    - apk add --no-cache curl jq
+  script:
+    - echo "Deploying to production environment..."
+    - echo "Tag:$CI_COMMIT_TAG"
+    - echo "Backend image:$BACKEND_IMAGE:$CI_COMMIT_TAG"
+    - echo "Frontend image:$FRONTEND_IMAGE:$CI_COMMIT_TAG"
+    - echo "Production deploy completed (placeholder)"
+  environment:
+    name: production
+    url: https://example.com
+  rules:
+    - if: $CI_COMMIT_TAG
+  when: manual
+  needs:
+    - backend-tests
+    - frontend-tests
+    - docker-build-backend
+    - docker-build-frontend
