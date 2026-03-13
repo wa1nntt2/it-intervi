@@ -39,7 +39,8 @@ class TestAuthFlow:
         assert login_response.status_code == 200
         login_data = login_response.json()
         assert "access_token" in login_data
-        assert "csrf_token" in login_data
+        # CSRF токен теперь в cookies, а не в JSON
+        assert "csrf_token" in login_response.cookies
 
         # 3. Получение информации о пользователе
         client.headers["Authorization"] = f"Bearer {login_data['access_token']}"
