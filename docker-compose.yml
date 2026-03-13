@@ -8,10 +8,19 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-      - backend_data:/app/data
+      # Используем локальную БД вместо volume - так данные не будут теряться
+      - ./backend/interview_trainer.db:/app/interview_trainer.db
     environment:
-      - DATABASE_URL=sqlite:///./data/interview_trainer.db
-      - SECRET_KEY=mysecretkey
+      - DATABASE_URL=sqlite:///./interview_trainer.db
+      # SECRET_KEY обязателен в production! Генерация: openssl rand -hex 32
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production-min-32-chars}
+      - ALGORITHM=${ALGORITHM:-HS256}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      - DEBUG=${DEBUG:-true}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      - CORS_ALLOW_CREDENTIALS=${CORS_ALLOW_CREDENTIALS:-true}
+      - RATE_LIMIT_PER_MINUTE=${RATE_LIMIT_PER_MINUTE:-10}
     command: >
       uvicorn app.main:app
       --reload
@@ -27,16 +36,13 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - "3000:80"
+    # Убрали volumes - frontend использует файлы из образа
+    # volumes были проблемой - они перезаписывали dist из образа
     depends_on:
       backend:
         condition: service_healthy
-    command: >
-      npm run dev
-      -- --host 0.0.0.0
+    environment:
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8000}
 
-volumes:
-  backend_data:
+# Volume удален - теперь используем локальную БД

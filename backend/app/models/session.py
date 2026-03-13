@@ -16,13 +16,13 @@ class Session(Base):
     __tablename__ = "sessions"
 
     id = Column(Integer, primary_key=True, index=True)
-    profession_id = Column(Integer, ForeignKey("professions.id"), nullable=False)  # Профессия для тестирования
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Пользователь (может быть NULL для анонимных)
+    profession_id = Column(Integer, ForeignKey("professions.id"), nullable=False, index=True)  # Профессия для тестирования
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)  # Пользователь (может быть NULL для анонимных)
     question_ids = Column(JSON, nullable=False)  # Список ID вопросов в сессии
-    status = Column(String, default="active")  # "active", "completed", "failed"
+    status = Column(String, default="active", index=True)  # "active", "completed", "failed"
     score = Column(Integer, default=0)  # Количество правильных ответов
-    created_at = Column(DateTime, default=datetime.utcnow)  # Время создания сессии
-    completed_at = Column(DateTime, nullable=True)  # Время завершения
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)  # Время создания сессии
+    completed_at = Column(DateTime, nullable=True, index=True)  # Время завершения
 
     # Связи с другими таблицами
     profession = relationship("Profession", back_populates="sessions")

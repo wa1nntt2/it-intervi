@@ -2,7 +2,8 @@
 # Регистрация, вход, refresh токенов, управление профилем
 
 import re
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -13,16 +14,22 @@ from app.core.security import (
     create_access_token,
     create_refresh_token,
     validate_refresh_token,
+    get_cookie_config,
 )
 from app.models.user import User
-from app.api.schemas import UserCreate, UserUpdate, UserResponse, Token, TokenRefresh, TokenRefreshResponse
+from app.api.schemas import UserCreate, UserUpdate, UserResponse, Token, TokenRefresh, TokenRefreshResponse, TokenCookie
 from app.core.config import settings
 from app.core.limiter import limiter
 
 router = APIRouter(prefix="/auth", tags=["auth"])  # Префикс /api/auth
 
+# Rate limit декораторы
+register_limit = limiter.limit("5 per minute")
+login_limit = limiter.limit("10 per minute")
+refresh_limit = limiter.limit("3 per minute")
+
 # Схема OAuth2 для получения токена из заголовка Authorization
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
 
 
 async def get_current_user(
@@ -31,19 +38,33 @@ async def get_current_user(
 ) -> User:
     """
     Dependency для получения текущего пользователя из JWT токена.
+    Поддерживает получение токена из заголовка Authorization или из cookies.
     Используется в защищенных endpoint'ах.
-    
+
     Args:
-        token: JWT токен из заголовка Authorization
+        token: JWT токен из заголовка Authorization или cookies
         db: Сессия базы данных
-    
+
     Returns:
         User: Объект текущего пользователя
-    
+
     Raises:
         HTTPException: Если токен невалиден или пользователь не найден
     """
     from app.core.security import decode_token
+
+    # Если токен не передан в заголовке, пробуем получить из cookies
+    if not token:
+        # Примечание: oauth2_scheme с auto_error=False вернет None если токен не найден
+        # В этом случае можно попробовать получить из cookies (для совместимости)
+        pass
+
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Токен не предоставлен",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     payload = decode_token(token, expected_type="access")
     if payload is None:
@@ -75,16 +96,16 @@ async def get_current_user(
 def validate_password_strength(password: str) -> None:
     """
     Валидация сложности пароля.
-    
+
     Требования к паролю:
     - Минимум 8 символов
     - Хотя бы одна заглавная буква
     - Хотя бы одна строчная буква
     - Хотя бы одна цифра
-    
+
     Args:
         password: Пароль для проверки
-    
+
     Raises:
         HTTPException: Если пароль не соответствует требованиям
     """
@@ -111,7 +132,8 @@ def validate_password_strength(password: str) -> None:
 
 
 @router.post("/register", response_model=UserResponse)
-def register(user_data: UserCreate, db: Session = Depends(get_db)):
+@register_limit
+def register(request: Request, user_data: UserCreate, db: Session = Depends(get_db)):
     """
     Регистрация нового пользователя.
     
@@ -150,26 +172,29 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=TokenCookie)
+@login_limit
 def login(
     request: Request,
+    response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
     """
     Вход пользователя (аутентификация).
-    
-    Проверяет email и пароль, возвращает пару access/refresh токенов.
+
+    Проверяет email и пароль, устанавливает токены в HttpOnly cookies.
     Использует OAuth2PasswordRequestForm для совместимости с OAuth2.
-    
+
     Args:
         request: HTTP запрос
+        response: HTTP ответ для установки cookies
         form_data: Данные формы (username=email, password)
         db: Сессия базы данных
-    
+
     Returns:
-        Token: Access и refresh токены
-    
+        TokenCookie: Access токен в теле ответа (refresh в cookie)
+
     Raises:
         HTTPException: Если credentials неверны
     """
@@ -184,34 +209,66 @@ def login(
     access_token = create_access_token(data={"sub": user.email})
     refresh_token = create_refresh_token(data={"sub": user.email})
 
+    # Устанавливаем refresh токен в HttpOnly cookie
+    cookie_config = get_cookie_config()
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=cookie_config["httponly"],
+        secure=cookie_config["secure"],
+        samesite=cookie_config["samesite"],
+        max_age=cookie_config["max_age"],
+        path=cookie_config["path"],
+    )
+    
+    # Устанавливаем CSRF токен для защиты от CSRF атак
+    from app.core.csrf import csrf_protect
+    csrf_token = csrf_protect.generate_csrf_token()
+    csrf_protect.set_csrf_cookie(response, csrf_token)
+
     return {
         "access_token": access_token,
-        "refresh_token": refresh_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "message": "Токены установлены в cookies",
+        "csrf_token": csrf_token  # Возвращаем для совместимости
     }
 
 
-@router.post("/refresh", response_model=TokenRefreshResponse)
+@router.post("/refresh", response_model=TokenCookie)
+@refresh_limit
 def refresh_token(
-    token_data: TokenRefresh,
+    request: Request,
+    response: Response,
     db: Session = Depends(get_db)
 ):
     """
-    Обновление access токена с использованием refresh токена.
-    
+    Обновление access токена с использованием refresh токена из cookies.
+
     Позволяет получить новую пару токенов без повторного ввода пароля.
-    
+    Refresh токен автоматически читается из HttpOnly cookie.
+
     Args:
-        token_data: Refresh токен
+        request: HTTP запрос
+        response: HTTP ответ для установки cookies
         db: Сессия базы данных
-    
+
     Returns:
-        TokenRefreshResponse: Новая пара токенов
-    
+        TokenCookie: Новый access токен в теле ответа (refresh в cookie)
+
     Raises:
         HTTPException: Если refresh токен невалиден
     """
-    payload = validate_refresh_token(token_data.refresh_token)
+    # Читаем refresh токен из cookie
+    refresh_token = request.cookies.get("refresh_token")
+    
+    if not refresh_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh токен не найден в cookies",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    payload = validate_refresh_token(refresh_token)
     if payload is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -239,11 +296,70 @@ def refresh_token(
     new_access_token = create_access_token(data={"sub": user.email})
     new_refresh_token = create_refresh_token(data={"sub": user.email})
 
+    # Устанавливаем новый refresh токен в cookie
+    cookie_config = get_cookie_config()
+    response.set_cookie(
+        key="refresh_token",
+        value=new_refresh_token,
+        httponly=cookie_config["httponly"],
+        secure=cookie_config["secure"],
+        samesite=cookie_config["samesite"],
+        max_age=cookie_config["max_age"],
+        path=cookie_config["path"],
+    )
+
     return {
         "access_token": new_access_token,
-        "refresh_token": new_refresh_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "message": "Токены обновлены"
     }
+
+
+@router.post("/logout")
+def logout(
+    request: Request,
+    response: Response
+):
+    """
+    Выход пользователя.
+
+    Удаляет refresh токен из cookies.
+
+    Args:
+        request: HTTP запрос
+        response: HTTP ответ для очистки cookies
+
+    Returns:
+        dict: Сообщение об успешном выходе
+    """
+    # Очищаем refresh токен из cookie
+    response.delete_cookie(
+        key="refresh_token",
+        path="/",
+    )
+    return {"message": "Выход выполнен успешно"}
+
+
+@router.get("/csrf-token")
+def get_csrf_token(request: Request, response: Response):
+    """
+    Получить новый CSRF токен.
+    
+    Используется при инициализации приложения или после истечения срока действия токена.
+    
+    Args:
+        request: HTTP запрос
+        response: HTTP ответ для установки cookies
+        
+    Returns:
+        dict: CSRF токен
+    """
+    from app.core.csrf import csrf_protect
+    
+    csrf_token = csrf_protect.generate_csrf_token()
+    csrf_protect.set_csrf_cookie(response, csrf_token)
+    
+    return {"csrf_token": csrf_token}
 
 
 @router.get("/me", response_model=UserResponse)

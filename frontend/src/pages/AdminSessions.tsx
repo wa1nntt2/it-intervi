@@ -68,8 +68,10 @@ export default function AdminSessions() {
       if (selectedProfession) filters.profession_id = parseInt(selectedProfession)
       if (dateFrom) filters.date_from = dateFrom
       if (dateTo) filters.date_to = dateTo
-      const data = await sessionsApi.getAll(filters)
-      setSessions(data)
+      const response = await sessionsApi.getAll(filters)
+      // API теперь возвращает { items: [...], meta: {...} }
+      const sessionsData = response.items || response
+      setSessions(sessionsData)
     } catch (error) {
       console.error('Failed to load sessions:', error)
     } finally {
@@ -78,7 +80,9 @@ export default function AdminSessions() {
   }
 
   const loadProfessions = async () => {
-    const data = await professionsApi.getAll()
+    const response = await professionsApi.getAll()
+    // API теперь возвращает { items: [...], meta: {...} }
+    const data = response.items || response
     setProfessions(data)
   }
 

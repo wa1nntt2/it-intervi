@@ -16,12 +16,12 @@ class Answer(Base):
     __tablename__ = "answers"
 
     id = Column(Integer, primary_key=True, index=True)
-    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)  # Связь с вопросом
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Связь с пользователем (может быть NULL для анонимных сессий)
+    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False, index=True)  # Связь с вопросом
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)  # Связь с пользователем (может быть NULL для анонимных сессий)
     selected_option = Column(Integer, nullable=True)  # Выбранный вариант ответа (индекс)
     selected_order = Column(JSON, nullable=True)  # Выбранный порядок (для Ordering вопросов)
-    is_correct = Column(Boolean, default=False)  # Флаг правильного ответа
-    created_at = Column(DateTime, default=datetime.utcnow)  # Время ответа
+    is_correct = Column(Boolean, default=False, index=True)  # Флаг правильного ответа
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)  # Время ответа
 
     # Связь с вопросом
     question = relationship("Question")

@@ -18,9 +18,9 @@ class Question(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     text = Column(Text, nullable=False)  # Текст вопроса
-    question_type = Column(String, nullable=False)  # "mcq" или "ordering"
-    profession_id = Column(Integer, ForeignKey("professions.id"), nullable=False)  # Связь с профессией
-    difficulty = Column(String, default="junior")  # "intern", "junior", "middle"
+    question_type = Column(String, nullable=False, index=True)  # "mcq" или "ordering"
+    profession_id = Column(Integer, ForeignKey("professions.id"), nullable=False, index=True)  # Связь с профессией
+    difficulty = Column(String, default="junior", index=True)  # "intern", "junior", "middle"
     options = Column(JSON, nullable=False)  # Список вариантов ответа (JSON массив)
     correct_option = Column(Integer, nullable=True)  # Индекс правильного ответа (для MCQ)
     correct_order = Column(JSON, nullable=True)  # Правильный порядок элементов (для Ordering)

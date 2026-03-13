@@ -12,6 +12,8 @@ import { ProfessionCards } from '../components/admin/ProfessionCards'
 import { ProfessionDropdown } from '../components/admin/ProfessionDropdown'
 import { QuestionPreview } from '../components/admin/QuestionPreview'
 import { BulkActions } from '../components/admin/BulkActions'
+import { ConfirmDialog } from '../components/ui/ConfirmDialog'
+import { toast } from '../stores/toastStore'
 
 export default function Admin() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -33,6 +35,8 @@ export default function Admin() {
   // Массовое удаление
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [questionToDelete, setQuestionToDelete] = useState<number | null>(null)
+  const [isBulkDelete, setIsBulkDelete] = useState(false)  // Массовое или одиночное удаление
   
   // Массовое изменение
   const [isBulkActionsOpen, setIsBulkActionsOpen] = useState(false)
@@ -68,10 +72,33 @@ export default function Admin() {
 
   const loadQuestions = async () => {
     setLoading(true)
-    const data = await questionsApi.getAll()
-    setQuestions(data)
-    validateQuestions(data)
-    setLoading(false)
+    try {
+      // Загружаем все вопросы постранично
+      let allQuestions: Question[] = []
+      let page = 1
+      const pageSize = 100
+      let hasMore = true
+      
+      while (hasMore) {
+        const response = await questionsApi.getAll(undefined, page, pageSize)
+        const questionsData = response.items || response
+        allQuestions = [...allQuestions, ...questionsData]
+        
+        // Проверяем есть ли ещё страницы
+        if (response.meta && response.meta.total_pages > page) {
+          page++
+        } else {
+          hasMore = false
+        }
+      }
+      
+      setQuestions(allQuestions)
+      validateQuestions(allQuestions)
+    } catch (error) {
+      console.error('Failed to load questions:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   // Валидация вопросов
@@ -166,9 +193,23 @@ export default function Admin() {
   }
 
   const handleDeleteQuestion = async (id: number) => {
-    if (!confirm('Вы уверены, что хотите удалить этот вопрос?')) return
-    await questionsApi.delete(id)
-    loadQuestions()
+    setQuestionToDelete(id)
+    setIsBulkDelete(false)  // Одиночное удаление
+    setIsDeleteConfirmOpen(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (questionToDelete === null) return
+    try {
+      await questionsApi.delete(questionToDelete)
+      toast.success('Вопрос удален')
+      loadQuestions()
+    } catch (error) {
+      toast.error('Ошибка при удалении вопроса')
+    } finally {
+      setIsDeleteConfirmOpen(false)
+      setQuestionToDelete(null)
+    }
   }
 
   const handleToggleQuestionSelection = (id: number) => {
@@ -186,14 +227,16 @@ export default function Admin() {
   }
 
   const handleBulkDelete = async () => {
-    if (!confirm(`Вы уверены, что хотите удалить ${selectedQuestions.length} вопросов?`)) return
     try {
       await Promise.all(selectedQuestions.map((id) => questionsApi.delete(id)))
+      toast.success(`Удалено ${selectedQuestions.length} вопросов`)
       setSelectedQuestions([])
+      setQuestionToDelete(null)
+      setIsBulkDelete(false)
       setIsDeleteConfirmOpen(false)
       loadQuestions()
     } catch (error) {
-      console.error('Failed to delete questions:', error)
+      toast.error('Ошибка при удалении вопросов')
     }
   }
 
@@ -530,7 +573,10 @@ export default function Admin() {
                       Изменить
                     </button>
                     <button
-                      onClick={() => setIsDeleteConfirmOpen(true)}
+                      onClick={() => {
+                        setIsBulkDelete(true)  // Массовое удаление
+                        setIsDeleteConfirmOpen(true)
+                      }}
                       className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -734,30 +780,45 @@ export default function Admin() {
         />
       </Modal>
 
-      {/* Модальное окно подтверждения массового удаления */}
+      {/* Модальное окно подтверждения удаления */}
       {isDeleteConfirmOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setIsDeleteConfirmOpen(false)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Удаление вопросов</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                {isBulkDelete ? 'Массовое удаление' : 'Удаление вопроса'}
+              </h3>
               <p className="text-gray-600">
-                Вы уверены, что хотите удалить <span className="font-bold text-red-600">{selectedQuestions.length}</span> вопросов? Это действие нельзя отменить.
+                {isBulkDelete ? (
+                  <>Вы уверены, что хотите удалить <span className="font-bold text-red-600">{selectedQuestions.length}</span> вопросов? Это действие нельзя отменить.</>
+                ) : (
+                  <>Вы уверены, что хотите удалить этот вопрос? Это действие нельзя отменить.</>
+                )}
               </p>
             </div>
             <div className="flex gap-3">
               <button
-                onClick={() => setIsDeleteConfirmOpen(false)}
+                onClick={() => {
+                  setIsDeleteConfirmOpen(false)
+                  setQuestionToDelete(null)
+                }}
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Отмена
               </button>
               <button
-                onClick={handleBulkDelete}
+                onClick={() => {
+                  if (isBulkDelete) {
+                    handleBulkDelete()
+                  } else {
+                    handleConfirmDelete()
+                  }
+                }}
                 className="flex-1 px-4 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors"
               >
                 Удалить

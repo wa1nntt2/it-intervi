@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useAuthStore } from '../stores/authStore'
+import { useAuthStore, User } from '../stores/authStore'
 import { authApi } from '../services/api'
 
 export default function Register() {
@@ -46,8 +46,14 @@ export default function Register() {
     setLoading(true)
     try {
       await authApi.register(email, password)
-      const data = await authApi.login(email, password)
-      login(data.access_token, data.refresh_token, { id: data.id, email, is_admin: data.is_admin })
+      const loginResponse = await authApi.login(email, password)
+      const accessToken = loginResponse.access_token
+      
+      // Получаем информацию о пользователе
+      const userInfo: User = await authApi.getCurrentUser()
+      
+      // Сохраняем токен и данные пользователя в store
+      login(accessToken, userInfo)
       navigate('/')
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Ошибка регистрации')

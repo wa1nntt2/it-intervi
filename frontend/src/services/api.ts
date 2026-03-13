@@ -1,12 +1,21 @@
 /**
  * API клиент для взаимодействия с backend.
  * Использует Axios для HTTP запросов с автоматической обработкой JWT токенов.
+ * 
+ * SECURITY UPDATE:
+ * - Refresh токен хранится в HttpOnly cookie на backend
+ * - Access токен передается в заголовке Authorization
+ * - CSRF токен используется для защиты state-changing операций
+ * - Cookies автоматически отправляются браузером с credentials: 'include'
  */
 
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
+import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import { useAuthStore } from '../stores/authStore'
 
 const API_BASE = '/api'
+
+// CSRF токен (хранится в памяти)
+let csrfToken: string | null = null
 
 // Создание экземпляра axios с базовой конфигурацией
 const api = axios.create({
@@ -14,6 +23,39 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 30000, // 30 секунд таймаут
+  withCredentials: true,  // Важно: отправлять cookies автоматически
+})
+
+/**
+ * Получить CSRF токен из cookies или памяти.
+ */
+const getCsrfToken = (): string | null => {
+  if (csrfToken) {
+    return csrfToken
+  }
+  // Пытаемся получить из cookies (если установлен через backend)
+  const match = document.cookie.match(/csrf_token=([^;]+)/)
+  return match ? match[1] : null
+}
+
+/**
+ * Interceptor для добавления JWT токена и CSRF токена в заголовки.
+ * Выполняется перед каждым запросом.
+ */
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = useAuthStore.getState().token
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  
+  // Добавляем CSRF токен для state-changing операций
+  const csrf = getCsrfToken()
+  if (csrf && config.method && ['post', 'put', 'delete', 'patch'].includes(config.method.toLowerCase())) {
+    config.headers['X-CSRF-Token'] = csrf
+  }
+  
+  return config
 })
 
 // Флаг для предотвращения множественных запросов на refresh
@@ -41,26 +83,64 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 }
 
 /**
- * Interceptor для добавления JWT токена в заголовок Authorization.
- * Выполняется перед каждым запросом.
+ * Форматирование ошибки для отображения пользователю
  */
-api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = useAuthStore.getState().token
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+const formatErrorMessage = (error: AxiosError): string => {
+  if (error.response?.data) {
+    const data = error.response.data as { detail?: string | { msg: string } }
+    if (typeof data.detail === 'string') {
+      return data.detail
+    }
+    if (typeof data.detail === 'object' && data.detail !== null && 'msg' in data.detail) {
+      return (data.detail as { msg: string }).msg
+    }
   }
-  return config
-})
+  if (error.message) {
+    return error.message
+  }
+  return 'Произошла неизвестная ошибка'
+}
 
 /**
  * Interceptor для обработки ответов API.
- * Автоматически refresh'ит токен при получении 401 ошибки.
+ * Автоматически refresh'ит токен при получении 401 ошибки через cookie-based endpoint.
+ * Также обрабатывает 403 CSRF ошибки.
  */
 api.interceptors.response.use(
-  (response) => response,
+  (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean
+    }
+
+    // Логгирование ошибок (в development режиме)
+    if (import.meta.env.DEV) {
+      console.error('API Error:', {
+        url: error.config?.url,
+        status: error.response?.status,
+        message: formatErrorMessage(error),
+      })
+    }
+
+    // Обработка 403 CSRF ошибок - пробуем получить новый CSRF токен
+    if (error.response?.status === 403) {
+      const detail = (error.response?.data as any)?.detail
+      if (detail && detail.includes('CSRF')) {
+        try {
+          // Получаем новый CSRF токен
+          const csrfResponse = await axios.get(`${API_BASE}/auth/csrf-token`, {
+            withCredentials: true,
+          })
+          
+          // Сохраняем токен
+          csrfToken = csrfResponse.data.csrf_token
+          
+          // Повторяем оригинальный запрос
+          return api(originalRequest)
+        } catch (csrfError) {
+          console.error('Failed to refresh CSRF token:', csrfError)
+        }
+      }
     }
 
     // Если ошибка 401 и запрос еще не был повторен
@@ -80,39 +160,34 @@ api.interceptors.response.use(
       originalRequest._retry = true
       isRefreshing = true
 
-      const refreshToken = useAuthStore.getState().refreshToken
+      try {
+        // Refresh endpoint теперь сам читает токен из cookies
+        const response = await axios.post(`${API_BASE}/auth/refresh`, {}, {
+          withCredentials: true,  // Отправляем cookies
+        })
 
-      if (refreshToken) {
-        try {
-          const response = await axios.post(`${API_BASE}/auth/refresh`, {
-            refresh_token: refreshToken,
-          })
+        const { access_token } = response.data
 
-          const { access_token, refresh_token: newRefreshToken } = response.data
-
-          // Обновляем токены в store
-          useAuthStore.getState().login(access_token, newRefreshToken, useAuthStore.getState().user!)
-
-          // Обрабатываем очередь запросов
-          processQueue(null, access_token)
-
-          // Повторяем оригинальный запрос
-          originalRequest.headers.Authorization = `Bearer ${access_token}`
-          return api(originalRequest)
-        } catch (refreshError) {
-          // Если refresh не удался, logout
-          processQueue(refreshError as Error, null)
-          useAuthStore.getState().logout()
-          window.location.href = '/login'
-          return Promise.reject(refreshError)
-        } finally {
-          isRefreshing = false
+        // Обновляем токен в store
+        const user = useAuthStore.getState().user
+        if (user) {
+          useAuthStore.getState().login(access_token, user)
         }
-      } else {
-        // Нет refresh токена - logout
+
+        // Обрабатываем очередь запросов
+        processQueue(null, access_token)
+
+        // Повторяем оригинальный запрос
+        originalRequest.headers.Authorization = `Bearer ${access_token}`
+        return api(originalRequest)
+      } catch (refreshError) {
+        // Если refresh не удался, logout
+        processQueue(refreshError as Error, null)
         useAuthStore.getState().logout()
         window.location.href = '/login'
-        return Promise.reject(error)
+        return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
       }
     }
 
@@ -131,7 +206,14 @@ export const authApi = {
     params.append('password', password)
     const response = await api.post('/auth/login', params.toString(), {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      withCredentials: true,  // Получаем cookies
     })
+    
+    // Сохраняем CSRF токен из ответа
+    if (response.data.csrf_token) {
+      csrfToken = response.data.csrf_token
+    }
+    
     return response.data
   },
   /** Зарегистрировать нового пользователя */
@@ -149,10 +231,19 @@ export const authApi = {
     const response = await api.put('/auth/me', data)
     return response.data
   },
-  /** Обновить токены */
-  refreshTokens: async (refreshToken: string) => {
-    const response = await api.post('/auth/refresh', { refresh_token: refreshToken })
+  /** Выйти из системы (очищает cookies) */
+  logout: async () => {
+    const response = await api.post('/auth/logout')
+    csrfToken = null  // Очищаем CSRF токен
     return response.data
+  },
+  /** Получить новый CSRF токен */
+  getCsrfToken: async () => {
+    const response = await axios.get(`${API_BASE}/auth/csrf-token`, {
+      withCredentials: true,
+    })
+    csrfToken = response.data.csrf_token
+    return response.data.csrf_token
   },
 }
 
@@ -176,9 +267,10 @@ export const professionsApi = {
  * API методы для работы с вопросами.
  */
 export const questionsApi = {
-  /** Получить все вопросы или по профессии */
-  getAll: async (professionId?: number) => {
-    const params = professionId ? { profession_id: professionId } : {}
+  /** Получить все вопросы или по профессии (с пагинацией) */
+  getAll: async (professionId?: number, page: number = 1, pageSize: number = 100) => {
+    const params: Record<string, any> = { page, page_size: pageSize }
+    if (professionId) params.profession_id = professionId
     const response = await api.get('/questions/', { params })
     return response.data
   },
