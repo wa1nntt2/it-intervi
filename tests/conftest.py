@@ -12,8 +12,19 @@ os.environ["SKIP_SEED"] = "true"  # Отключаем seed данные для 
 
 from app.database.engine import Base, get_db, engine, SessionLocal
 
+# Импортируем модели чтобы SQLAlchemy знал о них перед созданием таблиц
+from app.models import user, profession, question, answer, session, ordering_item, user_progress
+
 # Используем in-memory SQLite для тестов
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+
+# Включаем foreign keys для SQLite ДО создания engine
+# Это критично для работы FOREIGN KEY constraints
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 test_engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
@@ -22,20 +33,28 @@ test_engine = create_engine(
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
 
 
-# Включаем foreign keys для SQLite
-@event.listens_for(Engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
-
-
 @pytest.fixture(scope="function")
 def db_session():
+    # Включаем foreign keys перед созданием таблиц
+    with test_engine.connect() as conn:
+        conn.execute(text("PRAGMA foreign_keys=ON"))
+        conn.commit()
+    
     # Создаем все таблицы в in-memory БД
     Base.metadata.create_all(bind=test_engine)
+    
+    # Создаем сессию и тестовую профессию
     db = TestingSessionLocal()
     try:
+        # Создаем тестовую профессию с ID=1 для всех тестов
+        from app.models.profession import Profession
+        profession = Profession(
+            id=1,
+            name="TestProfession",
+            description="Test profession for unit tests"
+        )
+        db.add(profession)
+        db.commit()
         yield db
     finally:
         db.close()
@@ -66,18 +85,11 @@ def client(db_session):
         yield test_client
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope="function")
 def setup_test_data(db_session):
-    """Автоматически создает тестовую профессию для всех тестов"""
+    """Возвращает тестовую профессию (создается в db_session)"""
     from app.models.profession import Profession
-    
-    profession = Profession(
-        name="TestProfession",
-        description="Test profession for unit tests"
-    )
-    db_session.add(profession)
-    db_session.commit()
-    db_session.refresh(profession)
+    profession = db_session.query(Profession).filter(Profession.id == 1).first()
     return profession
 
 
