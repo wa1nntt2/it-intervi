@@ -44,12 +44,10 @@ backend-tests:
     - pip install -r requirements.txt
     - pip install -r requirements-dev.txt
   script:
-    # Запуск линтера
-    - echo "🔍 Запуск flake8..."
+    - echo "Running flake8 linter..."
     - flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics || true
     - flake8 app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    # Запуск тестов
-    - echo "🧪 Запуск pytest..."
+    - echo "Running pytest..."
     - pytest tests/ -v --tb=short --cov=app --cov-report=html --cov-report=xml
   artifacts:
     when: always
@@ -78,14 +76,11 @@ frontend-tests:
     - cd frontend
     - npm ci --cache .npm-cache --prefer-offline
   script:
-    # Линтинг
-    - echo "🔍 Запуск ESLint..."
+    - echo "Running ESLint..."
     - npm run lint || true
-    # TypeScript проверка типов
-    - echo "📝 Проверка типов TypeScript..."
+    - echo "Running TypeScript type check..."
     - npx tsc --noEmit
-    # Сборка
-    - echo "🏗️ Сборка frontend..."
+    - echo "Building frontend..."
     - npm run build
   artifacts:
     when: on_success
@@ -152,9 +147,9 @@ security-scan-python:
   before_script:
     - pip install safety bandit
   script:
-    - echo "🔒 Сканирование Python зависимостей (safety)..."
+    - echo "Scanning Python dependencies (safety)..."
     - safety check -r backend/requirements.txt || true
-    - echo "🔒 Статический анализ кода (bandit)..."
+    - echo "Static code analysis (bandit)..."
     - bandit -r backend/app/ -f json -o bandit-report.json || true
   artifacts:
     when: always
@@ -174,7 +169,7 @@ security-scan-frontend:
     - cd frontend
     - npm ci --cache .npm-cache --prefer-offline
   script:
-    - echo "🔒 Аудит npm зависимостей..."
+    - echo "Auditing npm dependencies..."
     - npm audit --audit-level=high --json > npm-audit-report.json || true
   artifacts:
     when: always
@@ -195,11 +190,11 @@ deploy-staging:
   before_script:
     - apk add --no-cache curl jq
   script:
-    - echo "🚀 Деплой на staging окружение..."
+    - echo "Deploying to staging environment..."
     - echo "Commit: $CI_COMMIT_SHORT_SHA"
     - echo "Backend image: $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA"
     - echo "Frontend image: $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA"
-    - echo "✅ Деплой завершен (placeholder)"
+    - echo "Deploy completed (placeholder)"
   environment:
     name: staging
     url: https://staging.example.com
@@ -224,11 +219,11 @@ deploy-production:
   before_script:
     - apk add --no-cache curl jq
   script:
-    - echo "🚀🚀 Деплой на production окружение..."
+    - echo "Deploying to production environment..."
     - echo "Tag: $CI_COMMIT_TAG"
     - echo "Backend image: $BACKEND_IMAGE:$CI_COMMIT_TAG"
     - echo "Frontend image: $FRONTEND_IMAGE:$CI_COMMIT_TAG"
-    - echo "✅ Production деплой завершен (placeholder)"
+    - echo "Production deploy completed (placeholder)"
   environment:
     name: production
     url: https://example.com
