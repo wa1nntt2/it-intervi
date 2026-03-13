@@ -1,7 +1,7 @@
 import pytest
 import os
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
 
@@ -38,6 +38,8 @@ def db_session():
         yield db
     finally:
         db.close()
+        # Очищаем все таблицы после теста
+        Base.metadata.drop_all(bind=test_engine)
 
 
 @pytest.fixture(scope="function")
@@ -76,7 +78,7 @@ def test_user():
 def test_profession(db_session):
     """Фикстура с тестовой профессией"""
     from app.models.profession import Profession
-    
+
     profession = Profession(
         name="TestProfession",
         description="Test profession for unit tests"
