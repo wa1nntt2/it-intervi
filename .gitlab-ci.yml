@@ -14,9 +14,12 @@ variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
   NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm-cache"
   # GitLab Registry настройки
-  DOCKER_REGISTRY: "$CI_REGISTRY"
-  BACKEND_IMAGE: "$CI_REGISTRY_IMAGE/backend"
-  FRONTEND_IMAGE: "$CI_REGISTRY_IMAGE/frontend"
+  # Для локального тестирования используем Docker Hub (измените на свой)
+  DOCKER_REGISTRY: "docker.io"
+  DOCKER_USER: "your-dockerhub-username"  # ← Заполните перед запуском
+  DOCKER_PASSWORD: "your-dockerhub-token"  # ← Заполните перед запуском
+  BACKEND_IMAGE: "$DOCKER_USER/it-interview-backend"
+  FRONTEND_IMAGE: "$DOCKER_USER/it-interview-frontend"
 
 # Кэширование для ускорения сборок
 cache:
@@ -108,7 +111,7 @@ docker-build-backend:
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin "$DOCKER_REGISTRY"
   script:
     - echo "🐳 Сборка Docker образа backend..."
     - docker build -t "$BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$BACKEND_IMAGE:latest" ./backend
@@ -118,6 +121,7 @@ docker-build-backend:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
     - if: $CI_COMMIT_BRANCH =~ /^release\//
+  allow_failure: true  # ← Разрешить неудачу если Registry недоступен
 
 docker-build-frontend:
   stage: build
@@ -129,7 +133,7 @@ docker-build-frontend:
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin "$DOCKER_REGISTRY"
   script:
     - echo "🐳 Сборка Docker образа frontend..."
     - docker build -t "$FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$FRONTEND_IMAGE:latest" ./frontend
@@ -139,6 +143,7 @@ docker-build-frontend:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
     - if: $CI_COMMIT_BRANCH =~ /^release\//
+  allow_failure: true  # ← Разрешить неудачу если Registry недоступен
 
 # ============================================
 # Security Scan
