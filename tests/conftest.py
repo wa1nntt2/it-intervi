@@ -56,6 +56,9 @@ def client(db_session):
     # Пересоздаем приложение с тестовым engine
     test_app = main.create_app()
 
+    # Отключаем rate limiting для тестов
+    test_app.state.limiter.enabled = False
+
     with TestClient(test_app) as test_client:
         yield test_client
 
@@ -70,21 +73,36 @@ def test_user():
 
 
 @pytest.fixture
+def test_profession(db_session):
+    """Фикстура с тестовой профессией"""
+    from app.models.profession import Profession
+    
+    profession = Profession(
+        name="TestProfession",
+        description="Test profession for unit tests"
+    )
+    db_session.add(profession)
+    db_session.commit()
+    db_session.refresh(profession)
+    return profession
+
+
+@pytest.fixture
 def authenticated_client(client: TestClient, test_user: dict):
     """Фикстура с аутентифицированным клиентом"""
     # Регистрируем пользователя
     client.post("/api/auth/register", json=test_user)
-    
+
     # Логинимся и получаем токен
     response = client.post("/api/auth/login", data={
         "username": test_user["email"],
         "password": test_user["password"]
     })
-    
+
     token = response.json()["access_token"]
     client.headers["Authorization"] = f"Bearer {token}"
-    
+
     yield client
-    
+
     # Очищаем заголовок после теста
     client.headers.pop("Authorization", None)
