@@ -39,6 +39,8 @@ backend-tests:
     - pip install --upgrade pip
     - pip install virtualenv
     - cd backend
+    # Очищаем старый venv чтобы избежать проблем с кэшем
+    - rm -rf venv
     - virtualenv venv
     - source venv/bin/activate
     - pip install -r requirements.txt
