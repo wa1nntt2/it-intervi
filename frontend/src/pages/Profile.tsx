@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
-import { progressApi } from '../services/api'
+import { progressApi, interviewsApi, professionsApi } from '../services/api'
+import { InterviewConfig, Profession } from '../types'
 
 interface UserProgress {
   xp: number
@@ -32,6 +33,8 @@ export default function Profile() {
   const logout = useAuthStore((state) => state.logout)
   const [progress, setProgress] = useState<UserProgress | null>(null)
   const [loading, setLoading] = useState(true)
+  const [savedConfigs, setSavedConfigs] = useState<InterviewConfig[]>([])
+  const [professions, setProfessions] = useState<Record<number, string>>({})
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -39,9 +42,13 @@ export default function Profile() {
       return
     }
     loadProgress()
-    
+    loadSavedConfigs()
+
     // Обновляем прогресс при возврате на страницу (фокус окна)
-    const handleFocus = () => loadProgress()
+    const handleFocus = () => {
+      loadProgress()
+      loadSavedConfigs()
+    }
     window.addEventListener('focus', handleFocus)
     return () => window.removeEventListener('focus', handleFocus)
   }, [])
@@ -61,7 +68,7 @@ export default function Profile() {
           // Неверный формат, игнорируем
         }
       }
-      
+
       // Затем загружаем актуальные данные с сервера
       const data = await progressApi.getMyProgress()
       setProgress(data)
@@ -71,6 +78,59 @@ export default function Profile() {
       console.error('Failed to load progress:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadSavedConfigs = async () => {
+    try {
+      // Загружаем все профессии для маппинга
+      const profs = await professionsApi.getAll()
+      const profMap: Record<number, string> = {}
+      ;(profs.items || profs).forEach((p: Profession) => {
+        profMap[p.id] = p.name
+      })
+      setProfessions(profMap)
+
+      // Загружаем конфигурации для всех профессий
+      const allConfigs: InterviewConfig[] = []
+      const professionIds = Object.keys(profMap).map(Number)
+      
+      for (const profId of professionIds) {
+        try {
+          const configs = await interviewsApi.getConfigsByProfession(profId)
+          // Фильтруем только свои конфигурации
+          const myConfigs = (configs || []).filter((c: InterviewConfig) => c.user_id !== null)
+          allConfigs.push(...myConfigs)
+        } catch (e) {
+          // Игнорируем ошибки для отдельных профессий
+        }
+      }
+      
+      setSavedConfigs(allConfigs)
+    } catch (error) {
+      console.error('Failed to load saved configs:', error)
+    }
+  }
+
+  const handleDeleteConfig = async (configId: number) => {
+    if (!confirm('Удалить эту конфигурацию?')) return
+    
+    try {
+      await interviewsApi.deleteConfig(configId)
+      loadSavedConfigs()
+    } catch (error) {
+      console.error('Failed to delete config:', error)
+      alert('Не удалось удалить конфигурацию')
+    }
+  }
+
+  const handleStartFromConfig = async (configId: number) => {
+    try {
+      const result = await interviewsApi.createSessionFromConfig(configId)
+      navigate(`/session/${result.session_id}`)
+    } catch (error: any) {
+      console.error('Failed to start session:', error)
+      alert('Не удалось начать сессию')
     }
   }
 
@@ -157,7 +217,7 @@ export default function Profile() {
         </div>
 
         {/* Achievements */}
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6">
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-6">
           <h2 className="text-xl font-bold text-white mb-4">🏆 Достижения</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {progress.achievements.map((ach) => (
@@ -181,6 +241,63 @@ export default function Profile() {
             ))}
           </div>
         </div>
+
+        {/* Saved Interview Configs */}
+        {savedConfigs.length > 0 && (
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-6">
+            <h2 className="text-xl font-bold text-white mb-4">📋 Сохранённые собеседования</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              {savedConfigs.map((config) => (
+                <div
+                  key={config.id}
+                  className="bg-white/5 rounded-xl p-4 border border-white/20 hover:border-yellow-400 transition-all"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h3 className="text-white font-bold text-base">{config.name}</h3>
+                      <p className="text-white/60 text-xs">
+                        {professions[config.profession_id] || 'Профессия'}
+                      </p>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      config.difficulty === 'intern' ? 'bg-green-500' :
+                      config.difficulty === 'junior' ? 'bg-blue-500' : 'bg-purple-500'
+                    } text-white`}>
+                      {config.difficulty === 'intern' ? '🌱' :
+                       config.difficulty === 'junior' ? '📚' : '💼'}
+                    </span>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {config.category_configs.slice(0, 3).map((cat, idx) => (
+                      <span key={idx} className="text-white/70 text-xs bg-white/10 px-2 py-0.5 rounded">
+                        {cat.question_count} вопр.
+                      </span>
+                    ))}
+                    {config.category_configs.length > 3 && (
+                      <span className="text-white/50 text-xs">+{config.category_configs.length - 3}</span>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleStartFromConfig(config.id)}
+                      className="flex-1 bg-yellow-400/20 text-yellow-300 py-2 rounded-lg text-xs font-bold hover:bg-yellow-400/30 transition-all"
+                    >
+                      ▶️ Начать
+                    </button>
+                    <button
+                      onClick={() => handleDeleteConfig(config.id)}
+                      className="px-3 bg-red-500/20 text-red-300 py-2 rounded-lg text-xs font-bold hover:bg-red-500/30 transition-all"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Back to Home */}
         <div className="mt-6 text-center">

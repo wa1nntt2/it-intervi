@@ -28,6 +28,7 @@ export interface Question {
   correct_option: number | null  // Индекс правильного ответа (для MCQ)
   correct_order?: number[] | null  // Правильный порядок (для Ordering)
   explanation?: string | null  // Пояснение к ответу
+  category_ids?: number[]  // ID категорий вопроса
 }
 
 /** Ответ пользователя на вопрос */
@@ -53,4 +54,32 @@ export interface TokenResponse {
   access_token: string
   refresh_token: string
   token_type: string
+}
+
+/** Категория вопросов */
+export interface Category {
+  id: number
+  name: string
+  description: string | null
+  profession_id: number
+}
+
+/** Конфигурация категории для собеседования */
+export interface CategoryConfig {
+  category_id: number
+  question_count: number
+}
+
+/** Конфигурация собеседования */
+export interface InterviewConfig {
+  id: number
+  name: string
+  description: string | null
+  profession_id: number
+  profession_name: string
+  user_id: number | null
+  difficulty: 'intern' | 'junior' | 'middle'
+  category_configs: CategoryConfig[]
+  is_public: boolean
+  is_default: boolean
 }

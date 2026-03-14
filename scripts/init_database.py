@@ -29,6 +29,7 @@ from sqlalchemy.orm import sessionmaker
 from app.models.user import User
 from app.models.profession import Profession
 from app.models.question import Question
+from app.models.category import Category
 from app.models.user_progress import Achievement
 from app.core.security import get_password_hash
 
@@ -97,11 +98,67 @@ try:
         print("✅ Профессии созданы (4)")
     else:
         print("⚠️  Профессии уже существуют (пропущено)")
-    
-    # Получаем ID профессий для вопросов
+
+    # Получаем ID профессий для категорий и вопросов
     professions_map = {}
     for p in db.query(Profession).all():
         professions_map[p.name] = p.id
+
+    # ============================================
+    # 3. Создаём категории для профессий
+    # ============================================
+    if not db.query(Category).first():
+        # Frontend категории
+        if professions_map.get("Frontend Developer"):
+            frontend_id = professions_map["Frontend Developer"]
+            frontend_categories = [
+                Category(name="HTML/CSS", description="Основы вёрстки и стилей", profession_id=frontend_id),
+                Category(name="JavaScript", description="Язык JavaScript и основы", profession_id=frontend_id),
+                Category(name="React", description="Библиотека React", profession_id=frontend_id),
+                Category(name="TypeScript", description="Типизация в JavaScript", profession_id=frontend_id),
+            ]
+            db.add_all(frontend_categories)
+
+        # Backend категории
+        if professions_map.get("Backend Developer"):
+            backend_id = professions_map["Backend Developer"]
+            backend_categories = [
+                Category(name="Python", description="Язык Python", profession_id=backend_id),
+                Category(name="REST API", description="Проектирование API", profession_id=backend_id),
+                Category(name="Базы данных", description="SQL и NoSQL БД", profession_id=backend_id),
+                Category(name="Архитектура", description="Микросервисы, паттерны", profession_id=backend_id),
+            ]
+            db.add_all(backend_categories)
+
+        # Fullstack категории
+        if professions_map.get("Fullstack Developer"):
+            fullstack_id = professions_map["Fullstack Developer"]
+            fullstack_categories = [
+                Category(name="Frontend", description="Frontend разработка", profession_id=fullstack_id),
+                Category(name="Backend", description="Backend разработка", profession_id=fullstack_id),
+                Category(name="Базы данных", description="Работа с БД", profession_id=fullstack_id),
+                Category(name="DevOps Basics", description="Основы DevOps", profession_id=fullstack_id),
+            ]
+            db.add_all(fullstack_categories)
+
+        # DevOps категории
+        if professions_map.get("DevOps Engineer"):
+            devops_id = professions_map["DevOps Engineer"]
+            devops_categories = [
+                Category(name="Linux", description="ОС Linux, командная строка", profession_id=devops_id),
+                Category(name="Docker", description="Контейнеризация", profession_id=devops_id),
+                Category(name="Kubernetes", description="Оркестрация контейнеров", profession_id=devops_id),
+                Category(name="CI/CD", description="Непрерывная интеграция и доставка", profession_id=devops_id),
+                Category(name="Сети", description="Сетевые технологии", profession_id=devops_id),
+                Category(name="Monitoring", description="Мониторинг и логирование", profession_id=devops_id),
+                Category(name="IaC", description="Infrastructure as Code", profession_id=devops_id),
+            ]
+            db.add_all(devops_categories)
+
+        db.commit()
+        print("✅ Категории созданы")
+    else:
+        print("⚠️  Категории уже существуют (пропущено)")
     
     # ============================================
     # 3. Создаём достижения
@@ -186,239 +243,20 @@ try:
         print("✅ Достижения созданы (8)")
     else:
         print("⚠️  Достижения уже существуют (пропущено)")
-    
+
     # ============================================
-    # 4. Создаём начальные вопросы
+    # 4. Вопросы НЕ создаём!
     # ============================================
-    print("\n📚 Добавление начальных вопросов...")
-    
-    # Frontend вопросы
-    if professions_map.get("Frontend Developer"):
-        frontend_id = professions_map["Frontend Developer"]
-        if db.query(Question).filter(Question.profession_id == frontend_id).count() == 0:
-            frontend_questions = [
-                Question(
-                    text="Что такое HTML?",
-                    question_type="mcq",
-                    profession_id=frontend_id,
-                    difficulty="intern",
-                    options=["Язык разметки", "Язык программирования", "База данных", "Фреймворк"],
-                    correct_option=0,
-                    explanation="HTML (HyperText Markup Language) — это язык гипертекстовой разметки."
-                ),
-                Question(
-                    text="Что такое Virtual DOM?",
-                    question_type="mcq",
-                    profession_id=frontend_id,
-                    difficulty="intern",
-                    options=["Прямая копия реального DOM", "Легковесная копия реального DOM", "База данных", "Библиотека"],
-                    correct_option=1,
-                    explanation="Virtual DOM — это легковесная копия реального DOM в памяти."
-                ),
-                Question(
-                    text="Что такое useEffect в React?",
-                    question_type="mcq",
-                    profession_id=frontend_id,
-                    difficulty="junior",
-                    options=["Хук для состояния", "Хук для побочных эффектов", "Хук для мемоизации", "Хук для навигации"],
-                    correct_option=1,
-                    explanation="useEffect — хук для выполнения побочных эффектов."
-                ),
-                Question(
-                    text="Расположите этапы жизненного цикла React",
-                    question_type="ordering",
-                    profession_id=frontend_id,
-                    difficulty="junior",
-                    options=["Mounting", "Updating", "Unmounting"],
-                    correct_order=[0, 1, 2],
-                    explanation="Жизненный цикл: Mounting → Updating → Unmounting"
-                ),
-                Question(
-                    text="Что такое React Fiber?",
-                    question_type="mcq",
-                    profession_id=frontend_id,
-                    difficulty="middle",
-                    options=["Новая версия React", "Архитектура рендеринга", "Библиотека анимаций", "Инструмент отладки"],
-                    correct_option=1,
-                    explanation="React Fiber — архитектура движка согласования в React 16+."
-                ),
-                Question(
-                    text="Что такое TypeScript?",
-                    question_type="mcq",
-                    profession_id=frontend_id,
-                    difficulty="intern",
-                    options=["Язык программирования", "Надстройка над JS с типами", "Фреймворк", "Библиотека"],
-                    correct_option=1,
-                    explanation="TypeScript — это язык с статической типизацией, компилируемый в JavaScript."
-                ),
-            ]
-            db.add_all(frontend_questions)
-            db.commit()
-            print(f"   ✅ Frontend: {len(frontend_questions)} вопросов")
-        else:
-            print("   ⚠️  Frontend вопросы уже существуют (пропущено)")
-    
-    # Backend вопросы
-    if professions_map.get("Backend Developer"):
-        backend_id = professions_map["Backend Developer"]
-        if db.query(Question).filter(Question.profession_id == backend_id).count() == 0:
-            backend_questions = [
-                Question(
-                    text="Что такое REST API?",
-                    question_type="mcq",
-                    profession_id=backend_id,
-                    difficulty="intern",
-                    options=["Протокол", "Архитектурный стиль", "Язык", "База данных"],
-                    correct_option=1,
-                    explanation="REST — архитектурный стиль для проектирования веб-сервисов."
-                ),
-                Question(
-                    text="Что такое SQL?",
-                    question_type="mcq",
-                    profession_id=backend_id,
-                    difficulty="intern",
-                    options=["Язык программирования", "Язык запросов к БД", "Фреймворк", "ОС"],
-                    correct_option=1,
-                    explanation="SQL — язык для работы с реляционными базами данных."
-                ),
-                Question(
-                    text="Что такое микросервисы?",
-                    question_type="mcq",
-                    profession_id=backend_id,
-                    difficulty="junior",
-                    options=["Монолит", "Архитектура из небольших сервисов", "База данных", "Фреймворк"],
-                    correct_option=1,
-                    explanation="Микросервисы — архитектура приложения как набора небольших независимых сервисов."
-                ),
-                Question(
-                    text="Что такое FastAPI?",
-                    question_type="mcq",
-                    profession_id=backend_id,
-                    difficulty="intern",
-                    options=["База данных", "Веб-фреймворк Python", "Язык", "Библиотека"],
-                    correct_option=1,
-                    explanation="FastAPI — современный веб-фреймворк для Python с автоматической документацией."
-                ),
-            ]
-            db.add_all(backend_questions)
-            db.commit()
-            print(f"   ✅ Backend: {len(backend_questions)} вопросов")
-        else:
-            print("   ⚠️  Backend вопросы уже существуют (пропущено)")
-    
-    # Fullstack вопросы
-    if professions_map.get("Fullstack Developer"):
-        fullstack_id = professions_map["Fullstack Developer"]
-        if db.query(Question).filter(Question.profession_id == fullstack_id).count() == 0:
-            fullstack_questions = [
-                Question(
-                    text="Что такое MVC паттерн?",
-                    question_type="mcq",
-                    profession_id=fullstack_id,
-                    difficulty="junior",
-                    options=["Model-View-Controller", "Model-View-Component", "Module-View", "Model-Visual"],
-                    correct_option=0,
-                    explanation="MVC — паттерн: Model (данные), View (отображение), Controller (логика)."
-                ),
-                Question(
-                    text="Что такое JWT токен?",
-                    question_type="mcq",
-                    profession_id=fullstack_id,
-                    difficulty="junior",
-                    options=["База данных", "Токен аутентификации", "Язык", "Фреймворк"],
-                    correct_option=1,
-                    explanation="JWT — стандарт для передачи данных аутентификации между сторонами."
-                ),
-            ]
-            db.add_all(fullstack_questions)
-            db.commit()
-            print(f"   ✅ Fullstack: {len(fullstack_questions)} вопросов")
-        else:
-            print("   ⚠️  Fullstack вопросы уже существуют (пропущено)")
-    
-    # DevOps вопросы
-    if professions_map.get("DevOps Engineer"):
-        devops_id = professions_map["DevOps Engineer"]
-        if db.query(Question).filter(Question.profession_id == devops_id).count() == 0:
-            devops_questions = [
-                Question(
-                    text="Что такое CI/CD?",
-                    question_type="mcq",
-                    profession_id=devops_id,
-                    difficulty="intern",
-                    options=["Continuous Integration / Continuous Delivery", "Computer Interface", "Central Display", "Continuous Display"],
-                    correct_option=0,
-                    explanation="CI/CD — непрерывная интеграция и доставка/развертывание."
-                ),
-                Question(
-                    text="Что такое Docker?",
-                    question_type="mcq",
-                    profession_id=devops_id,
-                    difficulty="intern",
-                    options=["Платформа виртуализации", "Платформа контейнеризации", "ОС", "Язык"],
-                    correct_option=1,
-                    explanation="Docker — платформа для разработки, доставки и запуска приложений в контейнерах."
-                ),
-                Question(
-                    text="Что такое Kubernetes?",
-                    question_type="mcq",
-                    profession_id=devops_id,
-                    difficulty="junior",
-                    options=["СУБД", "Система оркестрации контейнеров", "Мониторинг", "Контроль версий"],
-                    correct_option=1,
-                    explanation="Kubernetes — система оркестрации контейнеров."
-                ),
-                Question(
-                    text="Что такое Infrastructure as Code?",
-                    question_type="mcq",
-                    profession_id=devops_id,
-                    difficulty="junior",
-                    options=["Документация", "Управление инфраструктурой через код", "Язык", "Физическая инфраструктура"],
-                    correct_option=1,
-                    explanation="IaC — управление инфраструктурой через код и автоматизацию."
-                ),
-                Question(
-                    text="Расположите этапы CI/CD pipeline",
-                    question_type="ordering",
-                    profession_id=devops_id,
-                    difficulty="junior",
-                    options=["Build", "Test", "Deploy", "Monitor"],
-                    correct_order=[0, 1, 2, 3],
-                    explanation="Стандартный pipeline: Build → Test → Deploy → Monitor"
-                ),
-                Question(
-                    text="Что такое Prometheus?",
-                    question_type="mcq",
-                    profession_id=devops_id,
-                    difficulty="middle",
-                    options=["Логирование", "Мониторинг и алертинг", "CI/CD", "Управление контейнерами"],
-                    correct_option=1,
-                    explanation="Prometheus — система мониторинга и алертинга."
-                ),
-                Question(
-                    text="Что такое Terraform?",
-                    question_type="mcq",
-                    profession_id=devops_id,
-                    difficulty="middle",
-                    options=["Мониторинг", "IaC инструмент от HashiCorp", "Контейнеризация", "Тестирование"],
-                    correct_option=1,
-                    explanation="Terraform — инструмент IaC от HashiCorp."
-                ),
-                Question(
-                    text="Что такое Blue-Green Deployment?",
-                    question_type="mcq",
-                    profession_id=devops_id,
-                    difficulty="middle",
-                    options=["Тестирование", "Стратегия развертывания с двумя средами", "Мониторинг", "Бэкап"],
-                    correct_option=1,
-                    explanation="Blue-Green — стратегия развертывания с двумя идентичными средами."
-                ),
-            ]
-            db.add_all(devops_questions)
-            db.commit()
-            print(f"   ✅ DevOps: {len(devops_questions)} вопросов")
-        else:
-            print("   ⚠️  DevOps вопросы уже существуют (пропущено)")
+    # ВАЖНО: Этот скрипт БОЛЬШЕ НИКОГДА не создаёт вопросы.
+    # Вопросы добавляются только через:
+    # - Админ-панель (/admin)
+    # - Импорт из JSON/CSV
+    # - Прямое редактирование БД
+    #
+    # Данные пользователей (вопросы) НЕПРИКОСНОВЕННЫ!
+    # ============================================
+    print("\n📚 Вопросы не создаются (данные пользователей неприкосновенны)")
+    print("   Для добавления вопросов используйте админ-панель или импорт")
     
     # ============================================
     # Итоги

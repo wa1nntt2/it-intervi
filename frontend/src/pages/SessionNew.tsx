@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { professionsApi, sessionsApi, progressApi } from '../services/api'
+import { professionsApi, progressApi } from '../services/api'
 import { Profession } from '../types'
-
-type Difficulty = 'intern' | 'junior' | 'middle'
 
 interface UserProgress {
   xp: number
@@ -21,15 +19,12 @@ interface UserProgress {
 export default function SessionNew() {
   const navigate = useNavigate()
   const [professions, setProfessions] = useState<Profession[]>([])
-  const [selectedProfession, setSelectedProfession] = useState<number | null>(null)
-  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null)
   const [loading, setLoading] = useState(true)
-  const [creating, setCreating] = useState(false)
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null)
 
   useEffect(() => {
     const abortController = new AbortController()
-    
+
     const loadData = async () => {
       try {
         const [professionsResponse, progressData] = await Promise.all([
@@ -52,26 +47,13 @@ export default function SessionNew() {
         }
       }
     }
-    
+
     loadData()
-    
+
     return () => {
       abortController.abort()
     }
   }, [])
-
-  const handleStart = async () => {
-    if (!selectedProfession || !selectedDifficulty) return
-    setCreating(true)
-    try {
-      const session = await sessionsApi.create(selectedProfession, selectedDifficulty)
-      navigate(`/session/${session.id}`)
-    } catch (err) {
-      console.error('Failed to create session', err)
-    } finally {
-      setCreating(false)
-    }
-  }
 
   const getProfessionIcon = (name: string) => {
     const icons: Record<string, string> = {
@@ -91,33 +73,6 @@ export default function SessionNew() {
       'DevOps': 'from-orange-500 to-amber-500'
     }
     return gradients[name.split(' ')[0]] || 'from-gray-500 to-slate-500'
-  }
-
-  const getDifficultyConfig = (difficulty: Difficulty) => {
-    const configs: Record<Difficulty, { bg: string; text: string; label: string; icon: string; description: string }> = {
-      'intern': { 
-        bg: 'from-green-400 to-emerald-500', 
-        text: 'text-green-700', 
-        label: 'Intern', 
-        icon: '🌱',
-        description: 'Базовые вопросы для начинающих'
-      },
-      'junior': { 
-        bg: 'from-blue-400 to-cyan-500', 
-        text: 'text-blue-700', 
-        label: 'Junior', 
-        icon: '📚',
-        description: 'Вопросы для начального уровня'
-      },
-      'middle': { 
-        bg: 'from-purple-500 to-pink-500', 
-        text: 'text-purple-700', 
-        label: 'Middle', 
-        icon: '💼',
-        description: 'Продвинутые вопросы для опытных'
-      }
-    }
-    return configs[difficulty]
   }
 
   if (loading) {
@@ -175,140 +130,49 @@ export default function SessionNew() {
             </span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
-            Настройте сессию
+            Выберите профессию
           </h1>
           <p className="text-base text-white/90">
-            Выберите профессию и сложность
+            После выбора вы сможете настроить темы и количество вопросов
           </p>
         </div>
 
-        {/* Step 1: Professions */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm">1</span>
-            <h2 className="text-lg font-bold text-white">Выберите профессию</h2>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {professions.map((profession) => (
-              <div
-                key={profession.id}
-                onClick={() => setSelectedProfession(profession.id)}
-                className={`group relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 ${
-                  selectedProfession === profession.id
-                    ? 'ring-2 ring-yellow-400 shadow-xl shadow-yellow-400/50'
-                    : 'hover:shadow-lg'
-                }`}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${getProfessionGradient(profession.name)} opacity-90 group-hover:opacity-100 transition-opacity`} />
-                <div className="relative p-3 text-white">
-                  <div className="flex items-start gap-2">
-                    <div className="text-2xl">{getProfessionIcon(profession.name)}</div>
-                    <div className="flex-1">
-                      <h3 className="text-sm font-bold mb-1">{profession.name}</h3>
-                      {profession.description && (
-                        <p className="text-white/90 text-xs leading-tight line-clamp-2">
-                          {profession.description}
-                        </p>
-                      )}
-                    </div>
-                    <div className={`transition-all duration-300 ${
-                      selectedProfession === profession.id ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                    }`}>
-                      <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
-                        <span className="text-indigo-600 text-sm font-bold">✓</span>
-                      </div>
-                    </div>
+        {/* Professions Grid */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          {professions.map((profession) => (
+            <div
+              key={profession.id}
+              onClick={() => navigate(`/interview/${profession.id}/setup`)}
+              className={`group relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl`}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${getProfessionGradient(profession.name)} opacity-90 group-hover:opacity-100 transition-opacity`} />
+              <div className="relative p-4 text-white">
+                <div className="flex items-start gap-3">
+                  <div className="text-3xl">{getProfessionIcon(profession.name)}</div>
+                  <div className="flex-1">
+                    <h3 className="text-base font-bold mb-1">{profession.name}</h3>
+                    {profession.description && (
+                      <p className="text-white/90 text-xs leading-tight line-clamp-2">
+                        {profession.description}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Step 2: Difficulty */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm">2</span>
-            <h2 className="text-lg font-bold text-white">Выберите сложность</h2>
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            {(['intern', 'junior', 'middle'] as Difficulty[]).map((difficulty) => {
-              const config = getDifficultyConfig(difficulty)
-              return (
-                <div
-                  key={difficulty}
-                  onClick={() => setSelectedDifficulty(difficulty)}
-                  className={`group relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 ${
-                    selectedDifficulty === difficulty
-                      ? 'ring-2 ring-yellow-400 shadow-xl shadow-yellow-400/50'
-                      : 'hover:shadow-lg'
-                  }`}
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${config.bg} opacity-90 group-hover:opacity-100 transition-opacity`} />
-                  <div className="relative p-3 text-white text-center">
-                    <div className="text-2xl mb-1">{config.icon}</div>
-                    <h3 className="text-sm font-bold mb-0.5">{config.label}</h3>
-                    <p className="text-white/90 text-xs">{config.description}</p>
-                  </div>
-                  <div className={`absolute top-1 right-1 transition-all duration-300 ${
-                    selectedDifficulty === difficulty ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                  }`}>
-                    <div className="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
-                      <span className="text-indigo-600 text-xs font-bold">✓</span>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button
-            onClick={handleStart}
-            disabled={!selectedProfession || !selectedDifficulty || creating}
-            className="group bg-white text-indigo-600 px-6 py-3 rounded-xl font-bold text-base hover:bg-yellow-300 transition-all hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
-          >
-            {creating ? (
-              <>
-                <span className="animate-spin">⏳</span>
-                Создание...
-              </>
-            ) : (
-              <>
-                <span>🚀</span>
-                Начать сессию
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={() => navigate('/')}
-            className="bg-white/20 backdrop-blur-sm text-white border-2 border-white/50 px-6 py-3 rounded-xl font-bold text-base hover:bg-white/30 transition-all hover:scale-105"
-          >
-            ← Назад
-          </button>
-        </div>
-
-        {/* Selected Info */}
-        {(selectedProfession || selectedDifficulty) && (
-          <div className="mt-4 text-center">
-            <div className="inline-block bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-              <p className="text-white/80 text-xs">
-                <span className="font-bold text-yellow-300">
-                  {selectedProfession ? professions.find(p => p.id === selectedProfession)?.name : 'Профессия не выбрана'}
-                </span>
-              </p>
-              {selectedDifficulty && (
-                <p className="text-white/80 text-xs">
-                  Уровень: <span className="font-bold text-yellow-300">{getDifficultyConfig(selectedDifficulty).label}</span>
-                </p>
-              )}
+              <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
             </div>
-          </div>
-        )}
+          ))}
+        </div>
+
+        {/* Info */}
+        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-center">
+          <p className="text-white/80 text-sm">
+            👈 Выберите профессию чтобы настроить собеседование
+          </p>
+          <p className="text-white/60 text-xs mt-2">
+            Вы сможете выбрать темы, количество вопросов и уровень сложности
+          </p>
+        </div>
       </div>
     </div>
   )

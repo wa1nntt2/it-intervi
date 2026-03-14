@@ -17,7 +17,7 @@ from app.core.limiter import limiter
 from app.models import user, profession, question, answer, ordering_item, session
 
 # Импорт API роутеров (endpoint'ов)
-from app.api import auth, professions, questions, sessions, users, progress
+from app.api import auth, professions, questions, sessions, users, progress, interviews
 
 
 def apply_migrations():
@@ -121,6 +121,7 @@ def create_app() -> FastAPI:
     app.include_router(sessions.router, prefix="/api")
     app.include_router(users.router, prefix="/api")
     app.include_router(progress.router, prefix="/api")
+    app.include_router(interviews.router, prefix="/api")
 
     @app.get("/")
     def root():

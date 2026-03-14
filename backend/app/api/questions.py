@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Header, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import Optional, List
 import json
 import csv
@@ -9,7 +9,9 @@ from math import ceil
 from app.database.engine import get_db
 from app.models.question import Question
 from app.models.profession import Profession
+from app.models.user import User
 from app.api.schemas import QuestionCreate, QuestionUpdate, QuestionResponse, PaginatedQuestions
+from app.api.auth import get_current_user
 
 router = APIRouter(prefix="/questions", tags=["questions"])
 
@@ -40,7 +42,7 @@ def get_questions(
     
     # Применяем пагинацию
     offset = (page - 1) * page_size
-    questions = query.offset(offset).limit(page_size).all()
+    questions = query.options(joinedload(Question.categories)).offset(offset).limit(page_size).all()
     
     return PaginatedQuestions(
         items=questions,
@@ -55,10 +57,22 @@ def get_questions(
 
 @router.post("/", response_model=QuestionResponse)
 def create_question(question: QuestionCreate, db: Session = Depends(get_db)):
-    new_question = Question(**question.model_dump())
+    question_data = question.model_dump()
+    category_ids = question_data.pop('category_ids', None)
+    
+    new_question = Question(**question_data)
     db.add(new_question)
     db.commit()
     db.refresh(new_question)
+    
+    # Привязываем категории если указаны
+    if category_ids:
+        from app.models.category import Category
+        categories = db.query(Category).filter(Category.id.in_(category_ids)).all()
+        new_question.categories.extend(categories)
+        db.commit()
+        db.refresh(new_question)
+    
     return new_question
 
 
@@ -120,9 +134,10 @@ def get_question_templates():
 
 @router.get("/{question_id}", response_model=QuestionResponse)
 def get_question(question_id: int, db: Session = Depends(get_db)):
-    question = db.query(Question).filter(Question.id == question_id).first()
+    question = db.query(Question).options(joinedload(Question.categories)).filter(Question.id == question_id).first()
     if not question:
         raise HTTPException(status_code=404, detail="Вопрос не найден")
+    
     return question
 
 
@@ -131,10 +146,24 @@ def update_question(question_id: int, question_data: QuestionUpdate, db: Session
     question = db.query(Question).filter(Question.id == question_id).first()
     if not question:
         raise HTTPException(status_code=404, detail="Вопрос не найден")
-    
+
     update_data = question_data.model_dump(exclude_unset=True)
+    category_ids = update_data.pop('category_ids', None)
+    
     for field, value in update_data.items():
         setattr(question, field, value)
+
+    # Обновляем категории если указаны
+    if category_ids is not None:
+        from app.models.category import Category
+        # Очищаем текущие категории
+        question.categories = []
+        db.flush()
+        
+        # Добавляем новые
+        if category_ids:
+            categories = db.query(Category).filter(Category.id.in_(category_ids)).all()
+            question.categories.extend(categories)
     
     db.commit()
     db.refresh(question)
@@ -434,24 +463,30 @@ def duplicate_question(question_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/{question_id}/answers", response_model=dict)
-def submit_answer(question_id: int, answer: dict, db: Session = Depends(get_db)):
+def submit_answer(
+    question_id: int,
+    answer: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     question = db.query(Question).filter(Question.id == question_id).first()
     if not question:
         raise HTTPException(status_code=404, detail="Вопрос не найден")
 
     selected_option = answer.get("selected_option")
     is_correct = selected_option == question.correct_option
-    
+
     from app.models.answer import Answer
     new_answer = Answer(
         question_id=question_id,
+        user_id=current_user.id,  # Сохраняем ID пользователя
         selected_option=selected_option,
         is_correct=is_correct
     )
     db.add(new_answer)
     db.commit()
     db.refresh(new_answer)
-    
+
     return {
         "id": new_answer.id,
         "question_id": question_id,

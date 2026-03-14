@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Question, Profession } from '../../types'
+import { Question, Profession, Category } from '../../types'
 
 interface QuestionEditorProps {
   question?: Question | null
   professions: Profession[]
+  categories: Category[]
   onSubmit: (data: QuestionFormData) => void
   onCancel: () => void
 }
@@ -16,9 +17,11 @@ interface QuestionFormData {
   options: string[]
   correct_option: number | null
   correct_order: number[] | null
+  category_ids: number[]
+  explanation: string
 }
 
-export function QuestionEditor({ question, professions, onSubmit, onCancel }: QuestionEditorProps) {
+export function QuestionEditor({ question, professions, categories, onSubmit, onCancel }: QuestionEditorProps) {
   const [formData, setFormData] = useState<QuestionFormData>({
     text: '',
     question_type: 'mcq',
@@ -27,6 +30,8 @@ export function QuestionEditor({ question, professions, onSubmit, onCancel }: Qu
     options: ['', '', '', ''],
     correct_option: null,
     correct_order: null,
+    category_ids: [],
+    explanation: '',
   })
 
   useEffect(() => {
@@ -39,6 +44,8 @@ export function QuestionEditor({ question, professions, onSubmit, onCancel }: Qu
         options: question.options,
         correct_option: question.correct_option,
         correct_order: (question as any).correct_order || null,
+        category_ids: (question as any).category_ids || [],
+        explanation: (question as any).explanation || '',
       })
     }
   }, [question])
@@ -55,12 +62,29 @@ export function QuestionEditor({ question, professions, onSubmit, onCancel }: Qu
         options: template.options || ['', '', '', ''],
         correct_option: template.correct_option ?? 0,
         correct_order: template.correct_order || null,
+        category_ids: [],
+        explanation: '',
       })
     }
 
     window.addEventListener('useTemplate', handleUseTemplate as EventListener)
     return () => window.removeEventListener('useTemplate', handleUseTemplate as EventListener)
   }, [])
+
+  // Фильтрация категорий по выбранной профессии
+  const filteredCategories = categories.filter(
+    c => c.profession_id.toString() === formData.profession_id
+  )
+
+  // Переключение категории
+  const handleCategoryToggle = (categoryId: number) => {
+    setFormData(prev => ({
+      ...prev,
+      category_ids: prev.category_ids.includes(categoryId)
+        ? prev.category_ids.filter(id => id !== categoryId)
+        : [...prev.category_ids, categoryId]
+    }))
+  }
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...formData.options]
@@ -144,7 +168,7 @@ export function QuestionEditor({ question, professions, onSubmit, onCancel }: Qu
         </label>
         <select
           value={formData.profession_id}
-          onChange={(e) => setFormData({ ...formData, profession_id: e.target.value })}
+          onChange={(e) => setFormData({ ...formData, profession_id: e.target.value, category_ids: [] })}
           className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500"
           required
         >
@@ -154,6 +178,56 @@ export function QuestionEditor({ question, professions, onSubmit, onCancel }: Qu
           ))}
         </select>
       </div>
+
+      {/* Категории */}
+      {formData.profession_id && (
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Категории вопроса
+            </label>
+            <button
+              type="button"
+              onClick={() => {
+                const event = new CustomEvent('openAddCategory')
+                window.dispatchEvent(event)
+              }}
+              className="text-xs text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1"
+            >
+              + Добавить категорию
+            </button>
+          </div>
+          {filteredCategories.length > 0 ? (
+            <div className="grid grid-cols-2 gap-2">
+              {filteredCategories.map((category) => (
+                <label
+                  key={category.id}
+                  className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-all ${
+                    formData.category_ids.includes(category.id)
+                      ? 'bg-indigo-50 border-indigo-400'
+                      : 'bg-white border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.category_ids.includes(category.id)}
+                    onChange={() => handleCategoryToggle(category.id)}
+                    className="w-4 h-4 text-indigo-600 rounded"
+                  />
+                  <span className="text-sm text-gray-700">{category.name}</span>
+                </label>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500 italic">
+              Для этой профессии ещё нет категорий. Создайте первую!
+            </p>
+          )}
+          <p className="mt-2 text-xs text-gray-500">
+            💡 Выберите одну или несколько категорий для этого вопроса
+          </p>
+        </div>
+      )}
 
       {/* Варианты ответов */}
       <div>
@@ -210,6 +284,23 @@ export function QuestionEditor({ question, professions, onSubmit, onCancel }: Qu
             💡 Для вопросов на упорядочивание правильный порядок задается последовательностью элементов
           </p>
         )}
+      </div>
+
+      {/* Пояснение к ответу */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Пояснение к правильному ответу
+        </label>
+        <textarea
+          value={formData.explanation}
+          onChange={(e) => setFormData({ ...formData, explanation: e.target.value })}
+          className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500"
+          rows={3}
+          placeholder="Объясните, почему этот ответ правильный..."
+        />
+        <p className="mt-1 text-xs text-gray-500">
+          💡 Это пояснение будет показано пользователю после ответа
+        </p>
       </div>
 
       {/* Кнопки действий */}

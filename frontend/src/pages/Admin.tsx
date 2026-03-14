@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { professionsApi, questionsApi } from '../services/api'
-import { Profession, Question } from '../types'
+import { professionsApi, questionsApi, interviewsApi } from '../services/api'
+import { Profession, Question, Category } from '../types'
 import { Sidebar } from '../components/admin/Sidebar'
 import { Modal } from '../components/admin/Modal'
 import { StatCard } from '../components/admin/StatCard'
 import { QuestionEditor } from '../components/admin/QuestionEditor'
+import { AddCategoryModal } from '../components/admin/AddCategoryModal'
 import { DifficultyDistribution } from '../components/admin/DifficultyDistribution'
 import { ProfessionDistribution } from '../components/admin/ProfessionDistribution'
 import { ImportExportModal } from '../components/admin/ImportExportModal'
@@ -18,6 +19,7 @@ import { toast } from '../stores/toastStore'
 export default function Admin() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [professions, setProfessions] = useState<Profession[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -26,11 +28,13 @@ export default function Admin() {
   const [selectedProfession, setSelectedProfession] = useState<string>('')
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('')
   const [selectedType, setSelectedType] = useState<string>('')
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
 
   // Модальные окна
   const [isEditorOpen, setIsEditorOpen] = useState(false)
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null)
   const [isImportExportOpen, setIsImportExportOpen] = useState(false)
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false)
 
   // Массовое удаление
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
@@ -62,12 +66,40 @@ export default function Admin() {
 
   useEffect(() => {
     loadProfessions()
-    loadQuestions()
+  }, [])
+
+  useEffect(() => {
+    if (professions.length > 0) {
+      loadCategories()
+      loadQuestions()
+    }
+  }, [professions])
+
+  // Обработчик открытия модального окна добавления категории
+  useEffect(() => {
+    const handleOpenAddCategory = () => {
+      setIsAddCategoryOpen(true)
+    }
+    window.addEventListener('openAddCategory', handleOpenAddCategory)
+    return () => window.removeEventListener('openAddCategory', handleOpenAddCategory)
   }, [])
 
   const loadProfessions = async () => {
     const data = await professionsApi.getAll()
     setProfessions(data)
+  }
+
+  const loadCategories = async () => {
+    const allCategories: Category[] = []
+    for (const profession of professions) {
+      try {
+        const cats = await interviewsApi.getCategoriesByProfession(profession.id)
+        allCategories.push(...cats)
+      } catch (e) {
+        console.error(`Failed to load categories for profession ${profession.id}`)
+      }
+    }
+    setCategories(allCategories)
   }
 
   const loadQuestions = async () => {
@@ -152,7 +184,8 @@ export default function Admin() {
     const matchesProfession = !selectedProfession || q.profession_id.toString() === selectedProfession
     const matchesDifficulty = !selectedDifficulty || q.difficulty === selectedDifficulty
     const matchesType = !selectedType || q.question_type === selectedType
-    return matchesSearch && matchesProfession && matchesDifficulty && matchesType
+    const matchesCategory = !selectedCategory || (q as any).category_ids?.includes(parseInt(selectedCategory))
+    return matchesSearch && matchesProfession && matchesDifficulty && matchesType && matchesCategory
   })
 
   // Пагинация
@@ -176,6 +209,8 @@ export default function Admin() {
     await questionsApi.create({
       ...data,
       profession_id: parseInt(data.profession_id),
+      category_ids: data.category_ids || [],
+      explanation: data.explanation || '',
     })
     setIsEditorOpen(false)
     loadQuestions()
@@ -186,6 +221,8 @@ export default function Admin() {
     await questionsApi.update(editingQuestion.id, {
       ...data,
       profession_id: parseInt(data.profession_id),
+      category_ids: data.category_ids || [],
+      explanation: data.explanation || '',
     })
     setIsEditorOpen(false)
     setEditingQuestion(null)
@@ -517,12 +554,13 @@ export default function Admin() {
                 </svg>
                 <h3 className="text-lg font-semibold text-gray-900">Дополнительные фильтры</h3>
               </div>
-              {(searchQuery || selectedDifficulty || selectedType) && (
+              {(searchQuery || selectedDifficulty || selectedType || selectedCategory) && (
                 <button
                   onClick={() => {
                     setSearchQuery('')
                     setSelectedDifficulty('')
                     setSelectedType('')
+                    setSelectedCategory('')
                   }}
                   className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
                 >
@@ -530,25 +568,39 @@ export default function Admin() {
                 </button>
               )}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <select
                 value={selectedDifficulty}
                 onChange={(e) => setSelectedDifficulty(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                className="border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
-                <option value="">Все сложности</option>
+                <option value="">Все уровни</option>
                 <option value="intern">🌱 Intern</option>
                 <option value="junior">📚 Junior</option>
                 <option value="middle">💼 Middle</option>
               </select>
+
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                className="border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
                 <option value="">Все типы</option>
-                <option value="mcq">📝 MCQ</option>
-                <option value="ordering">🔢 Порядок</option>
+                <option value="mcq">Multiple Choice</option>
+                <option value="ordering">Упорядочивание</option>
+              </select>
+
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              >
+                <option value="">Все категории</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name} ({professions.find(p => p.id === cat.profession_id)?.name || 'Unknown'})
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -611,6 +663,9 @@ export default function Admin() {
                       Вопрос
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Тема
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Профессия
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -627,7 +682,7 @@ export default function Admin() {
                 <tbody className="divide-y divide-gray-100">
                   {loading ? (
                     <tr>
-                      <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                      <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
                         <div className="flex items-center justify-center gap-2">
                           <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
@@ -639,7 +694,7 @@ export default function Admin() {
                     </tr>
                   ) : paginatedQuestions.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-6 py-12 text-center">
+                      <td colSpan={7} className="px-6 py-12 text-center">
                         <div className="text-gray-400 mb-2">📭</div>
                         <p className="text-gray-500">Вопросы не найдены</p>
                       </td>
@@ -676,6 +731,48 @@ export default function Admin() {
                               </div>
                             )}
                           </div>
+                          {/* Категории */}
+                          {(q as any).category_ids && (q as any).category_ids.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              {(q as any).category_ids.map((catId: number) => {
+                                const cat = categories.find(c => c.id === catId)
+                                return cat ? (
+                                  <span
+                                    key={catId}
+                                    className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full"
+                                    title={cat.description || ''}
+                                  >
+                                    {cat.name}
+                                  </span>
+                                ) : null
+                              })}
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          {(q as any).category_ids && (q as any).category_ids.length > 0 ? (
+                            <div className="flex flex-wrap gap-1">
+                              {(q as any).category_ids.slice(0, 3).map((catId: number) => {
+                                const cat = categories.find(c => c.id === catId)
+                                return cat ? (
+                                  <span
+                                    key={catId}
+                                    className="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full font-medium"
+                                    title={cat.description || ''}
+                                  >
+                                    {cat.name}
+                                  </span>
+                                ) : null
+                              })}
+                              {(q as any).category_ids.length > 3 && (
+                                <span className="text-xs text-gray-500 px-1 py-1">
+                                  +{(q as any).category_ids.length - 3}
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-xs text-gray-400 italic">Нет темы</span>
+                          )}
                         </td>
                         <td className="px-6 py-4">
                           <span className="text-sm text-gray-600 font-medium">
@@ -772,6 +869,7 @@ export default function Admin() {
         <QuestionEditor
           question={editingQuestion}
           professions={professions}
+          categories={categories}
           onSubmit={editingQuestion ? handleUpdateQuestion : handleCreateQuestion}
           onCancel={() => {
             setIsEditorOpen(false)
@@ -779,6 +877,18 @@ export default function Admin() {
           }}
         />
       </Modal>
+
+      {/* Модальное окно добавления категории */}
+      <AddCategoryModal
+        isOpen={isAddCategoryOpen}
+        onClose={() => setIsAddCategoryOpen(false)}
+        onSuccess={() => {
+          loadCategories()
+          toast.success('Категория создана')
+        }}
+        professions={professions}
+        professionId={selectedProfession ? parseInt(selectedProfession) : undefined}
+      />
 
       {/* Модальное окно подтверждения удаления */}
       {isDeleteConfirmOpen && (

@@ -1,11 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Header, Body
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from datetime import datetime, timedelta
 
 from app.database.engine import get_db
 from app.models.user import User
 from app.models.user_progress import UserProgress, Achievement, UserAchievement
+from app.models.question import Question
+from app.models.answer import Answer
+from app.models.session import Session as SessionModel
 from app.api.schemas import UserResponse
+from app.api.auth import get_current_user
 from app.core.security import decode_token
 
 router = APIRouter(prefix="/progress", tags=["progress"])
@@ -237,3 +241,40 @@ def get_all_achievements(db: Session = Depends(get_db)):
         }
         for a in achievements
     ]
+
+
+@router.get("/wrong-answers")
+def get_wrong_answers(
+    limit: int = 10,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Получить неправильные ответы пользователя"""
+    # Получаем ответы пользователя где is_correct = False
+    wrong_answers = db.query(Answer).options(
+        joinedload(Answer.question)
+    ).filter(
+        Answer.user_id == current_user.id,
+        Answer.is_correct == False
+    ).order_by(Answer.created_at.desc()).limit(limit).all()
+    
+    result = []
+    for answer in wrong_answers:
+        question = answer.question
+        if not question:
+            continue
+            
+        # Получаем категории вопроса
+        categories = [c.name for c in question.categories]
+        
+        result.append({
+            "question_id": question.id,
+            "question_text": question.text,
+            "your_answer": question.options[answer.selected_option] if answer.selected_option is not None else None,
+            "correct_answer": question.options[question.correct_option] if question.correct_option is not None else None,
+            "explanation": question.explanation,
+            "category": categories[0] if categories else None,
+            "answered_at": answer.created_at.isoformat() if answer.created_at else None
+        })
+    
+    return result

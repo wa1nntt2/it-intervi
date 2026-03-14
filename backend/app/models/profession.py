@@ -21,3 +21,5 @@ class Profession(Base):
     # Связи с другими таблицами
     questions = relationship("Question", back_populates="profession")  # Вопросы по профессии
     sessions = relationship("Session", back_populates="profession")  # Сессии тестирования
+    categories = relationship("Category", back_populates="profession")  # Категории вопросов
+    interview_configs = relationship("InterviewConfig", back_populates="profession")  # Конфигурации собеседований

@@ -284,10 +284,12 @@ export const questionsApi = {
     text: string
     question_type: 'mcq' | 'ordering'
     profession_id: number
-    difficulty: 'easy' | 'medium' | 'hard'
+    difficulty: 'intern' | 'junior' | 'middle'
     options: string[]
     correct_option: number | null
     correct_order?: number[]
+    category_ids?: number[]
+    explanation?: string
   }) => {
     const response = await api.post('/questions/', data)
     return response.data
@@ -297,10 +299,12 @@ export const questionsApi = {
     text?: string
     question_type?: 'mcq' | 'ordering'
     profession_id?: number
-    difficulty?: 'easy' | 'medium' | 'hard'
+    difficulty?: 'intern' | 'junior' | 'middle'
     options?: string[]
     correct_option?: number | null
     correct_order?: number[]
+    category_ids?: number[]
+    explanation?: string
   }) => {
     const response = await api.put(`/questions/${id}`, data)
     return response.data
@@ -429,6 +433,75 @@ export const progressApi = {
   /** Получить все достижения */
   getAllAchievements: async () => {
     const response = await api.get('/progress/achievements')
+    return response.data
+  },
+}
+
+/**
+ * API методы для работы с категориями и собеседованиями.
+ */
+export const interviewsApi = {
+  /** Получить все категории для профессии */
+  getCategoriesByProfession: async (professionId: number) => {
+    const response = await api.get(`/professions/${professionId}/categories`)
+    return response.data
+  },
+  /** Получить категорию по ID */
+  getCategoryById: async (categoryId: number) => {
+    const response = await api.get(`/categories/${categoryId}`)
+    return response.data
+  },
+  /** Создать новую категорию */
+  createCategory: async (data: {
+    name: string
+    description?: string
+    profession_id: number
+  }) => {
+    const response = await api.post('/categories', data)
+    return response.data
+  },
+  /** Получить все конфигурации для профессии */
+  getConfigsByProfession: async (professionId: number) => {
+    const response = await api.get(`/professions/${professionId}/interview-configs`)
+    return response.data
+  },
+  /** Получить конфигурацию по ID */
+  getConfigById: async (configId: number) => {
+    const response = await api.get(`/interview-configs/${configId}`)
+    return response.data
+  },
+  /** Создать новую конфигурацию собеседования */
+  createConfig: async (data: {
+    name: string
+    description?: string
+    profession_id: number
+    difficulty: 'intern' | 'junior' | 'middle'
+    category_configs: { category_id: number; question_count: number }[]
+    is_public?: boolean
+  }) => {
+    const response = await api.post('/interview-configs', data)
+    return response.data
+  },
+  /** Обновить конфигурацию собеседования */
+  updateConfig: async (configId: number, data: {
+    name: string
+    description?: string
+    profession_id: number
+    difficulty: 'intern' | 'junior' | 'middle'
+    category_configs: { category_id: number; question_count: number }[]
+    is_public?: boolean
+  }) => {
+    const response = await api.put(`/interview-configs/${configId}`, data)
+    return response.data
+  },
+  /** Удалить конфигурацию собеседования */
+  deleteConfig: async (configId: number) => {
+    const response = await api.delete(`/interview-configs/${configId}`)
+    return response.data
+  },
+  /** Создать сессию из конфигурации */
+  createSessionFromConfig: async (configId: number) => {
+    const response = await api.post('/sessions/from-config', { config_id: configId })
     return response.data
   },
 }

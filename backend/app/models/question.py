@@ -1,10 +1,11 @@
 # Модель вопроса
 # Хранит вопросы для тестирования с вариантами ответов
 
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, JSON, Table
 from sqlalchemy.orm import relationship
 
 from app.database.engine import Base
+from app.models.category import question_categories
 
 
 class Question(Base):
@@ -28,3 +29,6 @@ class Question(Base):
 
     # Связь с профессией
     profession = relationship("Profession", back_populates="questions")
+    
+    # Связь с категориями (многие-ко-многим)
+    categories = relationship("Category", secondary=question_categories, back_populates="questions")

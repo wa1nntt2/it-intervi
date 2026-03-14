@@ -137,13 +137,19 @@ export default function Session() {
       if (question.question_type === 'ordering') {
         const userOrder = orderingAnswers[question.id]
         const correctOrder = question.correct_order?.map(i => String(i))
-        if (userOrder && correctOrder && JSON.stringify(userOrder) === JSON.stringify(correctOrder)) {
+        const isCorrect = userOrder && correctOrder && JSON.stringify(userOrder) === JSON.stringify(correctOrder)
+        if (isCorrect) {
           correctCount++
         }
+        // TODO: сохранить ответ для ordering вопросов
       } else {
         const selectedOption = answers[question.id]
-        if (selectedOption === question.correct_option) {
+        const isCorrect = selectedOption === question.correct_option
+        if (isCorrect) {
           correctCount++
+        }
+        // Сохраняем ответ в БД (и правильные, и неправильные)
+        if (selectedOption !== undefined) {
           await questionsApi.submitAnswer(question.id, selectedOption as number)
         }
       }

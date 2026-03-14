@@ -1,9 +1,9 @@
 # Pydantic схемы для валидации данных API
 # Определяют структуру запросов и ответов
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator, model_validator
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, Any
 
 
 # === Схемы пользователя ===
@@ -99,6 +99,7 @@ class QuestionCreate(QuestionBase):
     options: list[str]  # Варианты ответов
     correct_option: Optional[int] = None  # Индекс правильного ответа (для MCQ)
     correct_order: Optional[list[int]] = None  # Правильный порядок (для Ordering)
+    category_ids: Optional[list[int]] = None  # ID категорий вопроса
 
 
 class QuestionUpdate(BaseModel):
@@ -111,6 +112,7 @@ class QuestionUpdate(BaseModel):
     correct_option: Optional[int] = None
     correct_order: Optional[list[int]] = None
     explanation: Optional[str] = None
+    category_ids: Optional[list[int]] = None  # ID категорий вопроса
 
 
 class QuestionResponse(QuestionBase):
@@ -118,9 +120,33 @@ class QuestionResponse(QuestionBase):
     id: int
     options: list[str]  # Варианты ответов
     correct_option: Optional[int] = None  # Индекс правильного ответа
+    category_ids: Optional[list[int]] = None  # ID категорий вопроса
 
     class Config:
         from_attributes = True
+        
+    @model_validator(mode='before')
+    @classmethod
+    def extract_category_ids(cls, values: Any) -> Any:
+        if isinstance(values, dict):
+            return values
+        # Если это ORM объект, извлекаем category_ids из categories
+        if hasattr(values, 'categories') and values.categories:
+            if not isinstance(values, dict):
+                # Конвертируем в dict и добавляем category_ids
+                values_dict = {
+                    'id': values.id,
+                    'text': values.text,
+                    'question_type': values.question_type,
+                    'profession_id': values.profession_id,
+                    'difficulty': values.difficulty,
+                    'explanation': getattr(values, 'explanation', None),
+                    'options': values.options,
+                    'correct_option': values.correct_option,
+                    'category_ids': [cat.id for cat in values.categories]
+                }
+                return values_dict
+        return values
 
 
 # === Схемы ответа ===

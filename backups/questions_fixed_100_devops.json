@@ -1,0 +1,1808 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-14T00:00:00",
+  "total": 105,
+  "questions": [
+    {
+      "id": 21,
+      "text": "Расположите уровни OSI модели (снизу вверх)",
+      "question_type": "ordering",
+      "profession_id": 2,
+      "profession_name": "Backend Developer",
+      "difficulty": "junior",
+      "options": [
+        "Physical",
+        "Network",
+        "Transport",
+        "Application"
+      ],
+      "correct_option": null,
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "Уровни OSI: 1. Physical, 2. Data Link, 3. Network, 4. Transport, 5. Session, 6. Presentation, 7. Application."
+    },
+    {
+      "id": 22,
+      "text": "Что такое микросервисная архитектура?",
+      "question_type": "mcq",
+      "profession_id": 2,
+      "profession_name": "Backend Developer",
+      "difficulty": "junior",
+      "options": [
+        "Монолитное приложение",
+        "Архитектура с небольшими независимыми сервисами",
+        "База данных",
+        "Веб-фреймворк"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Микросервисная архитектура — это подход к разработке приложения как набора небольших независимых сервисов."
+    },
+    {
+      "id": 23,
+      "text": "Что такое DevOps?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Конкретный инструмент для автоматизации тестирования",
+        "Отдельная должность, которая занимается только настройкой серверов",
+        "Культура, набор практик и процессов для объединения разработки (Dev) и эксплуатации (Ops)",
+        "Методология управления проектами, похожая на Waterfall"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "DevOps — это прежде всего философия, направленная на устранение барьеров между командами, автоматизацию и повышение скорости и надежности поставки ПО."
+    },
+    {
+      "id": 24,
+      "text": "Основная цель внедрения DevOps?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Полностью заменить разработчиков администраторами",
+        "Ускорение и повышение надежности доставки программного обеспечения",
+        "Увеличение количества документации",
+        "Перестать использовать тестирование"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "DevOps стремится к более частым и стабильным релизам. Это достигается за счет автоматизации (CI/CD), мониторинга и тесного сотрудничества команд."
+    },
+    {
+      "id": 25,
+      "text": "Что такое Infrastructure as Code (IaC)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Управление инфраструктурой (серверами, сетями) через описание в файлах конфигурации, как кодом",
+        "Запуск кода приложения на физических серверах без виртуализации",
+        "Написание кода на языках программирования низкого уровня для BIOS",
+        "Ручное изменение конфигурации серверов через SSH"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "IaC позволяет хранить конфигурацию инфраструктуры в Git, применять к ней контроль версий, ревью и автоматически разворачивать идентичные окружения."
+    },
+    {
+      "id": 26,
+      "text": "Что означает термин \"Automation\" в контексте DevOps?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Автоматическое написание кода нейросетями",
+        "Увольнение всех системных администраторов",
+        "Автоматизация рутинных задач: сборки, тестирования, развертывания, настройки серверов",
+        "Автоматическая отправка писем с отчетами"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Автоматизация снижает риск человеческой ошибки и освобождает время команды для решения более сложных задач."
+    },
+    {
+      "id": 27,
+      "text": "Зачем в DevOps нужна культура сотрудничества (Collaboration)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Чтобы вместе ходить на обед",
+        "Чтобы было кому переложить вину за сбой",
+        "Чтобы разрушить \"стены\" между Dev и Ops, сделав команды ответственными за продукт целиком",
+        "Это просто модное слово, на практике не работает"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Когда разработчик понимает, как его код будет работать на проде, а администратор участвует в планировании фич — продукт становится качественнее."
+    },
+    {
+      "id": 28,
+      "text": "Какой командой можно посмотреть список запущенных процессов в реальном времени?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "ls",
+        "df -h",
+        "top (или htop)",
+        "echo"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`top` показывает динамический список процессов и потребление ресурсов. `htop` — более продвинутая и удобная версия."
+    },
+    {
+      "id": 29,
+      "text": "Как проверить, сколько свободного места на диске в Linux?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "free -m",
+        "df -h",
+        "du -sh",
+        "ps aux"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "`df` (disk free) с флагом `-h` (human-readable) показывает занятое и свободное место на всех смонтированных файловых системах."
+    },
+    {
+      "id": 30,
+      "text": "Как узнать размер папки `/var/log`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "df -h /var/log",
+        "du -sh /var/log",
+        "ls -lh /var/log",
+        "cat /var/log"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "`du` (disk usage) с флагом `-s` (summary) и `-h` покажет общий размер указанной директории."
+    },
+    {
+      "id": 31,
+      "text": "Какая команда используется для просмотра содержимого файла (например, лога) в реальном времени, по мере его дополнения?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "cat file.log",
+        "head -f file.log",
+        "tail -f file.log",
+        "less file.log"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`tail -f` (follow) незаменима для наблюдения за растущими логами."
+    },
+    {
+      "id": 32,
+      "text": "Как в текстовом файле найти все строки, содержащие слово \"error\", не учитывая регистр?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "cat file \\| wc -l error",
+        "find . -name \"error\"",
+        "grep -i error file.log",
+        "sed 's/error//g' file.log"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`grep` (global regular expression print) с флагом `-i` (ignore case) ищет строки, соответствующие шаблону."
+    },
+    {
+      "id": 33,
+      "text": "Как посмотреть переменные окружения в Linux?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "ls env",
+        "echo $VAR",
+        "env или printenv",
+        "export"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Команда `env` выводит список всех установленных переменных окружения."
+    },
+    {
+      "id": 34,
+      "text": "Что сделает команда `ping -c 4 google.com`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Отправит 4 пакета на гугл и завершится",
+        "Будет пинговать бесконечно",
+        "Покажет маршрут до гугла",
+        "Проверит, открыт ли порт 80"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Флаг `-c` (count) задает количество отправляемых пакетов."
+    },
+    {
+      "id": 35,
+      "text": "Как создать нового пользователя с именем `john`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "useradd john",
+        "adduser john",
+        "newuser john",
+        "Все варианты верны (useradd/adduser, в зависимости от дистрибутива)"
+      ],
+      "correct_option": 3,
+      "correct_order": null,
+      "explanation": "`useradd` — базовая утилита, `adduser` — более дружелюбный скрипт-обертка (обычно в Debian/Ubuntu). Оба создают пользователя."
+    },
+    {
+      "id": 36,
+      "text": "Как сделать скрипт `my_script.py` исполняемым?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "./my_script.py",
+        "python my_script.py",
+        "chmod +x my_script.py",
+        "execute my_script.py"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`chmod +x` добавляет флаг исполнения (execute) для владельца, группы и остальных."
+    },
+    {
+      "id": 37,
+      "text": "Что покажет команда `whoami`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Список пользователей в системе",
+        "Имя текущего пользователя",
+        "IP-адрес текущего хоста",
+        "Текущую директорию"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Буквально: \"кто я?\"."
+    },
+    {
+      "id": 38,
+      "text": "Как вывести первые 10 строк файла?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "tail file.txt",
+        "cat -10 file.txt",
+        "head file.txt",
+        "less file.txt"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "По умолчанию `head` выводит первые 10 строк, `tail` — последние 10."
+    },
+    {
+      "id": 39,
+      "text": "Что произойдет, когда вы введете google.com в браузере?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Браузер сразу отправит запрос на IP 8.8.8.8",
+        "Браузер проверит кэш, затем DNS, установит TCP-соединение, отправит HTTP-запрос, получит ответ и отрендерит страницу",
+        "Сначала сработает протокол FTP",
+        "Будет отправлен ICMP ping"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Классический вопрос для проверки понимания веб-стека: DNS -> TCP (3-way handshake) -> TLS (если HTTPS) -> HTTP Request -> HTTP Response."
+    },
+    {
+      "id": 40,
+      "text": "Что такое DNS?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Система для динамической маршрутизации пакетов",
+        "Система доменных имен (Domain Name System), преобразующая имена хостов (google.com) в IP-адреса",
+        "Протокол для отправки почты",
+        "Тип сетевого экрана"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "DNS — это \"телефонная книга\" интернета."
+    },
+    {
+      "id": 41,
+      "text": "Какой порт используется по умолчанию для HTTP?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "22",
+        "443",
+        "80",
+        "25"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "HTTP — 80, HTTPS — 443, SSH — 22, DNS — 53."
+    },
+    {
+      "id": 42,
+      "text": "Какой протокол используется для безопасной передачи гипертекста (HTTPS)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "HTTP + FTP",
+        "HTTP + TLS/SSL",
+        "HTTP + SMTP",
+        "HTTP + SNMP"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "HTTPS — это обычный HTTP, работающий поверх шифрованного TLS (ранее SSL) соединения."
+    },
+    {
+      "id": 43,
+      "text": "Что такое IP-адрес?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Уникальное имя компьютера в сети",
+        "Уникальный числовой идентификатор устройства в компьютерной сети",
+        "Адрес электронной почты",
+        "MAC-адрес сетевой карты"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "IP (Internet Protocol) адрес — это логический адрес устройства в сети (например, 192.168.1.1)."
+    },
+    {
+      "id": 44,
+      "text": "В чем разница между публичным (белым) и приватным (серым) IP-адресом?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Приватные адреса используются только внутри локальных сетей и не маршрутизируются в интернете",
+        "Публичные адреса быстрее",
+        "Приватные адреса начинаются только с 8.8.8.8",
+        "Разницы нет"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Приватные диапазоны: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16. Устройства с такими адресами выходят в интернет через NAT (например, роутер)."
+    },
+    {
+      "id": 45,
+      "text": "Что такое HTTP-метод GET?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Запрос на удаление ресурса",
+        "Запрос на получение данных с сервера",
+        "Запрос на отправку данных на сервер (например, формы)",
+        "Запрос на обновление ресурса"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "GET — самый распространенный метод. Он не должен изменять состояние сервера (идемпотентен)."
+    },
+    {
+      "id": 46,
+      "text": "Какой HTTP-статус означает \"Успешно\" (OK)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "404",
+        "200",
+        "500",
+        "301"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "200 OK — стандартный ответ на успешный GET-запрос. 404 — не найдено, 500 — внутренняя ошибка сервера, 301 — перемещено навсегда (редирект)."
+    },
+    {
+      "id": 47,
+      "text": "Для чего нужна система контроля версий (VCS), такая как Git?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Для общения в команде",
+        "Для отслеживания изменений в коде, возврата к старым версиям и совместной работы",
+        "Для автоматического деплоя кода на сервер",
+        "Для компиляции программ"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Git сохраняет всю историю проекта. Можно увидеть, кто, когда и зачем изменил любую строку."
+    },
+    {
+      "id": 48,
+      "text": "Какая команда Git используется для сохранения изменений в локальный репозиторий?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "git push",
+        "git fetch",
+        "git commit",
+        "git pull"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`git commit` создает \"снимок\" (snapshot) состояния проекта на текущий момент в локальной истории."
+    },
+    {
+      "id": 49,
+      "text": "Какая команда загружает изменения из удаленного репозитория в локальный и сразу сливает их с текущей веткой?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "git fetch",
+        "git pull",
+        "git push",
+        "git merge"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "`git pull = git fetch + git merge`. `git fetch` просто скачивает новые данные, но не применяет их к вашим рабочим файлам."
+    },
+    {
+      "id": 50,
+      "text": "Что такое ветка (branch) в Git?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Скопированный репозиторий",
+        "Легковесный указатель на определенный коммит, позволяющий вести параллельную разработку",
+        "Название удаленного сервера",
+        "Конфликт в коде"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Ветки позволяют разрабатывать фичи независимо друг от друга, не мешая основной линии разработки (обычно `main` или `master`)."
+    },
+    {
+      "id": 51,
+      "text": "Вы хотите создать новую ветку `feature` и сразу переключиться на нее. Какая команда это сделает?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "git branch feature",
+        "git checkout feature",
+        "git checkout -b feature",
+        "git switch feature (без флагов)"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`git checkout -b` создает ветку и переключается на нее. `git switch -c` делает то же самое в более новом синтаксисе."
+    },
+    {
+      "id": 52,
+      "text": "Как отправить свои локальные коммиты в удаленный репозиторий (например, на GitHub)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "git pull",
+        "git commit",
+        "git push",
+        "git fetch"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`git push origin branch-name` отправляет изменения из вашей локальной ветки в ветку `branch-name` на удаленном сервере `origin`."
+    },
+    {
+      "id": 53,
+      "text": "Что такое .gitignore?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Команда для удаления репозитория",
+        "Файл, в котором перечислены имена и папки, которые Git должен игнорировать (не отслеживать)",
+        "Файл с историей коммитов",
+        "Конфигурационный файл самого Git"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Туда помещают временные файлы, секреты (пароли), папки `node_modules`, чтобы не засорять репозиторий."
+    },
+    {
+      "id": 54,
+      "text": "Для чего нужна команда `git log`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Для входа в систему",
+        "Для создания новой ветки",
+        "Для просмотра истории коммитов",
+        "Для удаления файлов"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`git log` показывает список коммитов с их хешами, авторами и датами."
+    },
+    {
+      "id": 55,
+      "text": "В чем ключевое отличие контейнера от виртуальной машины?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Контейнер использует ядро хостовой ОС и изолирует процессы, VM содержит полную гостевую ОС со своим ядром",
+        "Контейнеры работают только в Windows",
+        "Виртуальные машины быстрее запускаются",
+        "Контейнеры не могут выходить в интернет"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "VM тяжелее (гигабайты), контейнеры легкие (мегабайты) и запускаются за секунды, так как не нужно грузить ОС."
+    },
+    {
+      "id": 56,
+      "text": "Что такое Docker-образ (image)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Запущенный процесс контейнера",
+        "Неизменяемый шаблон (слепок) файловой системы для создания контейнеров",
+        "Логи контейнера",
+        "Docker-репозиторий"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Образ — это как \"класс\" в ООП, а контейнер — \"экземпляр\" этого класса. Образы состоят из слоев."
+    },
+    {
+      "id": 57,
+      "text": "Что такое Docker-контейнер?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Файл с настройками Docker",
+        "Запущенный экземпляр Docker-образа (изолированный процесс)",
+        "Утилита для сборки образов",
+        "Графический интерфейс для Docker"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Контейнер — это живая, работающая среда, созданная из образа."
+    },
+    {
+      "id": 58,
+      "text": "Для чего нужен файл Dockerfile?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Для запуска контейнеров",
+        "Для хранения логов",
+        "Для описания инструкций по сборке Docker-образа",
+        "Для настройки сетей в Docker"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Dockerfile содержит команды `FROM`, `RUN`, `COPY`, `CMD` и т.д., которые выполняются для создания образа."
+    },
+    {
+      "id": 59,
+      "text": "Какая команда используется для запуска контейнера из образа?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "docker build",
+        "docker stop",
+        "docker run",
+        "docker commit"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`docker run nginx` скачает образ (если его нет) и запустит контейнер с nginx."
+    },
+    {
+      "id": 60,
+      "text": "Что такое Kubernetes (K8s)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Еще один инструмент для контейнеризации, как Docker",
+        "Система для контроля версий",
+        "Платформа для оркестрации контейнеров: автоматизации развертывания, масштабирования и управления",
+        "Облачный провайдер"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Если Docker — это \"кирпичи\" (контейнеры), то Kubernetes — это \"прораб\", который управляет этими кирпичами на множестве машин."
+    },
+    {
+      "id": 61,
+      "text": "Что значит декларативный подход в Kubernetes?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Вы пишете скрипт с последовательностью действий",
+        "Вы описываете желаемое состояние системы (YAML-файл), а Kubernetes сам решает, как к нему прийти",
+        "Вы вручную выполняете команды на каждом сервере",
+        "Использование только императивных команд типа `kubectl run`"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Декларативный подход — основа Kubernetes. Вы говорите \"хочу 5 копий\", а не \"запусти контейнер, потом проверь, запусти еще один\"."
+    },
+    {
+      "id": 62,
+      "text": "Что такое Continuous Integration (CI)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Автоматический деплой кода в прод",
+        "Ручное тестирование кода перед релизом",
+        "Частая интеграция кода разработчиков в общую ветку с автоматической сборкой и запуском тестов",
+        "Написание кода без перерыва"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Цель CI — быстро найти и исправить проблемы при слиянии кода от разных разработчиков."
+    },
+    {
+      "id": 63,
+      "text": "Что такое CI/CD пайплайн?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Группа серверов, на которых работает CI",
+        "Автоматизированная последовательность шагов (стадий), которые код проходит от коммита до деплоя (например: сборка -> тесты -> деплой на staging -> деплой в прод)",
+        "Визуальное отображение процессов в офисе",
+        "Список багов в коде"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Пайплайн описывает жизненный цикл кода."
+    },
+    {
+      "id": 64,
+      "text": "Что обычно происходит на стадии \"сборка\" (build) в CI/CD?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Отправка уведомлений в Telegram",
+        "Написание кода",
+        "Компиляция кода (если нужно), упаковка его в артефакт (например, JAR, WAR, Docker-образ)",
+        "Проверка кода линтером"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Результат сборки — артефакт, готовый к развертыванию."
+    },
+    {
+      "id": 65,
+      "text": "Зачем запускать автотесты в CI?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Чтобы занять процессор",
+        "Это необязательно",
+        "Чтобы сразу обнаружить ошибки или регрессию после слияния кода, не допуская их до продакшена",
+        "Для генерации отчетов для менеджеров"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Автоматические тесты — основа уверенности в качестве кода."
+    },
+    {
+      "id": 66,
+      "text": "Что такое облачные провайдеры (Cloud Providers)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Компании, которые предоставляют доступ в интернет",
+        "Компании (AWS, Google Cloud, Azure, Yandex Cloud), предоставляющие вычислительные ресурсы (серверы, БД, хранилища) по запросу через интернет",
+        "Производители процессоров",
+        "Хостинг-провайдеры, которые сдают стойки с серверами"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Главная фишка облаков — \"pay-as-you-go\" (плати только за то, что используешь) и масштабирование по запросу."
+    },
+    {
+      "id": 67,
+      "text": "Что такое AWS EC2?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Сервис для отправки email",
+        "Виртуальные серверы в облаке Amazon",
+        "Объектное хранилище (как диск)",
+        "Управляемая база данных"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "EC2 (Elastic Compute Cloud) — основа вычислительных мощностей AWS."
+    },
+    {
+      "id": 68,
+      "text": "Что такое AWS S3?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Сервис DNS",
+        "База данных",
+        "Объектное хранилище (для хранения файлов, статики, бэкапов)",
+        "Сервис мониторинга"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "S3 (Simple Storage Service) хранит файлы в \"бакетах\" (bucket). Очень надежное и дешевое хранилище."
+    },
+    {
+      "id": 69,
+      "text": "Как безопасно хранить пароли и ключи API в коде или CI/CD?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "В открытом виде прямо в коде",
+        "В комментариях",
+        "Использовать секреты (Secrets) в CI/CD, HashiCorp Vault, или зашифрованные переменные окружения",
+        "В имени файла"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Никогда не коммитьте секреты в Git. Для этого есть специальные инструменты."
+    },
+    {
+      "id": 70,
+      "text": "Что такое DevOps? (копия)",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Конкретный инструмент для автоматизации тестирования",
+        "Отдельная должность, которая занимается только настройкой серверов",
+        "Культура, набор практик и процессов для объединения разработки (Dev) и эксплуатации (Ops)",
+        "Методология управления проектами, похожая на Waterfall"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": null
+    },
+    {
+      "id": 71,
+      "text": "Что такое контейнеризация?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Упаковка приложения со зависимостями в изолированную среду",
+        "Создание виртуальных машин с полной ОС",
+        "Резервное копирование данных",
+        "Мониторинг производительности серверов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Контейнеризация — технология виртуализации на уровне ОС. Преимущества: изоляция приложений, быстрый запуск, переносимость, эффективное использование ресурсов. Инструменты: Docker, Podman, containerd."
+    },
+    {
+      "id": 72,
+      "text": "Какая команда Docker используется для запуска контейнера?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "docker run",
+        "docker start",
+        "docker create",
+        "docker exec"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "docker run — основная команда для запуска контейнеров. Примеры: docker run nginx, docker run -d nginx (фоновый режим), docker run -p 8080:80 nginx (маппинг порта)."
+    },
+    {
+      "id": 73,
+      "text": "Что такое Docker Image?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Шаблон только для чтения для создания контейнеров",
+        "Запущенный экземпляр приложения",
+        "Файл с логами контейнера",
+        "Скрипт для автоматизации развёртывания"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Docker Image — шаблон только для чтения для создания контейнеров. Содержит приложение и зависимости, имеет слоистую структуру, неизменяемый, хранится в реестре (Docker Hub)."
+    },
+    {
+      "id": 74,
+      "text": "Что делает команда `docker ps`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Показывает список запущенных контейнеров",
+        "Останавливает контейнеры",
+        "Создаёт новый контейнер",
+        "Удаляет старые контейнеры"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "docker ps — показывает список запущенных контейнеров. Опции: docker ps -a (все), docker ps -l (последний)."
+    },
+    {
+      "id": 75,
+      "text": "Что такое Dockerfile?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Текстовый файл с инструкциями для сборки Docker образа",
+        "Скрипт для запуска контейнера",
+        "Файл конфигурации Docker daemon",
+        "Лог сборки контейнера"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Dockerfile — текстовый файл с инструкциями для сборки Docker образа. Основные инструкции: FROM, WORKDIR, COPY, RUN, CMD, EXPOSE."
+    },
+    {
+      "id": 76,
+      "text": "Какая команда используется для остановки контейнера?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "docker stop",
+        "docker pause",
+        "docker kill",
+        "docker down"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "docker stop — корректная остановка контейнера. Также: docker start (запуск), docker restart (перезапуск), docker kill (принудительно)."
+    },
+    {
+      "id": 77,
+      "text": "Что такое Docker Hub?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Облачный реестр для хранения Docker образов",
+        "Инструмент для мониторинга контейнеров",
+        "Среда разработки для Docker",
+        "Панель управления Docker daemon"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Docker Hub — облачный реестр для хранения и распространения Docker образов. Поддерживает публичные и приватные репозитории, автоматическую сборку из GitHub."
+    },
+    {
+      "id": 78,
+      "text": "Что означает директива FROM в Dockerfile?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Указывает базовый образ для сборки",
+        "Определяет команду запуска",
+        "Копирует файлы в образ",
+        "Устанавливает переменные окружения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "FROM — указывает базовый образ для сборки. Должна быть первой инструкцией, может использоваться несколько раз (multi-stage)."
+    },
+    {
+      "id": 79,
+      "text": "Какая команда показывает логи контейнера?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "docker logs",
+        "docker inspect",
+        "docker events",
+        "docker stats"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "docker logs — вывод логов контейнера. Опции: -f (follow), --tail (последние N строк), --since (за время)."
+    },
+    {
+      "id": 80,
+      "text": "Какой порт используется по умолчанию для SSH?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "22",
+        "80",
+        "8080",
+        "443"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Порт 22 — стандартный порт для SSH. Популярные порты: 22 (SSH), 80 (HTTP), 443 (HTTPS), 3306 (MySQL), 5432 (PostgreSQL), 6379 (Redis)."
+    },
+    {
+      "id": 81,
+      "text": "Что делает команда `git clone`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Копирует удалённый репозиторий на локальную машину",
+        "Создаёт новую ветку",
+        "Отправляет изменения на сервер",
+        "Показывает историю коммитов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "git clone — копирует удалённый репозиторий на локальную машину. Примеры: git clone <url>, git clone --depth 1 (shallow), git clone --branch name."
+    },
+    {
+      "id": 82,
+      "text": "Какая команда показывает текущую директорию в Linux?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "pwd",
+        "cd",
+        "ls",
+        "dir"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "pwd (print working directory) — показывает полный путь к текущей директории. Смежные команды: cd (перейти), ls (список файлов)."
+    },
+    {
+      "id": 83,
+      "text": "Что такое переменная окружения?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "Именованное значение, доступное процессам в системе",
+        "Глобальная переменная в коде программы",
+        "Настройка конфигурации Git",
+        "Параметр командной строки"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Переменная окружения — именованное значение, доступное процессам в системе. Примеры: PATH, HOME, USER, DATABASE_URL, API_KEY."
+    },
+    {
+      "id": 84,
+      "text": "Какая команда используется для создания новой ветки в Git?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "intern",
+      "options": [
+        "git branch",
+        "git commit",
+        "git merge",
+        "git push"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "git branch — создание и управление ветками. Также: git checkout -b name (создать и переключиться), git switch -c name (новая команда)."
+    },
+    {
+      "id": 85,
+      "text": "Чем DevOps отличается от Agile?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Это одно и то же",
+        "Agile касается только дизайна, DevOps — только программирования",
+        "Agile фокусируется на процессе разработки и взаимодействии с заказчиком, DevOps — на доставке и эксплуатации",
+        "DevOps — это ненормативная лексика"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Agile отвечает на вопрос \"как быстро мы можем разработать и изменить продукт?\", а DevOps — \"как быстро и надежно мы доставим эти изменения пользователю и будем их поддерживать?\"."
+    },
+    {
+      "id": 86,
+      "text": "Какие инструменты относятся к категории IaC?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Jira и Confluence",
+        "Terraform и Ansible",
+        "Git и GitHub",
+        "Docker и Kubernetes"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Terraform (для создания ресурсов) и Ansible (для настройки ПО) — классические примеры. Пулл-реквесты здесь проходят не на код фичи, а на изменение инфраструктуры."
+    },
+    {
+      "id": 87,
+      "text": "Что из перечисленного НЕ является целью DevOps?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Увеличение частоты релизов",
+        "Сокращение времени от коммита до деплоя",
+        "Уменьшение количества ошибок на проде",
+        "Увеличение времени поставки изменений (Lead Time)"
+      ],
+      "correct_option": 3,
+      "correct_order": null,
+      "explanation": "DevOps стремится сократить Lead Time (время от появления идеи до ее реализации в продукте), а не увеличить его."
+    },
+    {
+      "id": 88,
+      "text": "Что такое \"Shift Left\" в контексте DevOps и безопасности (DevSecOps)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Перенос кода с одного языка на другой",
+        "Перенос процессов тестирования и безопасности на ранние этапы разработки",
+        "Миграция серверов в левый дата-центр",
+        "Удаление неиспользуемого кода"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "\"Сдвиг влево\" означает, что мы проверяем безопасность и качество не в конце, когда все готово, а сразу, как только написан код. Это дешевле и быстрее."
+    },
+    {
+      "id": 89,
+      "text": "Как найти все файлы с расширением `.conf` в директории `/etc`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "grep \".conf\" /etc",
+        "ls /etc/*.conf",
+        "find /etc -name \"*.conf\"",
+        "whereis .conf"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`find` — мощная команда для поиска файлов по различным критериям. `ls /etc/*.conf` тоже сработает, но только на один уровень вложенности. `find` ищет рекурсивно."
+    },
+    {
+      "id": 90,
+      "text": "Что означает команда `chmod 755 script.sh`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Запретить выполнение скрипта всем",
+        "Владельцу можно всё, группе и остальным — читать и выполнять",
+        "Сделать скрипт доступным только для чтения всем",
+        "Удалить скрипт"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "7 (rwx) для владельца, 5 (r-x) для группы и остальных. Это стандартные права для исполняемых файлов."
+    },
+    {
+      "id": 91,
+      "text": "Что такое Load Average (средняя нагрузка) в Linux?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Процент занятой оперативной памяти",
+        "Общее количество запущенных процессов",
+        "Среднее количество процессов, находящихся в очереди на выполнение или ожидающих ввода-вывода, за 1, 5 и 15 минут",
+        "Скорость интернет-соединения"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Важно понимать: высокий Load Average не всегда означает 100% CPU. Процессы могут ждать диска (I/O)."
+    },
+    {
+      "id": 92,
+      "text": "Какой сигнал по умолчанию посылает команда `kill PID`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "SIGKILL (9)",
+        "SIGTERM (15)",
+        "SIGHUP (1)",
+        "SIGSTOP (19)"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "SIGTERM — это \"вежливый\" запрос на завершение. Процесс может его перехватить и корректно закрыть файлы. SIGKILL убивает процесс принудительно."
+    },
+    {
+      "id": 93,
+      "text": "Для чего нужна команда `ssh-keygen`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Для шифрования диска",
+        "Для генерации пары публичного и приватного SSH-ключей",
+        "Для подключения к удаленному серверу",
+        "Для смены пароля"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "SSH-ключи используются для безопасного подключения к серверам без ввода пароля."
+    },
+    {
+      "id": 94,
+      "text": "Что такое символическая ссылка (symlink)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Копия файла",
+        "Специальный файл, который указывает на другой файл или директорию",
+        "Сжатая версия файла",
+        "Файл с расширением .sym"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Симлинки — это как \"ярлыки\" в Windows. Они позволяют иметь доступ к файлу из разных мест без дублирования."
+    },
+    {
+      "id": 95,
+      "text": "Какой сигнал нельзя перехватить и обработать в приложении?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "SIGTERM",
+        "SIGINT",
+        "SIGKILL",
+        "SIGHUP"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "SIGKILL (9) убивает процесс принудительно на уровне ядра, процесс не может его игнорировать."
+    },
+    {
+      "id": 96,
+      "text": "Что такое stdin, stdout, stderr?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Названия дистрибутивов Linux",
+        "Типы файловых систем",
+        "Стандартные потоки ввода, вывода и ошибок",
+        "Команды для работы с сетью"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Все программы в Linux работают с этими потоками. Можно перенаправлять `stdout` одного процесса в `stdin` другого с помощью пайпа (`\\|`)."
+    },
+    {
+      "id": 97,
+      "text": "Что такое TCP и UDP? В чем разница?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "TCP — надежный протокол с установкой соединения (как звонок), UDP — быстрый, но без гарантии доставки (как письмо в бутылке)",
+        "Это типы IP-адресов",
+        "Это названия сетевых карт",
+        "TCP для Windows, UDP для Linux"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "TCP гарантирует доставку и порядок пакетов (используется для веб, почты). UDP быстрее (используется для видео, DNS, игр)."
+    },
+    {
+      "id": 98,
+      "text": "Для чего нужен протокол ICMP?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Для передачи веб-страниц",
+        "Для шифрования данных",
+        "Для диагностики сети и сообщений об ошибках (используется утилитой ping)",
+        "Для назначения IP-адресов"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "ICMP (Internet Control Message Protocol) — служебный протокол. `ping` отправляет ICMP Echo Request."
+    },
+    {
+      "id": 99,
+      "text": "Что такое NAT (Network Address Translation)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Протокол шифрования трафика",
+        "Механизм, который подменяет IP-адреса в пакетах (обычно приватный на публичный) для выхода в интернет",
+        "Антивирусная программа",
+        "Тип кабеля"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Благодаря NAT ваш домашний роутер с одним белым IP-адресом может раздавать интернет десятку устройств."
+    },
+    {
+      "id": 100,
+      "text": "Как проверить, открыт ли порт 80 на удаленном хосте example.com?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "ping example.com",
+        "telnet example.com 80 или nc -zv example.com 80",
+        "ssh example.com 80",
+        "curl example.com:80"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "`telnet` или `netcat (nc)` — классические утилиты для проверки доступности портов. `curl` тоже покажет ответ, если там HTTP-сервер."
+    },
+    {
+      "id": 101,
+      "text": "Что такое прокси-сервер?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Сервер для разработки приложений",
+        "Посредник между клиентом и другими серверами, который может кэшировать данные, фильтровать трафик или скрывать клиента",
+        "То же самое, что и VPN",
+        "Сервер баз данных"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Прокси бывают прямыми (для клиентов) и обратными (для серверов, как nginx)."
+    },
+    {
+      "id": 102,
+      "text": "Что такое конфликт слияния (merge conflict)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Ошибка в коде программы",
+        "Ситуация, когда Git не может автоматически объединить изменения из двух веток, потому что они затрагивают одни и те же строки файла",
+        "Отсутствие интернета при push'е",
+        "Удаление ветки"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Конфликт решается вручную разработчиком, нужно выбрать, какие изменения оставить."
+    },
+    {
+      "id": 103,
+      "text": "Что такое `origin` в Git?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Название главной ветки",
+        "Псевдоним (алиас) по умолчанию для удаленного репозитория, с которого был сделан клон",
+        "Команда для создания репозитория",
+        "Имя пользователя"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Когда вы клонируете репозиторий, Git автоматически дает имя `origin` тому серверу, откуда вы клонировали."
+    },
+    {
+      "id": 104,
+      "text": "Что делает команда `docker build -t my-app:1.0 .`?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Запускает контейнер my-app",
+        "Собирает Docker-образ из Dockerfile в текущей директории и присваивает ему тег my-app:1.0",
+        "Удаляет все контейнеры",
+        "Пушит образ в Docker Hub"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Флаг `-t` задает имя и тег образу. Точка в конце — это путь к контексту сборки (где искать Dockerfile)."
+    },
+    {
+      "id": 105,
+      "text": "Что такое Docker Compose?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Плагин для мониторинга",
+        "Инструмент для определения и запуска многоконтейнерных приложений (через YAML-файл)",
+        "Альтернатива Docker",
+        "Система оркестрации, как Kubernetes"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Compose позволяет одной командой `docker-compose up` поднять, например, приложение, базу данных и redis."
+    },
+    {
+      "id": 106,
+      "text": "Для чего нужна директива `EXPOSE` в Dockerfile?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Прописать пароль",
+        "Запустить процесс внутри контейнера",
+        "Указать, что контейнер слушает определенный порт (это документирование, а не публикация порта наружу)",
+        "Создать том для данных"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "`EXPOSE 80` не делает порт доступным с хоста. Чтобы опубликовать порт наружу, нужно использовать флаг `-p` при запуске (`docker run -p 8080:80`)."
+    },
+    {
+      "id": 107,
+      "text": "Как сохранить данные, созданные в контейнере (например, в базе данных), чтобы они не пропали после удаления контейнера?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Никак, контейнеры всегда удаляются с данными",
+        "Использовать `docker commit`",
+        "Использовать Docker volumes (тома)",
+        "Записать данные в образ"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Volume — это специальная директория на хосте, которую можно смонтировать внутрь контейнера. Данные в volume живут отдельно от контейнера."
+    },
+    {
+      "id": 108,
+      "text": "Что такое Pod в Kubernetes?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Группа серверов",
+        "Виртуальная машина",
+        "Наименьшая и простейшая единица в Kubernetes, которая представляет собой группу из одного или нескольких контейнеров, разделяющих сеть и хранилище",
+        "База данных"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Чаще всего под содержит один контейнер, но может содержать и несколько тесно связанных контейнеров (например, основной + вспомогательный для отправки логов)."
+    },
+    {
+      "id": 109,
+      "text": "Для чего нужен Kubernetes Deployment?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Для создания секретов",
+        "Для подключения к базе данных",
+        "Для декларативного обновления приложений (обеспечивает желаемое количество реплик Pod'ов, стратегии обновления, откаты)",
+        "Для настройки сети"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Вы говорите Deployment'у: \"хочу 3 копии моего приложения\", и Kubernetes следит, чтобы это количество всегда было."
+    },
+    {
+      "id": 110,
+      "text": "Что такое Kubernetes Service?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Сервер для сборки приложений",
+        "Абстракция, которая определяет политику доступа к группе Pod'ов (постоянная точка входа, даже если Pod'ы пересоздаются)",
+        "Логин и пароль для доступа к кластеру",
+        "Инструмент мониторинга"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Так как Pod'ы могут умирать и появляться с новыми IP, Service дает им стабильный IP и DNS-имя."
+    },
+    {
+      "id": 111,
+      "text": "Что такое ConfigMap в Kubernetes?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Карта сети кластера",
+        "Объект для хранения конфигурационных данных в виде пар ключ-значение, несекретных",
+        "Секретный ключ для доступа к API",
+        "Инструмент для мониторинга"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "ConfigMap позволяет отделить конфигурацию от образа приложения."
+    },
+    {
+      "id": 112,
+      "text": "Что такое namespace в Kubernetes?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Название кластера",
+        "Процесс на ноде",
+        "Способ логического разделения ресурсов кластера между разными командами или проектами",
+        "Тип пода"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Позволяет иметь несколько \"виртуальных кластеров\" внутри одного физического. Например, namespace \"dev\" и \"prod\"."
+    },
+    {
+      "id": 113,
+      "text": "Что такое Continuous Delivery (CD)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Автоматическая подготовка кода к релизу (после CI код автоматически разворачивается на staging-окружении, но выкатка в прод — ручная)",
+        "Автоматический деплой всего подряд без тестов",
+        "Ручной перенос файлов по FTP",
+        "Доставка кофе разработчикам"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Continuous Delivery — код всегда в состоянии, готовом к выкатке в прод."
+    },
+    {
+      "id": 114,
+      "text": "Чем Continuous Delivery отличается от Continuous Deployment?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Continuous Deployment — это следующий шаг, где выкатка в прод происходит тоже автоматически, без участия человека",
+        "Это одно и то же",
+        "Continuous Delivery быстрее",
+        "Continuous Deployment опаснее для Windows"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Continuous Deployment — полностью автоматический пайплайн: коммит -> тесты -> сборка -> деплой на прод."
+    },
+    {
+      "id": 115,
+      "text": "Какие инструменты чаще всего используются для построения CI/CD пайплайнов?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Microsoft Word, Excel",
+        "Photoshop, Figma",
+        "Jenkins, GitLab CI, GitHub Actions, CircleCI",
+        "VS Code, Sublime Text"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Это специализированные серверы автоматизации."
+    },
+    {
+      "id": 116,
+      "text": "Что такое артефакт в CI/CD?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Ошибка в коде",
+        "Результат работы пайплайна (файл, Docker-образ), готовый к развертыванию",
+        "Название ветки в Git",
+        "Конфигурационный файл Jenkins"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Артефакты сохраняются и могут быть использованы позже (например, для отката)."
+    },
+    {
+      "id": 117,
+      "text": "В каком файле обычно описывается CI/CD пайплайн в GitLab CI?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Dockerfile",
+        "Jenkinsfile",
+        ".gitlab-ci.yml",
+        "package.json"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "GitLab CI использует YAML-файл в корне репозитория."
+    },
+    {
+      "id": 118,
+      "text": "Что такое GitHub Actions?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Плагин для VS Code",
+        "Платформа для автоматизации задач прямо в GitHub (CI/CD, и не только)",
+        "Социальная сеть для разработчиков",
+        "Аналог Docker Compose"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Позволяет создавать workflows, которые реагируют на события в репозитории (push, pull request)."
+    },
+    {
+      "id": 119,
+      "text": "Что такое Infrastructure as Code (IaC)? Мы уже спрашивали, но закрепим примером: какой инструмент лучше подойдет для создания виртуальной машины в AWS?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Ansible",
+        "Terraform",
+        "Docker",
+        "Bash-скрипт с вызовом AWS CLI"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Terraform специализируется на создании ресурсов (provisioning). Ansible хорош для их настройки (configuration management). Хотя Ansible тоже может создать машину, но это не его основная роль."
+    },
+    {
+      "id": 120,
+      "text": "Чем отличается Terraform от Ansible?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Terraform в первую очередь для создания инфраструктуры (императивно), Ansible — для настройки ПО на уже созданных серверах (хотя функции пересекаются)",
+        "Это одно и то же",
+        "Ansible только для Windows, Terraform только для Linux",
+        "Terraform работает быстрее"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Terraform управляет состоянием инфраструктуры, Ansible — конфигурацией серверов. Часто их используют вместе."
+    },
+    {
+      "id": 121,
+      "text": "Что такое декларативный подход в IaC (как в Terraform)?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Вы пишете скрипт, где по шагам создаете ресурс",
+        "Вы описываете конечный результат (хочу машину с 2 CPU и 4GB RAM), а инструмент сам выполняет нужные действия",
+        "Вы описываете, как удалить ресурс",
+        "Это подход, при котором код не пишется, все делается руками"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Terraform сравнивает ваше описание (желаемое состояние) с реальным состоянием облака и создает план действий."
+    },
+    {
+      "id": 122,
+      "text": "Для чего в облаках нужны Security Groups?",
+      "question_type": "mcq",
+      "profession_id": 4,
+      "profession_name": "DevOps Engineer",
+      "difficulty": "junior",
+      "options": [
+        "Для управления пользователями в консоли",
+        "Виртуальный firewall на уровне инстанса (EC2), который разрешает или запрещает трафик по портам и IP",
+        "Для шифрования диска",
+        "Для создания VPN"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Правила Security Groups: разрешаем входящий трафик на порт 80 и 22, а остальное блокируем."
+    },
+    {
+      "id": 152,
+      "text": "Расположите этапы жизненного цикла React компонента в правильном порядке",
+      "question_type": "ordering",
+      "profession_id": 1,
+      "profession_name": "Frontend Developer",
+      "difficulty": "junior",
+      "options": [
+        "Mounting",
+        "Updating",
+        "Unmounting"
+      ],
+      "correct_option": null,
+      "correct_order": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "Жизненный цикл React: 1. Mounting (создание), 2. Updating (обновление), 3. Unmounting (удаление)."
+    },
+    {
+      "id": 153,
+      "text": "Расположите по приоритету рендеринга в React Fiber",
+      "question_type": "ordering",
+      "profession_id": 1,
+      "profession_name": "Frontend Developer",
+      "difficulty": "middle",
+      "options": [
+        "Анимации",
+        "Задержка данных",
+        "Смена вкладок"
+      ],
+      "correct_option": null,
+      "correct_order": [
+        0,
+        2,
+        1
+      ],
+      "explanation": "Приоритеты в React Fiber: 1. Анимации (наивысший), 2. Смена вкладок, 3. Задержка данных (низкий)."
+    },
+    {
+      "id": 154,
+      "text": "Расположите этапы работы с базой данных",
+      "question_type": "ordering",
+      "profession_id": 3,
+      "profession_name": "Fullstack Developer",
+      "difficulty": "junior",
+      "options": [
+        "Connect",
+        "Query",
+        "Process",
+        "Close"
+      ],
+      "correct_option": null,
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "Стандартные этапы: 1. Connect (подключение), 2. Query (запрос), 3. Process (обработка), 4. Close (закрытие)."
+    }
+  ]
+}

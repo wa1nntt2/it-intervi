@@ -5,10 +5,11 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Session from './pages/Session'
 import SessionNew from './pages/SessionNew'
+import InterviewSetup from './pages/InterviewSetup'
 import Admin from './pages/Admin'
 import AdminSessions from './pages/AdminSessions'
 import AdminUsers from './pages/AdminUsers'
-import Profile from './pages/Profile'
+import ProfileEnhanced from './pages/ProfileEnhanced'
 import NotFound from './pages/NotFound'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -28,6 +29,14 @@ function App() {
           element={
             <PrivateRoute>
               <SessionNew />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/interview/:professionId/setup"
+          element={
+            <PrivateRoute>
+              <InterviewSetup />
             </PrivateRoute>
           }
         />
@@ -67,7 +76,7 @@ function App() {
           path="/profile"
           element={
             <PrivateRoute>
-              <Profile />
+              <ProfileEnhanced />
             </PrivateRoute>
           }
         />

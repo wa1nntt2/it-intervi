@@ -24,3 +24,4 @@ class User(Base):
     # Связи с другими таблицами
     sessions = relationship("Session", back_populates="user")  # Сессии тестирования
     achievements = relationship("UserAchievement", back_populates="user", cascade="all, delete-orphan")  # Достижения
+    interview_configs = relationship("InterviewConfig", back_populates="user")  # Сохранённые конфигурации собеседований
