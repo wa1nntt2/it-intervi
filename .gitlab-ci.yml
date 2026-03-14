@@ -15,11 +15,11 @@ variables:
   NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm-cache"
   # GitLab Registry настройки
   # Для локального тестирования используем Docker Hub (измените на свой)
-  DOCKER_REGISTRY: "docker.io"
-  DOCKER_USER: "your-dockerhub-username"  # ← Заполните перед запуском
-  DOCKER_PASSWORD: "your-dockerhub-token"  # ← Заполните перед запуском
-  BACKEND_IMAGE: "$DOCKER_USER/it-interview-backend"
-  FRONTEND_IMAGE: "$DOCKER_USER/it-interview-frontend"
+  DOCKER_REGISTRY: "https://index.docker.io/v1/"
+  DOCKER_USER: "wa1nntt"
+  DOCKER_PASSWORD: "your-dockerhub-token"  # ← Замените на ваш Docker Hub Access Token
+  BACKEND_IMAGE: "wa1nntt/it-interview-backend"
+  FRONTEND_IMAGE: "wa1nntt/it-interview-frontend"
 
 # Кэширование для ускорения сборок
 cache:
@@ -112,8 +112,9 @@ docker-build-backend:
     DOCKER_CONFIG: "/kaniko/.docker"
   before_script:
     - mkdir -p /kaniko/.docker
-    - |
-      echo "{\"auths\":{\"$DOCKER_REGISTRY\":{\"username\":\"$DOCKER_USER\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    # Для Docker Hub используем index.docker.io в auth config
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USER\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
   script:
     - echo "🐳 Сборка Docker образа backend через Kaniko..."
     - /kaniko/executor --context ./backend --dockerfile ./backend/Dockerfile --destination $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA --destination $BACKEND_IMAGE:latest --cache=true --cache-copy-layers=true
@@ -134,8 +135,9 @@ docker-build-frontend:
     DOCKER_CONFIG: "/kaniko/.docker"
   before_script:
     - mkdir -p /kaniko/.docker
-    - |
-      echo "{\"auths\":{\"$DOCKER_REGISTRY\":{\"username\":\"$DOCKER_USER\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    # Для Docker Hub используем index.docker.io в auth config
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USER\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
   script:
     - echo "🐳 Сборка Docker образа frontend через Kaniko..."
     - /kaniko/executor --context ./frontend --dockerfile ./frontend/Dockerfile --destination $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA --destination $FRONTEND_IMAGE:latest --cache=true --cache-copy-layers=true
