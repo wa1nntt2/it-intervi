@@ -117,7 +117,14 @@ docker-build-backend:
     - cat /kaniko/.docker/config.json
   script:
     - echo "🐳 Сборка Docker образа backend через Kaniko..."
-    - /kaniko/executor --context ./backend --dockerfile ./backend/Dockerfile --destination $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA --destination $BACKEND_IMAGE:latest --cache=true --cache-copy-layers=true
+    - >
+      /kaniko/executor
+      --context ./backend
+      --dockerfile ./backend/Dockerfile
+      --destination $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA
+      --destination $BACKEND_IMAGE:latest
+      --cache=true
+      --cache-copy-layers=true
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
@@ -140,7 +147,14 @@ docker-build-frontend:
     - cat /kaniko/.docker/config.json
   script:
     - echo "🐳 Сборка Docker образа frontend через Kaniko..."
-    - /kaniko/executor --context ./frontend --dockerfile ./frontend/Dockerfile --destination $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA --destination $FRONTEND_IMAGE:latest --cache=true --cache-copy-layers=true
+    - >
+      /kaniko/executor
+      --context ./frontend
+      --dockerfile ./frontend/Dockerfile
+      --destination $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA
+      --destination $FRONTEND_IMAGE:latest
+      --cache=true
+      --cache-copy-layers=true
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
