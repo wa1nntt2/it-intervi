@@ -10,8 +10,12 @@ from app.database.engine import get_db
 from app.models.question import Question
 from app.models.profession import Profession
 from app.models.user import User
-from app.api.schemas import QuestionCreate, QuestionUpdate, QuestionResponse, PaginatedQuestions
+from app.api.schemas import (
+    QuestionCreate, QuestionUpdate, QuestionResponse, 
+    PaginatedQuestions, ImportResult, BulkUpdateResult, DuplicateResult
+)
 from app.api.auth import get_current_user
+from app.core.exceptions import NotFoundException, ImportException, ValidationException
 
 router = APIRouter(prefix="/questions", tags=["questions"])
 
@@ -252,34 +256,34 @@ def export_questions_csv(
     return output.getvalue()
 
 
-@router.post("/import/json")
+@router.post("/import/json", response_model=ImportResult)
 async def import_questions_json(
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
     """Импорт вопросов из JSON"""
     if not file.filename.endswith('.json'):
-        raise HTTPException(status_code=400, detail="Файл должен быть в формате JSON")
-    
+        raise ValidationException("Файл должен быть в формате JSON")
+
     try:
         content = await file.read()
         data = json.loads(content.decode('utf-8'))
-        
+
         if isinstance(data, dict) and "questions" in data:
             questions_data = data["questions"]
         elif isinstance(data, list):
             questions_data = data
         else:
-            raise HTTPException(status_code=400, detail="Неверный формат JSON")
-        
+            raise ValidationException("Неверный формат JSON")
+
         created = []
         errors = []
-        
+
         professions_cache = {}
         for p in db.query(Profession).all():
             professions_cache[p.name.lower()] = p.id
             professions_cache[str(p.id)] = p.id
-        
+
         for idx, q_data in enumerate(questions_data):
             try:
                 # Определяем profession_id
@@ -294,16 +298,16 @@ async def import_questions_json(
                             "error": f"Профессия не найдена: {prof_name}"
                         })
                         continue
-                
+
                 # Валидация обязательных полей
                 if not q_data.get('text'):
                     errors.append({"index": idx, "error": "Отсутствует текст вопроса"})
                     continue
-                
+
                 if not q_data.get('options'):
                     errors.append({"index": idx, "error": "Отсутствуют варианты ответов"})
                     continue
-                
+
                 question = Question(
                     text=q_data['text'],
                     question_type=q_data.get('question_type', 'mcq'),
@@ -315,24 +319,24 @@ async def import_questions_json(
                 )
                 db.add(question)
                 created.append(question.text)
-                
+
             except Exception as e:
                 errors.append({"index": idx, "error": str(e)})
-        
+
         db.commit()
-        
-        return {
-            "message": "Импорт завершен",
-            "created": len(created),
-            "errors": len(errors),
-            "created_questions": created,
-            "error_details": errors
-        }
-        
+
+        return ImportResult(
+            message="Импорт завершен",
+            created=len(created),
+            errors=len(errors),
+            created_questions=created,
+            error_details=errors
+        )
+
     except json.JSONDecodeError:
-        raise HTTPException(status_code=400, detail="Неверный формат JSON")
+        raise ValidationException("Неверный формат JSON")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка импорта: {str(e)}")
+        raise ImportException("Ошибка импорта данных", errors=[{"error": str(e)}])
 
 
 @router.post("/import/csv")
@@ -418,7 +422,7 @@ async def import_questions_csv(
         raise HTTPException(status_code=500, detail=f"Ошибка импорта: {str(e)}")
 
 
-@router.post("/bulk-update")
+@router.post("/bulk-update", response_model=BulkUpdateResult)
 def bulk_update_questions(
     question_ids: list[int],
     profession_id: Optional[int] = None,
@@ -436,15 +440,18 @@ def bulk_update_questions(
                 question.difficulty = difficulty
             updated += 1
     db.commit()
-    return {"message": f"Обновлено {updated} вопросов"}
+    return BulkUpdateResult(
+        message=f"Обновлено {updated} вопросов",
+        updated=updated
+    )
 
 
-@router.post("/{question_id}/duplicate")
+@router.post("/{question_id}/duplicate", response_model=DuplicateResult)
 def duplicate_question(question_id: int, db: Session = Depends(get_db)):
     """Дублирование вопроса"""
     original = db.query(Question).filter(Question.id == question_id).first()
     if not original:
-        raise HTTPException(status_code=404, detail="Вопрос не найден")
+        raise NotFoundException("Вопрос", question_id)
     
     duplicate = Question(
         text=f"{original.text} (копия)",
@@ -458,8 +465,11 @@ def duplicate_question(question_id: int, db: Session = Depends(get_db)):
     db.add(duplicate)
     db.commit()
     db.refresh(duplicate)
-    
-    return {"message": "Вопрос дублирован", "new_id": duplicate.id}
+
+    return DuplicateResult(
+        message="Вопрос дублирован",
+        new_id=duplicate.id
+    )
 
 
 @router.post("/{question_id}/answers", response_model=dict)

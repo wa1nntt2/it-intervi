@@ -21,6 +21,8 @@ class Session(Base):
     question_ids = Column(JSON, nullable=False)  # Список ID вопросов в сессии
     status = Column(String, default="active", index=True)  # "active", "completed", "failed"
     score = Column(Integer, default=0)  # Количество правильных ответов
+    mode = Column(String, default="practice")  # "practice", "learning", "timed", "exam"
+    time_limit = Column(Integer, nullable=True)  # Лимит времени в секундах (для timed mode)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)  # Время создания сессии
     completed_at = Column(DateTime, nullable=True, index=True)  # Время завершения
 

@@ -20,6 +20,8 @@ export default function InterviewSetup() {
   const [difficulty, setDifficulty] = useState<'intern' | 'junior' | 'middle'>('junior')
   const [configName, setConfigName] = useState('')
   const [showConfigForm, setShowConfigForm] = useState(false)
+  const [mode, setMode] = useState<'practice' | 'learning' | 'timed' | 'exam'>('practice')
+  const [timeLimit, setTimeLimit] = useState<number>(60) // секунд на вопрос для timed mode
 
   useEffect(() => {
     const loadData = async () => {
@@ -32,7 +34,10 @@ export default function InterviewSetup() {
         ])
         setProfession(professionData)
         setCategories(categoriesData)
-        setSavedConfigs(configsData || [])
+        
+        // Фильтруем только личные конфигурации пользователя (не публичные)
+        const userConfigs = configsData?.filter((c: InterviewConfig) => c.is_public === false) || []
+        setSavedConfigs(userConfigs)
       } catch (err: any) {
         console.error('Failed to load data', err)
         setError('Не удалось загрузить данные')
@@ -106,31 +111,21 @@ export default function InterviewSetup() {
       return
     }
 
-    // Создаем сессию напрямую без сохранения конфигурации
     try {
-      // Сначала создаём временную конфигурацию (но не сохраняем в БД)
-      // API создаст сессию на основе переданных параметров
-      const categoriesPayload = Object.entries(selectedCategories).map(([categoryId, count]) => ({
-        category_id: parseInt(categoryId),
-        question_count: count
-      }))
+      // Получаем ID выбранных категорий
+      const categoryIds = Object.keys(selectedCategories).map(id => parseInt(id))
 
-      // Создаём временную конфигурацию только для создания сессии
-      const tempConfig = await interviewsApi.createConfig({
-        name: `Quick_${Date.now()}`,
-        profession_id: parseInt(professionId!),
+      // Создаём сессию напрямую через sessionsApi без создания конфигурации
+      const result = await sessionsApi.create(
+        parseInt(professionId!),
         difficulty,
-        category_configs: categoriesPayload,
-        is_public: false
-      })
+        mode,
+        mode === 'timed' ? timeLimit * totalQuestions : undefined,
+        categoryIds,
+        totalQuestions  // Передаем общее количество вопросов
+      )
 
-      // Создаем сессию из конфигурации
-      const result = await interviewsApi.createSessionFromConfig(tempConfig.id)
-      
-      // Сразу удаляем временную конфигурацию
-      await interviewsApi.deleteConfig(tempConfig.id).catch(() => {})
-      
-      navigate(`/session/${result.session_id}`)
+      navigate(`/session/${result.id}?mode=${mode}`)
     } catch (err: any) {
       console.error('Failed to start session', err)
       setError('Не удалось начать сессию')
@@ -207,7 +202,7 @@ export default function InterviewSetup() {
                         ? 'bg-yellow-400/30 scale-100'
                         : 'bg-white/5 scale-0 group-hover:scale-100'
                     }`} />
-                    
+
                     {/* Галочка в углу */}
                     <div className={`absolute top-3 right-3 transition-all duration-300 ${
                       selectedCategories[category.id]
@@ -233,7 +228,7 @@ export default function InterviewSetup() {
                           {category.description}
                         </p>
                       )}
-                      
+
                       {/* Ползунок количества вопросов */}
                       {selectedCategories[category.id] && (
                         <div className="mt-4 pt-3 border-t border-yellow-400/30" onClick={(e) => e.stopPropagation()}>
@@ -277,7 +272,102 @@ export default function InterviewSetup() {
             {/* Настройки сложности */}
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
               <h2 className="text-xl font-bold text-white mb-4">⚙️ Настройки</h2>
-              
+
+              {/* Выбор режима */}
+              <div className="mb-4">
+                <label className="text-white/80 text-xs block mb-2">🎮 Режим собеседования</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setMode('practice')}
+                    className={`p-3 rounded-lg border-2 text-xs font-bold transition-all ${
+                      mode === 'practice'
+                        ? 'bg-yellow-400 border-yellow-400 text-indigo-900 shadow-lg'
+                        : 'bg-white/10 border-white/20 text-white hover:border-white/40'
+                    }`}
+                  >
+                    🎯 Практика
+                  </button>
+                  <button
+                    onClick={() => setMode('learning')}
+                    className={`p-3 rounded-lg border-2 text-xs font-bold transition-all ${
+                      mode === 'learning'
+                        ? 'bg-green-400 border-green-400 text-green-900 shadow-lg'
+                        : 'bg-white/10 border-white/20 text-white hover:border-white/40'
+                    }`}
+                  >
+                    📚 Обучение
+                  </button>
+                  <button
+                    onClick={() => setMode('timed')}
+                    className={`p-3 rounded-lg border-2 text-xs font-bold transition-all ${
+                      mode === 'timed'
+                        ? 'bg-red-400 border-red-400 text-red-900 shadow-lg'
+                        : 'bg-white/10 border-white/20 text-white hover:border-white/40'
+                    }`}
+                  >
+                    ⏱️ На время
+                  </button>
+                  <button
+                    onClick={() => setMode('exam')}
+                    className={`p-3 rounded-lg border-2 text-xs font-bold transition-all ${
+                      mode === 'exam'
+                        ? 'bg-purple-400 border-purple-400 text-purple-900 shadow-lg'
+                        : 'bg-white/10 border-white/20 text-white hover:border-white/40'
+                    }`}
+                  >
+                    📝 Экзамен
+                  </button>
+                </div>
+                {/* Описание режима */}
+                <div className="mt-3 p-3 bg-white/10 rounded-lg border border-white/20">
+                  {mode === 'practice' && (
+                    <p className="text-white/80 text-xs">
+                      🎯 Классический режим: отвечайте на вопросы без ограничения по времени, результат после каждого вопроса
+                    </p>
+                  )}
+                  {mode === 'learning' && (
+                    <p className="text-white/80 text-xs">
+                      📚 Режим обучения: подробные пояснения после каждого вопроса для глубокого понимания
+                    </p>
+                  )}
+                  {mode === 'timed' && (
+                    <p className="text-white/80 text-xs">
+                      ⏱️ Режим на время: {timeLimit} сек на вопрос, тренировка скорости принятия решений
+                    </p>
+                  )}
+                  {mode === 'exam' && (
+                    <p className="text-white/80 text-xs">
+                      📝 Режим экзамена: результат только в конце, симуляция реального собеседования
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Настройка времени для timed mode */}
+              {mode === 'timed' && (
+                <div className="mb-4">
+                  <label className="text-white/80 text-xs block mb-2">⏱️ Время на вопрос (секунд)</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="range"
+                      min="30"
+                      max="120"
+                      step="15"
+                      value={timeLimit}
+                      onChange={(e) => setTimeLimit(parseInt(e.target.value))}
+                      className="flex-1 h-2 bg-white/20 rounded-full appearance-none cursor-pointer accent-red-400"
+                    />
+                    <span className="text-red-300 font-bold text-lg w-16 text-center">{timeLimit}с</span>
+                  </div>
+                  <div className="flex justify-between text-xs text-white/50 mt-1">
+                    <span>30с</span>
+                    <span>60с</span>
+                    <span>90с</span>
+                    <span>120с</span>
+                  </div>
+                </div>
+              )}
+
               <div className="mb-4">
                 <label className="text-white/80 text-xs block mb-2">Уровень сложности</label>
                 <select
@@ -316,7 +406,7 @@ export default function InterviewSetup() {
             {showConfigForm && (
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
                 <h3 className="text-lg font-bold text-white mb-4">Сохранить конфигурацию</h3>
-                
+
                 <input
                   type="text"
                   value={configName}
@@ -347,7 +437,7 @@ export default function InterviewSetup() {
             {savedConfigs.length > 0 && (
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
                 <h2 className="text-xl font-bold text-white mb-4">📋 Сохранённые</h2>
-                
+
                 <div className="space-y-3">
                   {savedConfigs.map((config) => (
                     <div
@@ -364,7 +454,7 @@ export default function InterviewSetup() {
                            config.difficulty === 'junior' ? '📚' : '💼'}
                         </span>
                       </div>
-                      
+
                       <div className="text-white/60 text-xs mb-2">
                         {config.category_configs.length} тем •{' '}
                         {config.category_configs.reduce((a, b) => a + b.question_count, 0)} вопросов

@@ -46,6 +46,8 @@ export interface Session {
   question_ids: number[]  // ID вопросов в сессии
   status: 'active' | 'completed' | 'failed'
   score: number  // Количество правильных ответов
+  mode?: 'practice' | 'learning' | 'timed' | 'exam'  // Режим сессии
+  time_limit?: number | null  // Лимит времени в секундах
   created_at: string
 }
 

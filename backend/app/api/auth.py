@@ -4,7 +4,7 @@
 import re
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from app.database.engine import get_db
@@ -17,9 +17,13 @@ from app.core.security import (
     get_cookie_config,
 )
 from app.models.user import User
-from app.api.schemas import UserCreate, UserUpdate, UserResponse, Token, TokenRefresh, TokenRefreshResponse, TokenCookie
+from app.api.schemas import UserCreate, UserUpdate, UserResponse, TokenCookie
 from app.core.config import settings
 from app.core.limiter import limiter
+from app.api.deps import get_current_user as get_current_user_from_token
+
+# OAuth2 схема для получения токена из заголовка Authorization
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
 
 router = APIRouter(prefix="/auth", tags=["auth"])  # Префикс /api/auth
 
@@ -28,69 +32,16 @@ register_limit = limiter.limit("5 per minute")
 login_limit = limiter.limit("10 per minute")
 refresh_limit = limiter.limit("3 per minute")
 
-# Схема OAuth2 для получения токена из заголовка Authorization
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
-
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
 ) -> User:
     """
-    Dependency для получения текущего пользователя из JWT токена.
-    Поддерживает получение токена из заголовка Authorization или из cookies.
-    Используется в защищенных endpoint'ах.
-
-    Args:
-        token: JWT токен из заголовка Authorization или cookies
-        db: Сессия базы данных
-
-    Returns:
-        User: Объект текущего пользователя
-
-    Raises:
-        HTTPException: Если токен невалиден или пользователь не найден
+    Wrapper для общей функции get_current_user из deps.
+    Оставлен для обратной совместимости.
     """
-    from app.core.security import decode_token
-
-    # Если токен не передан в заголовке, пробуем получить из cookies
-    if not token:
-        # Примечание: oauth2_scheme с auto_error=False вернет None если токен не найден
-        # В этом случае можно попробовать получить из cookies (для совместимости)
-        pass
-
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Токен не предоставлен",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    payload = decode_token(token, expected_type="access")
-    if payload is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Неверный или истекший токен",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    email: str = payload.get("sub")
-    if email is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Неверный токен",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    user = db.query(User).filter(User.email == email).first()
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Пользователь не найден",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    return user
+    return await get_current_user_from_token(token, db)
 
 
 def validate_password_strength(password: str) -> None:

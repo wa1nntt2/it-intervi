@@ -25,7 +25,9 @@ export function QuestionCard({ question, selectedAnswer, onAnswer }: QuestionCar
         </span>
         <span className="text-sm text-gray-500">{question.question_type}</span>
       </div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">{question.text}</h2>
+      <div className="mb-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border-l-4 border-indigo-500">
+        <h2 className="text-2xl font-bold text-gray-900 leading-relaxed">{question.text}</h2>
+      </div>
       <div className="space-y-3">
         {question.options.map((option, index) => (
           <button

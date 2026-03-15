@@ -24,8 +24,10 @@ export function OrderingQuestion({ question, onOrderChange }: OrderingQuestionPr
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">{question.text}</h2>
-      <p className="text-gray-600 mb-4">Расположите варианты в правильном порядке:</p>
+      <div className="mb-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border-l-4 border-indigo-500">
+        <h2 className="text-2xl font-bold text-gray-900 leading-relaxed">{question.text}</h2>
+      </div>
+      <p className="text-gray-700 mb-4 font-medium">Расположите варианты в правильном порядке:</p>
       <div className="space-y-2">
         {order.map((optionIndex, position) => (
           <div key={optionIndex} className="flex items-center gap-4">

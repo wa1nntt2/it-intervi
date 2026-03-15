@@ -44,17 +44,27 @@ const getCsrfToken = (): string | null => {
  * Выполняется перед каждым запросом.
  */
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = useAuthStore.getState().token
+  // Получаем токен напрямую из sessionStorage (не из store чтобы избежать проблем с порядком обновления)
+  let token: string | null = null
+  if (typeof window !== 'undefined') {
+    token = window.sessionStorage.getItem('auth_token')
+  }
+  
+  // Если нет в sessionStorage, пробуем получить из store
+  if (!token) {
+    token = useAuthStore.getState().token
+  }
+  
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
-  
+
   // Добавляем CSRF токен для state-changing операций
   const csrf = getCsrfToken()
   if (csrf && config.method && ['post', 'put', 'delete', 'patch'].includes(config.method.toLowerCase())) {
     config.headers['X-CSRF-Token'] = csrf
   }
-  
+
   return config
 })
 
@@ -113,6 +123,9 @@ api.interceptors.response.use(
       _retry?: boolean
     }
 
+    // Обновляем флаг isRefreshing в store
+    useAuthStore.getState().isRefreshing = isRefreshing
+
     // Логгирование ошибок (в development режиме)
     if (import.meta.env.DEV) {
       console.error('API Error:', {
@@ -131,10 +144,10 @@ api.interceptors.response.use(
           const csrfResponse = await axios.get(`${API_BASE}/auth/csrf-token`, {
             withCredentials: true,
           })
-          
+
           // Сохраняем токен
           csrfToken = csrfResponse.data.csrf_token
-          
+
           // Повторяем оригинальный запрос
           return api(originalRequest)
         } catch (csrfError) {
@@ -145,6 +158,11 @@ api.interceptors.response.use(
 
     // Если ошибка 401 и запрос еще не был повторен
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // Не пытаемся refresh'ить на страницах авторизации
+      if (window.location.pathname === '/login' || window.location.pathname === '/register') {
+        return Promise.reject(error)
+      }
+
       if (isRefreshing) {
         // Если уже идет refresh, добавляем запрос в очередь
         return new Promise((resolve, reject) => {
@@ -159,6 +177,7 @@ api.interceptors.response.use(
 
       originalRequest._retry = true
       isRefreshing = true
+      useAuthStore.getState().isRefreshing = true
 
       try {
         // Refresh endpoint теперь сам читает токен из cookies
@@ -183,13 +202,20 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Если refresh не удался, logout
         processQueue(refreshError as Error, null)
-        useAuthStore.getState().logout()
+        useAuthStore.getState().isRefreshing = false
+        await useAuthStore.getState().logout()
         window.location.href = '/login'
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
+        useAuthStore.getState().isRefreshing = false
       }
     }
+
+    // Сохраняем ошибку в store для отображения
+    // Отключено чтобы избежать постоянных ре-рендеров на Login странице
+    // const errorMessage = formatErrorMessage(error)
+    // useAuthStore.getState().error = errorMessage
 
     return Promise.reject(error)
   }
@@ -373,8 +399,15 @@ export const questionsApi = {
  */
 export const sessionsApi = {
   /** Создать новую сессию */
-  create: async (professionId: number, difficulty: string = 'junior') => {
-    const response = await api.post('/sessions/', { profession_id: professionId, difficulty })
+  create: async (professionId: number, difficulty: string = 'junior', mode: string = 'practice', timeLimit?: number, categoryIds?: number[], totalQuestions?: number) => {
+    const response = await api.post('/sessions/', {
+      profession_id: professionId,
+      difficulty,
+      mode,
+      time_limit: timeLimit,
+      category_ids: categoryIds,
+      total_questions: totalQuestions
+    })
     return response.data
   },
   /** Получить сессию по ID */

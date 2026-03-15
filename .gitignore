@@ -14,7 +14,6 @@ build/
 .pytest_cache/
 .coverage
 htmlcov/
-*.db
 
 # Node
 node_modules/
@@ -49,3 +48,20 @@ frontend/build/
 
 # Test
 test.db
+
+# Screenshots
+screenshots/
+*.png
+*.jpg
+*.jpeg
+
+# Database (keep data directory but ignore db files)
+backend/data/*.db
+!backend/data/.gitkeep
+
+# Backups (keep directory but ignore backup files)
+backups/*.json
+!backups/.gitkeep
+
+# Alembic
+alembic/versions/*.pyc

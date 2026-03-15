@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { sessionsApi, questionsApi, progressApi } from '../services/api'
 import { Question } from '../types'
 import confetti from 'canvas-confetti'
@@ -21,6 +21,7 @@ function shuffleArray<T>(array: T[]): { items: T[]; originalIndexMap: number[] }
 export default function Session() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<number, number | number[]>>({})
@@ -31,6 +32,12 @@ export default function Session() {
   const [showResults, setShowResults] = useState(false)
   const [score, setScore] = useState(0)
   
+  // Режим сессии
+  const [mode, setMode] = useState<'practice' | 'learning' | 'timed' | 'exam'>('practice')
+  const [timeLimit, setTimeLimit] = useState<number | null>(null)
+  const [timeLeft, setTimeLeft] = useState<number | null>(null)
+  const [session, setSession] = useState<any>(null)
+  
   // Перемешанные варианты ответов для каждого вопроса
   const [shuffledOptions, setShuffledOptions] = useState<Record<number, { items: string[]; originalIndexMap: number[] }>>({})
 
@@ -38,12 +45,19 @@ export default function Session() {
     const loadSession = async () => {
       if (!id) return
       try {
-        const session = await sessionsApi.getById(parseInt(id))
+        const sessionData = await sessionsApi.getById(parseInt(id))
+        setSession(sessionData)
+        
+        // Получаем режим из сессии или URL параметра
+        const sessionMode = sessionData.mode || searchParams.get('mode') || 'practice'
+        setMode(sessionMode)
+        setTimeLimit(sessionData.time_limit || null)
+        
         const questionsData = await Promise.all(
-          session.question_ids.map((qId: number) => questionsApi.getById(qId))
+          sessionData.question_ids.map((qId: number) => questionsApi.getById(qId))
         )
         setQuestions(questionsData)
-        
+
         // Перемешиваем варианты ответов для каждого вопроса
         const shuffled: Record<number, { items: string[]; originalIndexMap: number[] }> = {}
         questionsData.forEach(q => {
@@ -62,7 +76,43 @@ export default function Session() {
       }
     }
     loadSession()
-  }, [id])
+  }, [id, searchParams])
+
+  // Таймер для timed mode
+  useEffect(() => {
+    if (mode !== 'timed' || !timeLimit || loading) return
+
+    setTimeLeft(timeLimit)
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev === null || prev <= 1) {
+          // Время вышло - автоматический переход
+          handleTimeUp()
+          return timeLimit
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [mode, timeLimit, currentQuestionIndex, loading])
+
+  const handleTimeUp = () => {
+    // Автоматически показываем результат и переходим к следующему
+    if (mode === 'timed') {
+      // Звук или вибрация при истечении времени
+      if (navigator.vibrate) {
+        navigator.vibrate(200)
+      }
+      // Переход к следующему вопросу
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex((prev) => prev + 1)
+      } else {
+        handleSubmit()
+      }
+    }
+  }
 
   const handleAnswer = (questionId: number, shuffledIndex: number) => {
     // Получаем оригинальный индекс ответа
@@ -74,6 +124,17 @@ export default function Session() {
   }
 
   const handleShowResult = () => {
+    // В режиме экзамена не показываем результат после каждого вопроса
+    if (mode === 'exam') {
+      // Сразу переходим к следующему или завершаем
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex((prev) => prev + 1)
+      } else {
+        handleSubmit()
+      }
+      return
+    }
+    
     setShowResultModal(true)
   }
 
@@ -86,6 +147,19 @@ export default function Session() {
       handleSubmit()
     }
   }
+
+  // Для learning mode - показываем объяснение сразу после ответа
+  useEffect(() => {
+    if (mode !== 'learning') return
+    
+    const currentQuestion = questions[currentQuestionIndex]
+    const isAnswered = answers[currentQuestion?.id] !== undefined
+    
+    if (isAnswered && currentQuestion?.explanation) {
+      // Показываем модальное окно с объяснением
+      setShowResultModal(true)
+    }
+  }, [answers, currentQuestionIndex, mode])
 
   const handleOrderingMove = (questionId: number, fromIndex: number, toIndex: number) => {
     if (fromIndex === toIndex) return
@@ -132,7 +206,7 @@ export default function Session() {
 
   const handleSubmit = async () => {
     let correctCount = 0
-    
+
     for (const question of questions) {
       if (question.question_type === 'ordering') {
         const userOrder = orderingAnswers[question.id]
@@ -141,7 +215,6 @@ export default function Session() {
         if (isCorrect) {
           correctCount++
         }
-        // TODO: сохранить ответ для ordering вопросов
       } else {
         const selectedOption = answers[question.id]
         const isCorrect = selectedOption === question.correct_option
@@ -150,26 +223,36 @@ export default function Session() {
         }
         // Сохраняем ответ в БД (и правильные, и неправильные)
         if (selectedOption !== undefined) {
-          await questionsApi.submitAnswer(question.id, selectedOption as number)
+          try {
+            await questionsApi.submitAnswer(question.id, selectedOption as number)
+          } catch (err) {
+            // Игнорируем ошибки сохранения ответов (если пользователь не авторизован)
+            console.debug('Answer not saved:', err)
+          }
         }
       }
     }
-    
-    // Начисляем XP
-    const xpEarned = Math.round(correctCount * 10)
+
+    // Завершаем сессию
     try {
-      await progressApi.addXp(xpEarned, correctCount, questions.length)
-      // Сохраняем прогресс в localStorage для обновления в профиле
-      const progressData = await progressApi.getMyProgress()
-      localStorage.setItem('userProgress', JSON.stringify(progressData))
+      await sessionsApi.complete(parseInt(id!), correctCount)
     } catch (err) {
-      console.error('Failed to add XP:', err)
+      console.error('Failed to complete session:', err)
     }
 
     setScore(correctCount)
     setShowResults(true)
-    await sessionsApi.complete(parseInt(id!), correctCount)
-    
+
+    // Начисляем XP (только если пользователь авторизован)
+    const xpEarned = Math.round(correctCount * 10)
+    try {
+      const progressData = await progressApi.addXp(xpEarned, correctCount, questions.length)
+      localStorage.setItem('userProgress', JSON.stringify(progressData))
+    } catch (err) {
+      // Игнорируем ошибки XP (если пользователь не авторизован)
+      console.debug('XP not added:', err)
+    }
+
     // Запускаем конфетти если хороший результат
     const percentage = (correctCount / questions.length) * 100
     if (percentage >= 80) {
@@ -193,7 +276,7 @@ export default function Session() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-white text-xs animate-pulse">🚀 Загрузка вопросов...</div>
       </div>
     )
@@ -201,14 +284,14 @@ export default function Session() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
-        <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-2xl text-center max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-2xl text-center max-w-md dark:bg-gray-800/30">
           <div className="text-6xl mb-2">❌</div>
           <h1 className="text-xs font-bold text-white mb-2">Ошибка</h1>
           <p className="text-white/90 mb-2">{error}</p>
           <button
             onClick={() => navigate('/')}
-            className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-bold hover:bg-yellow-300 transition-all hover:scale-105"
+            className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-bold hover:bg-yellow-300 transition-all hover:scale-105 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-700"
           >
             🏠 На главную
           </button>
@@ -219,14 +302,14 @@ export default function Session() {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
-        <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-2xl text-center max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-2xl text-center max-w-md dark:bg-gray-800/30">
           <div className="text-6xl mb-2">📭</div>
           <h1 className="text-xs font-bold text-white mb-2">Нет вопросов</h1>
           <p className="text-white/90 mb-2">Для выбранной профессии пока нет вопросов</p>
           <button
             onClick={() => navigate('/')}
-            className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-bold hover:bg-yellow-300 transition-all hover:scale-105"
+            className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-bold hover:bg-yellow-300 transition-all hover:scale-105 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-700"
           >
             🏠 На главную
           </button>
@@ -246,11 +329,11 @@ export default function Session() {
     }
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center py-12 px-4">
-        <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-2xl text-center max-w-lg w-full">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center py-12 px-4">
+        <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-2xl text-center max-w-lg w-full dark:bg-gray-800/30">
           <div className="text-7xl mb-2 animate-bounce">{getResultEmoji()}</div>
           <h1 className="text-4xl font-extrabold text-white mb-2">Результаты</h1>
-          
+
           {/* Score Circle */}
           <div className="relative w-40 h-40 mx-auto mb-2">
             <svg className="w-full h-full transform -rotate-90">
@@ -287,17 +370,17 @@ export default function Session() {
              percentage >= 60 ? 'Хорошо, но можно лучше! 💪' :
              'Продолжайте учиться! 📖'}
           </p>
-          
+
           <div className="flex flex-col gap-3">
             <button
               onClick={() => navigate('/session/new')}
-              className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-bold text-xs hover:bg-yellow-300 transition-all hover:scale-105"
+              className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-bold text-xs hover:bg-yellow-300 transition-all hover:scale-105 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-700"
             >
               🔄 Ещё одна попытка
             </button>
             <button
               onClick={() => navigate('/')}
-              className="bg-white/20 backdrop-blur-sm text-white border-2 border-white/50 px-8 py-4 rounded-lg font-bold text-xs hover:bg-white/30 transition-all hover:scale-105"
+              className="bg-white/20 backdrop-blur-sm text-white border-2 border-white/50 px-8 py-4 rounded-lg font-bold text-xs hover:bg-white/30 transition-all hover:scale-105 dark:bg-gray-700/50 dark:border-gray-600 dark:hover:bg-gray-600/50"
             >
               🏠 На главную
             </button>
@@ -319,14 +402,14 @@ export default function Session() {
     : answers[currentQuestion.id] !== undefined
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 py-4 px-3">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-4 px-3">
       <div className="max-w-3xl mx-auto">
-        
+
         {/* Progress Header */}
         <div className="mb-2">
           <div className="flex justify-between items-center mb-2">
             <span className="text-white/90 font-medium text-xs">
-              Вопрос {currentQuestionIndex + 1} из {questions.length}
+              Прогресс
             </span>
             <span className="text-white/70 text-xs">
               {Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}%
@@ -341,24 +424,48 @@ export default function Session() {
         </div>
 
         {/* Question Card */}
-        <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-2xl overflow-hidden">
+        <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-2xl overflow-hidden dark:bg-gray-800/30">
           {/* Card Header */}
-          <div className="bg-white/20 px-4 py-3 flex items-center gap-3">
-            <span className={`px-2 py-1 rounded-full text-xs font-bold text-white ${difficultyConfig.bg}`}>
-              {difficultyConfig.icon} {difficultyConfig.label}
-            </span>
-            {isOrderingQuestion && (
-              <span className="px-2 py-1 rounded-full text-xs font-bold text-white bg-blue-500">
-                🔀 Упорядочивание
+          <div className="bg-white/20 px-4 py-3 flex items-center justify-between dark:bg-gray-700/30">
+            <div className="flex items-center gap-3">
+              <span className={`px-2 py-1 rounded-full text-xs font-bold text-white ${difficultyConfig.bg}`}>
+                {difficultyConfig.icon} {difficultyConfig.label}
               </span>
-            )}
+              {isOrderingQuestion && (
+                <span className="px-2 py-1 rounded-full text-xs font-bold text-white bg-blue-500">
+                  🔀 Упорядочивание
+                </span>
+              )}
+              {mode === 'timed' && (
+                <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2 ${
+                  timeLeft && timeLeft <= 10 ? 'bg-red-500 animate-pulse' : 'bg-orange-500'
+                }`}>
+                  ⏱️ {timeLeft || timeLimit}s
+                </span>
+              )}
+              {mode === 'learning' && (
+                <span className="px-2 py-1 rounded-full text-xs font-bold text-white bg-green-500">
+                  📚 Обучение
+                </span>
+              )}
+              {mode === 'exam' && (
+                <span className="px-2 py-1 rounded-full text-xs font-bold text-white bg-purple-500">
+                  📝 Экзамен
+                </span>
+              )}
+            </div>
+            <span className="text-white/90 font-medium text-xs">
+              {currentQuestionIndex + 1} / {questions.length}
+            </span>
           </div>
 
           {/* Question Content */}
           <div className="p-3">
-            <h2 className="text-xs font-bold text-white mb-2 leading-relaxed">
-              {currentQuestion.text}
-            </h2>
+            <div className="mb-3 p-5 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl border-2 border-white/30 shadow-lg">
+              <h2 className="text-xl md:text-2xl font-bold text-white leading-relaxed">
+                {currentQuestion.text}
+              </h2>
+            </div>
 
             {isOrderingQuestion ? (
               <div className="space-y-3">
@@ -435,7 +542,7 @@ export default function Session() {
             <div className="mt-8 flex justify-between gap-3">
               <button
                 onClick={() => setCurrentQuestionIndex((prev) => Math.max(0, prev - 1))}
-                disabled={currentQuestionIndex === 0}
+                disabled={currentQuestionIndex === 0 || mode === 'exam'}
                 className="px-6 py-3 bg-white/20 backdrop-blur-sm text-white border-2 border-white/50 rounded-lg font-bold hover:bg-white/30 transition-all hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 ← Назад
@@ -446,9 +553,15 @@ export default function Session() {
                 className="px-8 py-3 bg-gradient-to-r from-yellow-400 to-yellow-300 text-indigo-600 rounded-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2"
               >
                 {currentQuestionIndex < questions.length - 1 ? (
-                  <>
-                    Далее →
-                  </>
+                  mode === 'exam' ? (
+                    <>
+                      Далее →
+                    </>
+                  ) : (
+                    <>
+                      Проверить →
+                    </>
+                  )
                 ) : (
                   <>
                     🏁 Завершить →

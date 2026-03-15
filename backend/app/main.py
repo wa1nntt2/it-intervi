@@ -14,7 +14,7 @@ from app.core.config import settings
 from app.core.limiter import limiter
 
 # Импорт моделей для создания таблиц базы данных
-from app.models import user, profession, question, answer, ordering_item, session
+from app.models import user, profession, question, answer, ordering_item, session, user_progress
 
 # Импорт API роутеров (endpoint'ов)
 from app.api import auth, professions, questions, sessions, users, progress, interviews
@@ -26,7 +26,8 @@ def apply_migrations():
     Если миграции еще не применены, создаем таблицы через create_all.
     """
     # Отключаем миграции для тестов
-    if os.getenv("SKIP_MIGRATIONS"):
+    skip_migrations = os.getenv("SKIP_MIGRATIONS", "false").lower() == "true"
+    if skip_migrations:
         print("⏭️  Пропускаем миграции (SKIP_MIGRATIONS=true)")
         return
     

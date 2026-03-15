@@ -172,6 +172,8 @@ class AnswerResponse(BaseModel):
 class SessionBase(BaseModel):
     """Базовая схема сессии"""
     profession_id: int  # ID профессии для тестирования
+    mode: str = "practice"  # "practice", "learning", "timed", "exam"
+    time_limit: Optional[int] = None  # Лимит времени в секундах (для timed mode)
 
 
 class SessionCreate(SessionBase):
@@ -184,7 +186,9 @@ class SessionResponse(SessionBase):
     id: int
     question_ids: list[int]  # Список ID вопросов в сессии
     status: str  # "active", "completed", "failed"
+    score: int  # Количество правильных ответов
     created_at: datetime  # Время создания
+    completed_at: Optional[datetime] = None  # Время завершения
 
     class Config:
         from_attributes = True
@@ -212,6 +216,7 @@ class SessionListItem(BaseModel):
     question_ids: list[int]  # ID вопросов в сессии
     status: str
     score: int  # Количество правильных ответов
+    mode: str  # Режим сессии
     created_at: datetime
     completed_at: Optional[datetime]
 
@@ -235,3 +240,47 @@ class PaginatedProfessions(BaseModel):
     """Пагинированный список профессий"""
     items: list[ProfessionResponse]
     meta: PaginationMeta
+
+
+# === Схемы для импорта/экспорта ===
+
+class ImportResult(BaseModel):
+    """Результат импорта данных"""
+    message: str
+    created: int  # Количество созданных записей
+    errors: int  # Количество ошибок
+    created_questions: list[str]  # Список созданных вопросов (тексты)
+    error_details: list[dict]  # Детали ошибок
+
+
+class ExportData(BaseModel):
+    """Данные для экспорта"""
+    version: str
+    count: int
+    questions: list[dict]
+
+
+class BulkUpdateResult(BaseModel):
+    """Результат массового обновления"""
+    message: str
+    updated: int
+
+
+class DuplicateResult(BaseModel):
+    """Результат дублирования вопроса"""
+    message: str
+    new_id: int
+
+
+# === Схемы ошибок API ===
+
+class ErrorDetail(BaseModel):
+    """Детали ошибки"""
+    code: str
+    message: str
+    details: dict = {}
+
+
+class ErrorResponse(BaseModel):
+    """Формат ответа с ошибкой"""
+    error: ErrorDetail

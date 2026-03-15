@@ -16,7 +16,7 @@ from app.models.user import User
 from app.models.profession import Profession
 from app.api.schemas import SessionResponse, PaginatedSessions, SessionListItem
 from app.core.security import decode_token
-from app.api.auth import get_current_user as auth_get_current_user
+from app.api.deps import get_current_user_optional
 from app.core.config import settings
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])  # Префикс /api/sessions
@@ -26,28 +26,10 @@ class SessionCreate(BaseModel):
     """Схема для создания новой сессии"""
     profession_id: int  # ID профессии для тестирования
     difficulty: Optional[str] = "junior"  # "intern", "junior", "middle"
-
-
-async def get_current_user(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)) -> Optional[User]:
-    """
-    Получение текущего пользователя из JWT токена.
-    Использует функцию из auth модуля.
-
-    Args:
-        authorization: Заголовок Authorization с JWT токеном
-        db: Сессия базы данных
-
-    Returns:
-        User или None если токен невалиден
-    """
-    if not authorization or not authorization.startswith("Bearer "):
-        return None
-    token = authorization.split(" ")[1]
-    try:
-        user = await auth_get_current_user(token, db)
-        return user
-    except Exception:
-        return None
+    mode: Optional[str] = "practice"  # "practice", "learning", "timed", "exam"
+    time_limit: Optional[int] = None  # Лимит времени в секундах (для timed mode)
+    category_ids: Optional[list[int]] = None  # ID категорий для фильтрации вопросов
+    total_questions: Optional[int] = None  # Общее количество вопросов в сессии
 
 
 class SessionStatsResponse(BaseModel):
@@ -69,37 +51,46 @@ def get_session_stats(
 ):
     """
     Получить статистику по сессиям.
-    
+
     Вычисляет:
     - Общее количество сессий по статусам
-    - Средний балл в процентах
+    - Средний балл в процентах (оптимизировано через SQL)
     - Количество сессий за сегодня/неделю/месяц
-    
+
     Args:
         db: Сессия базы данных
         authorization: JWT токен (опционально)
-    
+
     Returns:
         SessionStatsResponse: Статистика по сессиям
     """
+    from sqlalchemy import case
+    
     total = db.query(func.count(Session.id)).scalar() or 0
     active = db.query(func.count(Session.id)).filter(Session.status == "active").scalar() or 0
     completed = db.query(func.count(Session.id)).filter(Session.status == "completed").scalar() or 0
     failed = db.query(func.count(Session.id)).filter(Session.status == "failed").scalar() or 0
 
-    # Средняя оценка в процентах
-    # Для каждой завершённой сессии считаем процент: (score / len(question_ids)) * 100
-    completed_sessions = db.query(Session).filter(Session.status == "completed").all()
-    if completed_sessions:
-        percentages = []
-        for session in completed_sessions:
-            total_questions = len(session.question_ids)
-            if total_questions > 0:
-                percentage = (session.score / total_questions) * 100
-                percentages.append(percentage)
-        average_score = round(sum(percentages) / len(percentages), 1) if percentages else 0
-    else:
-        average_score = 0
+    # Средняя оценка в процентах - ОДИН SQL запрос вместо N+1
+    # Используем SQL агрегацию для вычисления среднего процента
+    average_score_query = db.query(
+        func.avg(
+            case(
+                (
+                    Session.status == "completed",
+                    # Вычисляем процент: (score / total_questions) * 100
+                    case(
+                        (func.json_array_length(Session.question_ids) > 0,
+                         (Session.score * 100.0) / func.json_array_length(Session.question_ids)),
+                        else_=0
+                    )
+                ),
+                else_=None
+            )
+        ).filter(Session.status == "completed")
+    ).scalar()
+    
+    average_score = round(average_score_query, 1) if average_score_query is not None else 0
 
     # Сегодня
     today = datetime.now().date()
@@ -200,6 +191,7 @@ def get_sessions(
             question_ids=s.question_ids,
             status=s.status,
             score=s.score,
+            mode=s.mode,
             created_at=s.created_at,
             completed_at=s.completed_at
         ))
@@ -216,37 +208,26 @@ def get_sessions(
 
 
 @router.post("/", response_model=SessionResponse)
-def create_session(session_data: SessionCreate, db: Session = Depends(get_db), authorization: Optional[str] = Header(None)):
+def create_session(
+    session_data: SessionCreate,
+    db: Session = Depends(get_db),
+    user: Optional[User] = Depends(get_current_user_optional)
+):
     """
     Создать новую сессию тестирования.
-    
-    Выбирает 20 случайных вопросов по профессии и сложности.
+
+    Выбирает N случайных вопросов по профессии и сложности.
     Если вопросов выбранной сложности нет, берутся все вопросы профессии.
-    
+
     Args:
-        session_data: Данные сессии (profession_id, difficulty)
+        session_data: Данные сессии (profession_id, difficulty, total_questions)
         db: Сессия базы данных
-        authorization: JWT токен (опционально)
-    
+        user: Текущий пользователь (опционально)
+
     Returns:
         SessionResponse: Созданная сессия с ID вопросов
     """
     import random
-
-    # Получаем пользователя (функция async, но вызываем в sync контексте)
-    # Поэтому используем простой вариант с извлечением токена из заголовка
-    user = None
-    if authorization and authorization.startswith("Bearer "):
-        token = authorization.split(" ")[1]
-        try:
-            from app.core.security import decode_token
-            payload = decode_token(token, expected_type="access")
-            if payload:
-                email = payload.get("sub")
-                if email:
-                    user = db.query(User).filter(User.email == email).first()
-        except Exception:
-            pass  # Если токен невалиден, user останется None
 
     # Фильтрация вопросов по профессии и сложности
     query = db.query(Question).filter(
@@ -257,6 +238,13 @@ def create_session(session_data: SessionCreate, db: Session = Depends(get_db), a
     if session_data.difficulty:
         query = query.filter(Question.difficulty == session_data.difficulty)
 
+    # Фильтр по категориям (если указаны)
+    if session_data.category_ids and len(session_data.category_ids) > 0:
+        from app.models.category import question_categories
+        query = query.join(question_categories).filter(
+            question_categories.c.category_id.in_(session_data.category_ids)
+        )
+
     questions = query.all()
 
     # Если нет вопросов выбранной сложности, берем все вопросы профессии
@@ -265,15 +253,19 @@ def create_session(session_data: SessionCreate, db: Session = Depends(get_db), a
             Question.profession_id == session_data.profession_id
         ).all()
 
-    # Перемешиваем вопросы и берём первые N (из настроек)
+    # Перемешиваем вопросы и берём первые N
+    # Используем total_questions из запроса или значение по умолчанию из настроек
+    num_questions = session_data.total_questions if session_data.total_questions else settings.QUESTIONS_PER_SESSION
     random.shuffle(questions)
-    selected_questions = questions[:settings.QUESTIONS_PER_SESSION]
+    selected_questions = questions[:num_questions]
 
     new_session = Session(
         profession_id=session_data.profession_id,
         user_id=user.id if user else None,
         question_ids=[q.id for q in selected_questions],
-        status="active"
+        status="active",
+        mode=session_data.mode or "practice",
+        time_limit=session_data.time_limit
     )
     db.add(new_session)
     db.commit()

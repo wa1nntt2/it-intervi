@@ -1,48 +1,71 @@
 version: '3.8'
 
 services:
-
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: it-interview-backend
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
-      # Используем локальную БД вместо volume - так данные не будут теряться
-      - ./backend/interview_trainer.db:/app/interview_trainer.db
+      # Сохраняем БД между перезапусками
+      - ./backend/data:/app/data
+      # Бэкапы вопросов
+      - ./backups:/app/backups
     environment:
-      - DATABASE_URL=sqlite:///./interview_trainer.db
-      # SECRET_KEY обязателен в production! Генерация: openssl rand -hex 32
-      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production-min-32-chars}
+      # База данных
+      - DATABASE_URL=sqlite:///./data/interview_trainer.db
+      # Миграции
+      - SKIP_MIGRATIONS=false
+      # JWT настройки - ОБЯЗАТЕЛЬНО измените в production!
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production-min-32-chars-for-development-only}
       - ALGORITHM=${ALGORITHM:-HS256}
       - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
       - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      # Режим отладки
       - DEBUG=${DEBUG:-true}
+      # CORS настройки
       - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
       - CORS_ALLOW_CREDENTIALS=${CORS_ALLOW_CREDENTIALS:-true}
+      # Rate limiting
       - RATE_LIMIT_PER_MINUTE=${RATE_LIMIT_PER_MINUTE:-10}
-    command: >
-      uvicorn app.main:app
-      --reload
-      --host 0.0.0.0
-      --port 8000
+      # Кэширование
+      - CACHE_CAPACITY=${CACHE_CAPACITY:-100}
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
-      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - it-interview-network
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: it-interview-frontend
     ports:
       - "3000:80"
-    # Убрали volumes - frontend использует файлы из образа
-    # volumes были проблемой - они перезаписывали dist из образа
     depends_on:
       backend:
         condition: service_healthy
     environment:
       - VITE_API_URL=${VITE_API_URL:-http://localhost:8000}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - it-interview-network
 
-# Volume удален - теперь используем локальную БД
+# Networks
+networks:
+  it-interview-network:
+    driver: bridge
+    name: it-interview-network
