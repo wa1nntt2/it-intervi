@@ -19,6 +19,28 @@ from app.models import user, profession, question, answer, ordering_item, sessio
 # Импорт API роутеров (endpoint'ов)
 from app.api import auth, professions, questions, sessions, users, progress, interviews
 
+# Prometheus метрики
+from prometheus_client import generate_latest, Counter, Histogram
+from fastapi.responses import Response
+from starlette.requests import Request
+import time
+
+# Тип контента для Prometheus
+CONTENT_TYPE = "text/plain; version=0.0.4; charset=utf-8"
+
+# Счётчики метрик
+REQUEST_COUNT = Counter(
+    'http_requests_total',
+    'Total HTTP requests',
+    ['method', 'endpoint', 'status']
+)
+
+REQUEST_TIME = Histogram(
+    'http_request_duration_seconds',
+    'HTTP request duration',
+    ['method', 'endpoint']
+)
+
 
 def apply_migrations():
     """
@@ -104,6 +126,31 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # Prometheus middleware для сбора метрик
+    @app.middleware("http")
+    async def track_requests(request: Request, call_next):
+        """Middleware для сбора метрик каждого запроса"""
+        start_time = time.time()
+        
+        response = await call_next(request)
+        
+        duration = time.time() - start_time
+        
+        # Считаем запросы
+        REQUEST_COUNT.labels(
+            method=request.method,
+            endpoint=request.url.path,
+            status=response.status_code
+        ).inc()
+        
+        # Замеряем время
+        REQUEST_TIME.labels(
+            method=request.method,
+            endpoint=request.url.path
+        ).observe(duration)
+        
+        return response
+
     # Применение миграций или создание таблиц
     apply_migrations()
 
@@ -133,6 +180,11 @@ def create_app() -> FastAPI:
     def health_check():
         """Endpoint для проверки здоровья приложения"""
         return {"status": "healthy"}
+
+    @app.get("/metrics")
+    async def metrics():
+        """Endpoint для Prometheus метрик"""
+        return Response(generate_latest(), media_type=CONTENT_TYPE)
 
     return app
 

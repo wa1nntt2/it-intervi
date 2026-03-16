@@ -13,6 +13,8 @@ services:
       - ./backend/data:/app/data
       # Бэкапы вопросов
       - ./backups:/app/backups
+      # Исходный код для разработки (hot reload)
+      - ./backend/app:/app/app
     environment:
       # База данных
       - DATABASE_URL=sqlite:///./data/interview_trainer.db
