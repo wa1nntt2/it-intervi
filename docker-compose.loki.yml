@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./monitoring/loki/loki-config.yml:/etc/loki/loki-config.yml
+      - loki_chunks:/loki/chunks           # изменено с /tmp/loki/chunks
+      - loki_rules:/loki/rules              # изменено с /tmp/loki/rules
+      - loki_index:/loki/index               # добавил для индексов
+      - loki_rules_temp:/loki/rules-temp     # добавил для временных правил
+    environment:
+      - TZ=Europe/Moscow
+    command: 
+      - -config.file=/etc/loki/loki-config.yml
+      - -log.level=info
+    restart: unless-stopped
+    networks:
+      - it-interview-network
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    volumes:
+      - ./monitoring/promtail/promtail-config.yml:/etc/promtail/promtail-config.yml
+      - /var/log:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # для docker логов
+      - promtail_positions:/tmp/promtail  # для хранения позиций
+    command: 
+      - -config.file=/etc/promtail/promtail-config.yml
+      - -log.level=info
+    restart: unless-stopped
+    networks:
+      - it-interview-network
+    depends_on:
+      - loki
+    environment:
+      - TZ=Europe/Moscow
+
+  # Опционально: создатель правил для алертов
+  loki-rules-creator:
+    image: alpine:latest
+    container_name: loki-rules-creator
+    volumes:
+      - loki_rules:/loki/rules
+      - loki_rules_temp:/loki/rules-temp
+    command: >
+      sh -c "
+      mkdir -p /loki/rules/fake &&
+      echo 'groups:
+      - name: example
+        rules:
+        - alert: HighLogVolume
+          expr: rate({job=\"varlogs\"}[5m]) > 100
+          for: 10m
+          annotations:
+            summary: High log volume detected' > /loki/rules/fake/alert.yml &&
+      chmod -R 755 /loki/rules &&
+      echo 'Rules created successfully' &&
+      tail -f /dev/null
+      "
+    networks:
+      - it-interview-network
+    depends_on:
+      - loki
+
+volumes:
+  loki_chunks:
+    name: loki_chunks
+  loki_rules:
+    name: loki_rules
+  loki_index:
+    name: loki_index
+  loki_rules_temp:
+    name: loki_rules_temp
+  promtail_positions:
+    name: promtail_positions
+
+networks:
+  it-interview-network:
+    external: true

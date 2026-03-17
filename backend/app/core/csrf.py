@@ -34,7 +34,7 @@ class CSRFProtect:
     def set_csrf_cookie(self, response: Response, token: str) -> None:
         """
         Установка CSRF токена в cookie.
-        
+
         Args:
             response: HTTP ответ
             token: CSRF токен
@@ -42,7 +42,7 @@ class CSRFProtect:
         response.set_cookie(
             key=self.CSRF_COOKIE_NAME,
             value=token,
-            httponly=True,
+            httponly=False,  # False чтобы JavaScript мог прочитать токен
             secure=not settings.DEBUG,
             samesite="strict",
             max_age=3600,  # 1 час

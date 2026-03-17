@@ -82,22 +82,27 @@ def validate_password_strength(password: str) -> None:
         )
 
 
-@router.post("/register", response_model=UserResponse)
+@router.post("/register")
 @register_limit
-def register(request: Request, user_data: UserCreate, db: Session = Depends(get_db)):
+def register(
+    request: Request,
+    response: Response,
+    user_data: UserCreate,
+    db: Session = Depends(get_db)
+):
     """
     Регистрация нового пользователя.
-    
+
     Проверяет уникальность email и сложность пароля,
     затем создает нового пользователя в базе данных.
-    
+
     Args:
         user_data: Данные для регистрации (email, password)
         db: Сессия базы данных
-    
+
     Returns:
         UserResponse: Данные созданного пользователя
-    
+
     Raises:
         HTTPException: Если email уже занят или пароль слишком простой
     """
@@ -120,7 +125,20 @@ def register(request: Request, user_data: UserCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(new_user)
 
-    return new_user
+    # Устанавливаем CSRF токен для защиты от CSRF атак
+    from app.core.csrf import csrf_protect
+    csrf_token = csrf_protect.generate_csrf_token()
+    csrf_protect.set_csrf_cookie(response, csrf_token)
+
+    # Возвращаем пользователя с CSRF токеном
+    user_dict = {
+        "id": new_user.id,
+        "email": new_user.email,
+        "is_admin": new_user.is_admin,
+        "created_at": new_user.created_at,
+        "csrf_token": csrf_token
+    }
+    return user_dict
 
 
 @router.post("/login", response_model=TokenCookie)

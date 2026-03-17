@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../stores/authStore'
 
 export function Header() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const { isAuthenticated, user } = useAuthStore()
   const logout = useAuthStore((state) => state.logout)
   const navigate = useNavigate()
 
@@ -20,9 +20,12 @@ export function Header() {
         <nav className="flex gap-4">
           {isAuthenticated ? (
             <>
-              <Link to="/admin" className="text-gray-600 hover:text-gray-900">
-                Админ
-              </Link>
+              {/* Ссылка на админку только для администраторов */}
+              {user?.is_admin && (
+                <Link to="/admin" className="text-gray-600 hover:text-gray-900">
+                  Админ
+                </Link>
+              )}
               <button onClick={handleLogout} className="text-gray-600 hover:text-gray-900">
                 Выход
               </button>

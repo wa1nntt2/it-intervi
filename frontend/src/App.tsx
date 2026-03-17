@@ -29,6 +29,31 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" />
 }
 
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, user, isLoading } = useAuthStore()
+
+  // Показываем загрузку во время инициализации сессии
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
+        <div className="text-white text-lg animate-pulse">🚀 Загрузка...</div>
+      </div>
+    )
+  }
+
+  // Если не аутентифицирован - редирект на login
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />
+  }
+
+  // Если не админ - редирект на главную
+  if (!user?.is_admin) {
+    return <Navigate to="/" />
+  }
+
+  return <>{children}</>
+}
+
 function App() {
   const initializeSession = useAuthStore((state) => state.initializeSession)
   const hasInitialized = useRef(false)
@@ -76,25 +101,25 @@ function App() {
         <Route
           path="/admin"
           element={
-            <PrivateRoute>
+            <AdminRoute>
               <Admin />
-            </PrivateRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/admin/sessions"
           element={
-            <PrivateRoute>
+            <AdminRoute>
               <AdminSessions />
-            </PrivateRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/admin/users"
           element={
-            <PrivateRoute>
+            <AdminRoute>
               <AdminUsers />
-            </PrivateRoute>
+            </AdminRoute>
           }
         />
         <Route

@@ -6,7 +6,9 @@ from sqlalchemy.orm import Session
 
 from app.database.engine import get_db
 from app.models.profession import Profession
+from app.models.user import User
 from app.api.schemas import ProfessionCreate, ProfessionResponse
+from app.api.deps import get_current_admin_user
 
 router = APIRouter(prefix="/professions", tags=["professions"])  # Префикс /api/professions
 
@@ -15,7 +17,7 @@ router = APIRouter(prefix="/professions", tags=["professions"])  # Префик�
 def get_professions(db: Session = Depends(get_db)):
     """
     Получить список всех профессий.
-    
+
     Returns:
         list[ProfessionResponse]: Список всех профессий
     """
@@ -23,14 +25,20 @@ def get_professions(db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=ProfessionResponse)
-def create_profession(profession: ProfessionCreate, db: Session = Depends(get_db)):
+def create_profession(
+    profession: ProfessionCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
+):
     """
     Создать новую профессию.
-    
+    Доступно только администраторам.
+
     Args:
         profession: Данные профессии (name, description)
         db: Сессия базы данных
-    
+        current_user: Текущий администратор
+
     Returns:
         ProfessionResponse: Созданная профессия
     """
@@ -45,14 +53,14 @@ def create_profession(profession: ProfessionCreate, db: Session = Depends(get_db
 def get_profession(profession_id: int, db: Session = Depends(get_db)):
     """
     Получить профессию по ID.
-    
+
     Args:
         profession_id: ID профессии
         db: Сессия базы данных
-    
+
     Returns:
         ProfessionResponse: Данные профессии
-    
+
     Raises:
         HTTPException: Если профессия не найдена (404)
     """

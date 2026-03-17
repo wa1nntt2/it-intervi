@@ -9,6 +9,7 @@ from app.database.engine import get_db
 from app.models.user import User
 from app.models.session import Session as SessionModel
 from app.api.schemas import UserResponse
+from app.api.deps import get_current_admin_user, get_current_user
 
 router = APIRouter(prefix="/users", tags=["users"])  # Префикс /api/users
 
@@ -17,16 +18,19 @@ router = APIRouter(prefix="/users", tags=["users"])  # Префикс /api/users
 def get_users(
     skip: int = 0,  # Пропуск первых N записей (для пагинации)
     limit: int = 100,  # Максимальное количество записей
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
 ):
     """
     Получить список всех пользователей с пагинацией.
-    
+    Доступно только администраторам.
+
     Args:
         skip: Количество записей для пропуска
         limit: Максимальное количество записей
         db: Сессия базы данных
-    
+        current_user: Текущий администратор
+
     Returns:
         list[UserResponse]: Список пользователей
     """
@@ -35,17 +39,23 @@ def get_users(
 
 
 @router.get("/{user_id}", response_model=UserResponse)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
+):
     """
     Получить пользователя по ID.
-    
+    Доступно только администраторам.
+
     Args:
         user_id: ID пользователя
         db: Сессия базы данных
-    
+        current_user: Текущий администратор
+
     Returns:
         UserResponse: Данные пользователя
-    
+
     Raises:
         HTTPException: Если пользователь не найден (404)
     """
@@ -56,17 +66,23 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.delete("/{user_id}")
-def delete_user(user_id: int, db: Session = Depends(get_db)):
+def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
+):
     """
     Удалить пользователя и все его сессии.
-    
+    Доступно только администраторам.
+
     Args:
         user_id: ID пользователя
         db: Сессия базы данных
-    
+        current_user: Текущий администратор
+
     Returns:
         dict: Сообщение об успешном удалении
-    
+
     Raises:
         HTTPException: Если пользователь не найден (404)
     """

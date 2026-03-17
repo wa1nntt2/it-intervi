@@ -25,7 +25,13 @@ export default function Register() {
   const onSubmit = async (data: RegisterFormData) => {
     setLocalError('')
     try {
-      await authApi.register(data.email, data.password)
+      const registerResponse = await authApi.register(data.email, data.password)
+      
+      // Сохраняем CSRF токен из ответа регистрации
+      if (registerResponse.csrf_token) {
+        console.log('[Register] CSRF token received from registration')
+      }
+      
       const loginResponse = await authApi.login(data.email, data.password)
       const accessToken = loginResponse.access_token
       const userInfo: User = await authApi.getCurrentUser()

@@ -11,10 +11,10 @@ from app.models.question import Question
 from app.models.profession import Profession
 from app.models.user import User
 from app.api.schemas import (
-    QuestionCreate, QuestionUpdate, QuestionResponse, 
+    QuestionCreate, QuestionUpdate, QuestionResponse,
     PaginatedQuestions, ImportResult, BulkUpdateResult, DuplicateResult
 )
-from app.api.auth import get_current_user
+from app.api.deps import get_current_user, get_current_admin_user
 from app.core.exceptions import NotFoundException, ImportException, ValidationException
 
 router = APIRouter(prefix="/questions", tags=["questions"])
@@ -60,15 +60,19 @@ def get_questions(
 
 
 @router.post("/", response_model=QuestionResponse)
-def create_question(question: QuestionCreate, db: Session = Depends(get_db)):
+def create_question(
+    question: QuestionCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
+):
     question_data = question.model_dump()
     category_ids = question_data.pop('category_ids', None)
-    
+
     new_question = Question(**question_data)
     db.add(new_question)
     db.commit()
     db.refresh(new_question)
-    
+
     # Привязываем категории если указаны
     if category_ids:
         from app.models.category import Category
@@ -76,7 +80,7 @@ def create_question(question: QuestionCreate, db: Session = Depends(get_db)):
         new_question.categories.extend(categories)
         db.commit()
         db.refresh(new_question)
-    
+
     return new_question
 
 
@@ -146,14 +150,19 @@ def get_question(question_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{question_id}", response_model=QuestionResponse)
-def update_question(question_id: int, question_data: QuestionUpdate, db: Session = Depends(get_db)):
+def update_question(
+    question_id: int,
+    question_data: QuestionUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
+):
     question = db.query(Question).filter(Question.id == question_id).first()
     if not question:
         raise HTTPException(status_code=404, detail="Вопрос не найден")
 
     update_data = question_data.model_dump(exclude_unset=True)
     category_ids = update_data.pop('category_ids', None)
-    
+
     for field, value in update_data.items():
         setattr(question, field, value)
 
@@ -163,27 +172,31 @@ def update_question(question_id: int, question_data: QuestionUpdate, db: Session
         # Очищаем текущие категории
         question.categories = []
         db.flush()
-        
+
         # Добавляем новые
         if category_ids:
             categories = db.query(Category).filter(Category.id.in_(category_ids)).all()
             question.categories.extend(categories)
-    
+
     db.commit()
     db.refresh(question)
     return question
 
 
 @router.delete("/{question_id}")
-def delete_question(question_id: int, db: Session = Depends(get_db)):
+def delete_question(
+    question_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
+):
     question = db.query(Question).filter(Question.id == question_id).first()
     if not question:
         raise HTTPException(status_code=404, detail="Вопрос не найден")
-    
+
     # Удаляем связанные ответы
     from app.models.answer import Answer
     db.query(Answer).filter(Answer.question_id == question_id).delete()
-    
+
     # Удаляем вопрос
     db.delete(question)
     db.commit()
@@ -259,9 +272,10 @@ def export_questions_csv(
 @router.post("/import/json", response_model=ImportResult)
 async def import_questions_json(
     file: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
 ):
-    """Импорт вопросов из JSON"""
+    """Импорт вопросов из JSON. Доступно только администраторам."""
     if not file.filename.endswith('.json'):
         raise ValidationException("Файл должен быть в формате JSON")
 
@@ -342,9 +356,10 @@ async def import_questions_json(
 @router.post("/import/csv")
 async def import_questions_csv(
     file: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
 ):
-    """Импорт вопросов из CSV"""
+    """Импорт вопросов из CSV. Доступно только администраторам."""
     if not file.filename.endswith('.csv'):
         raise HTTPException(status_code=400, detail="Файл должен быть в формате CSV")
     
@@ -427,9 +442,10 @@ def bulk_update_questions(
     question_ids: list[int],
     profession_id: Optional[int] = None,
     difficulty: Optional[str] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
 ):
-    """Массовое обновление вопросов"""
+    """Массовое обновление вопросов. Доступно только администраторам."""
     updated = 0
     for qid in question_ids:
         question = db.query(Question).filter(Question.id == qid).first()
@@ -447,7 +463,12 @@ def bulk_update_questions(
 
 
 @router.post("/{question_id}/duplicate", response_model=DuplicateResult)
-def duplicate_question(question_id: int, db: Session = Depends(get_db)):
+def duplicate_question(
+    question_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)  # Требуется админ
+):
+    """Дублирование вопроса. Доступно только администраторам."""
     """Дублирование вопроса"""
     original = db.query(Question).filter(Question.id == question_id).first()
     if not original:

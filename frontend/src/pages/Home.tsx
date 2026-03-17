@@ -95,12 +95,15 @@ export default function Home() {
                 Начать сессию
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </Link>
-              <Link
-                to="/admin"
-                className="bg-white/20 backdrop-blur-sm text-white border-2 border-white/50 px-6 py-3 rounded-xl font-bold text-lg hover:bg-white/30 transition-all hover:scale-105 dark:bg-gray-800/50 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-700/50"
-              >
-                ⚙️ Админ-панель
-              </Link>
+              {/* Кнопка админ-панели только для администраторов */}
+              {user?.is_admin && (
+                <Link
+                  to="/admin"
+                  className="bg-white/20 backdrop-blur-sm text-white border-2 border-white/50 px-6 py-3 rounded-xl font-bold text-lg hover:bg-white/30 transition-all hover:scale-105 dark:bg-gray-800/50 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-700/50"
+                >
+                  ⚙️ Админ-панель
+                </Link>
+              )}
             </div>
           ) : (
             <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6">
