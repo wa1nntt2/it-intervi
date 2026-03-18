@@ -1,0 +1,74 @@
+global:
+  resolve_timeout: 5m
+  # Telegram настройки
+  telegram_api_url: 'https://api.telegram.org'
+
+route:
+  group_by: ['alertname', 'severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: 'telegram-notifications'
+  
+  # Маршрутизация по важности
+  routes:
+    - match:
+        severity: critical
+      receiver: 'telegram-critical'
+      repeat_interval: 1h
+    - match:
+        severity: warning
+      receiver: 'telegram-warnings'
+      repeat_interval: 6h
+
+receivers:
+  # Основной receiver (по умолчанию)
+  - name: 'telegram-notifications'
+    telegram_configs:
+      - bot_token: 7310291083:AAHyyDwVRGTJPCuLIobzDcEKQ12JFfSXc18
+        chat_id: 5530512919
+        message: |
+            🚨 *Alert: {{ .GroupLabels.alertname }}*
+            
+            Статус: {{ .Status }}
+            Уровень: {{ .GroupLabels.severity }}
+            
+            Описание: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+            
+            Детали:
+            {{ range .Alerts }}
+            - {{ .Labels.alertname }}: {{ .Annotations.summary }}
+            {{ end }}
+            
+            Время: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+
+  # Для критических алертов
+  - name: 'telegram-critical'
+    telegram_configs:
+      - bot_token: 7310291083:AAHyyDwVRGTJPCuLIobzDcEKQ12JFfSXc18
+        chat_id: 5530512919
+        message: |
+            🔴 *CRITICAL ALERT!*
+            
+            {{ range .Alerts }}
+            *{{ .Labels.alertname }}*
+            {{ .Annotations.description }}
+            {{ end }}
+
+  # Для предупреждений
+  - name: 'telegram-warnings'
+    telegram_configs:
+      - bot_token: 7310291083:AAHyyDwVRGTJPCuLIobzDcEKQ12JFfSXc18
+        chat_id: 5530512919
+        message: |
+            🟡 *Warning: {{ .GroupLabels.alertname }}*
+            
+            {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+
+# Настройки ингибирования (подавления) алертов
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']

@@ -2,9 +2,16 @@ global:
   scrape_interval: 15s      # Как часто опрашивать targets
   evaluation_interval: 15s  # Как часто проверять правила алертов
 
-# Правила алертов (пока пустые, добавим позже)
+# Alertmanager конфигурация
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Правила алертов
 rule_files:
-  # - "alerts.yml"
+  - "alerts.yml"
 
 # Цели для сбора метрик
 scrape_configs:

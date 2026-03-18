@@ -68,6 +68,26 @@ services:
     depends_on:
       - loki
 
+  # Alertmanager для уведомлений
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+      - '--cluster.listen-address='
+    restart: unless-stopped
+    networks:
+      - it-interview-network
+    depends_on:
+      - loki
+
 volumes:
   loki_chunks:
     name: loki_chunks
@@ -79,6 +99,8 @@ volumes:
     name: loki_rules_temp
   promtail_positions:
     name: promtail_positions
+  alertmanager_data:
+    name: alertmanager_data
 
 networks:
   it-interview-network:

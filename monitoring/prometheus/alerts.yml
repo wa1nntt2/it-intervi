@@ -1,0 +1,213 @@
+groups:
+  - name: IT Interview Trainer Alerts
+    interval: 30s
+    rules:
+      # ==========================================
+      # Backend Health Alerts
+      # ==========================================
+      - alert: BackendDown
+        expr: up{job="backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend приложение недоступно"
+          description: "Backend сервис не отвечает уже более 1 минуты. Проверьте логи и статус контейнера."
+
+      - alert: BackendHighErrorRate
+        expr: |
+          (
+            sum(rate(http_requests_total{job="backend",status=~"5.."}[5m])) 
+            / 
+            sum(rate(http_requests_total{job="backend"}[5m]))
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Высокий уровень ошибок (5xx)"
+          description: "Более 5% запросов завершаются с ошибками 5xx. Текущее значение: {{ $value | humanizePercentage }}"
+
+      - alert: BackendHighLatency
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(http_request_duration_seconds_bucket{job="backend"}[5m])) by (le)
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокая задержка ответов (p95)"
+          description: "95-й перцентиль времени ответа превышает 1 секунду. Текущее значение: {{ $value | humanizeDuration }}"
+
+      # ==========================================
+      # Database Alerts
+      # ==========================================
+      - alert: DatabaseConnectionHigh
+        expr: |
+          # Если есть метрика подключений к БД
+          db_connections_total{job="backend"} > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокое количество подключений к БД"
+          description: "Количество подключений к базе данных превышает 80. Текущее значение: {{ $value }}"
+
+      # ==========================================
+      # Infrastructure Alerts
+      # ==========================================
+      - alert: LokiDown
+        expr: up{job="loki"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Loki недоступен"
+          description: "Сервис Loki не отвечает уже более 1 минуты."
+
+      - alert: PromtailDown
+        expr: up{job="promtail"} == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Promtail недоступен"
+          description: "Сервис Promtail не отвечает. Сбор логов остановлен."
+
+      - alert: HighLogVolume
+        expr: rate({job="varlogs"}[5m]) > 100
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокий объём логов"
+          description: "Объём логов превышает 100 строк в секунду в течение 10 минут."
+
+      # ==========================================
+      # Container/Host Alerts (если есть node exporter)
+      # ==========================================
+      - alert: HighMemoryUsage
+        expr: |
+          (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокое использование памяти"
+          description: "Использование памяти превышает 90%. Текущее значение: {{ $value | humanizePercentage }}"
+
+      - alert: HighCPUUsage
+        expr: |
+          100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокая загрузка CPU"
+          description: "Загрузка CPU превышает 90% в течение 5 минут."
+
+      # ==========================================
+      # Docker/Container Alerts
+      # ==========================================
+      - alert: ContainerHighMemoryUsage
+        expr: |
+          (container_memory_usage_bytes / container_spec_memory_limit_bytes) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Контейнер использует много памяти"
+          description: "Контейнер {{ $labels.name }} использует более 85% памяти. Текущее значение: {{ $value | humanizePercentage }}"
+
+      - alert: ContainerRestarting
+        expr: |
+          changes(container_last_seen[5m]) > 2
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Контейнер постоянно перезапускается"
+          description: "Контейнер {{ $labels.name }} перезапускался более 2 раз за 5 минут."
+
+      # ==========================================
+      # Application-Specific Alerts
+      # ==========================================
+      - alert: BackendHighRequestRate
+        expr: |
+          sum(rate(http_requests_total{job="backend"}[1m])) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокий поток запросов"
+          description: "Более 100 запросов в секунду. Текущее значение: {{ $value | humanizeRate }}"
+
+      - alert: BackendLowThroughput
+        expr: |
+          sum(rate(http_requests_total{job="backend"}[5m])) < 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Низкая активность приложения"
+          description: "Менее 1 запроса в секунду в течение 10 минут. Возможно, приложение не используется или есть проблема."
+
+      # ==========================================
+      # Disk Alerts (если есть cadvisor)
+      # ==========================================
+      - alert: ContainerHighDiskUsage
+        expr: |
+          (container_fs_usage_bytes / container_fs_limit_bytes) * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Контейнер использует много диска"
+          description: "Контейнер {{ $labels.name }} использует более 85% дискового пространства. Текущее значение: {{ $value | humanizePercentage }}"
+
+      # ==========================================
+      # Alertmanager Alerts
+      # ==========================================
+      - alert: AlertmanagerConfigNotSynced
+        expr: |
+          count(count_values('config_hash', alertmanager_config_hash)) < 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alertmanager конфигурация не синхронизирована"
+          description: "Конфигурация Alertmanager не синхронизирована между инстансами."
+
+      - alert: AlertmanagerNotificationFailed
+        expr: |
+          rate(alertmanager_notifications_failed_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Ошибки отправки уведомлений"
+          description: "Более 10% уведомлений не доставляются. Проверьте интеграции."
+
+      # ==========================================
+      # Prometheus Self-Monitoring
+      # ==========================================
+      - alert: PrometheusTargetScrapeFailed
+        expr: |
+          rate(prometheus_target_scrapes_exceeded_sample_limit_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Превышен лимит метрик при скрейпе"
+          description: "Prometheus не может собрать метрики с некоторых targets."
+
+      - alert: PrometheusRuleEvaluationFailed
+        expr: |
+          rate(prometheus_rule_evaluation_failures_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Ошибки вычисления правил Prometheus"
+          description: "Правила алертов не вычисляются корректно."
