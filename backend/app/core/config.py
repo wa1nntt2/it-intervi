@@ -18,8 +18,8 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "IT Interview Trainer"
     VERSION: str = "0.1.0"
 
-    # URL подключения к базе данных SQLite
-    DATABASE_URL: str = "sqlite:///./interview_trainer.db"
+    # URL подключения к базе данных PostgreSQL
+    DATABASE_URL: str = "postgresql://postgres:postgres123@localhost:5433/interview_trainer"
 
     # Секретный ключ для JWT токенов
     # В production обязательно установите через переменную окружения!

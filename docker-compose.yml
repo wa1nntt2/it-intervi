@@ -9,15 +9,13 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Сохраняем БД между перезапусками
-      - ./backend/data:/app/data
       # Бэкапы вопросов
       - ./backups:/app/backups
       # Исходный код для разработки (hot reload)
       - ./backend/app:/app/app
     environment:
       # База данных
-      - DATABASE_URL=sqlite:///./data/interview_trainer.db
+      - DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/interview_trainer
       # Миграции
       - SKIP_MIGRATIONS=false
       # JWT настройки - ОБЯЗАТЕЛЬНО измените в production!
@@ -35,6 +33,9 @@ services:
       # Кэширование
       - CACHE_CAPACITY=${CACHE_CAPACITY:-100}
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 10s
@@ -66,8 +67,34 @@ services:
     networks:
       - it-interview-network
 
+  postgres:
+    image: postgres:15-alpine
+    container_name: it-interview-postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=interview_trainer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d interview_trainer"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - it-interview-network
+
 # Networks
 networks:
   it-interview-network:
     driver: bridge
     name: it-interview-network
+
+# Volumes
+volumes:
+  postgres_data:
+    name: it-interview-postgres-data

@@ -141,7 +141,7 @@ groups:
           severity: warning
         annotations:
           summary: "Высокий поток запросов"
-          description: "Более 100 запросов в секунду. Текущее значение: {{ $value | humanizeRate }}"
+          description: "Более 100 запросов в секунду. Текущее значение: {{ $value | humanize }}"
 
       - alert: BackendLowThroughput
         expr: |
