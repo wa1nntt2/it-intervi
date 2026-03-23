@@ -1,0 +1,967 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-23",
+  "total": 60,
+  "questions": [
+    {
+      "text": "Что означает аббревиатура CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Continuous Integration и Continuous Delivery/Deployment",
+        "Code Integration и Code Deployment",
+        "Centralized Infrastructure и Centralized Development",
+        "Continuous Improvement и Continuous Development"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **CI/CD:**\n\n**CI (Continuous Integration):**\n- Частое слияние кода\n- Авто-сборка и тесты\n\n**CD (Delivery/Deployment):**\n- Готовность к релизу\n- Авто-деплой\n\n💡 **Запомните:** CI = «интеграция», CD = «доставка».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Какие проблемы решает Continuous Integration (CI)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Обнаружение конфликтов слияния на ранних стадиях, автоматическая проверка работоспособности кода",
+        "Автоматическое развертывание в production",
+        "Управление секретами и паролями",
+        "Мониторинг производительности приложений"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "✅ **CI решает:**\n\n**Проблемы:**\n- Integration hell\n- Конфликты при мерже\n- Позднее обнаружение багов\n\n**Преимущества:**\n- Ранняя обратная связь\n- Главная ветка всегда рабочая\n\n💡 **Запомните:** CI = «раннее обнаружение проблем».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "В чем разница между Continuous Delivery и Continuous Deployment?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "При Continuous Delivery развертывание в production требует ручного подтверждения; при Continuous Deployment происходит автоматически",
+        "Continuous Delivery — это только сборка, Continuous Deployment — это тестирование",
+        "Continuous Deployment не использует автоматические тесты",
+        "Это одно и то же, просто разные названия"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚀 **Delivery vs Deployment:**\n\n**Continuous Delivery:**\n- Готов к релизу\n- Ручное подтверждение\n\n**Continuous Deployment:**\n- Полностью автоматически\n- Без ручного вмешательства\n\n💡 **Запомните:** Delivery = «ручной клик», Deployment = «авто».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое пайплайн (pipeline) в контексте CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Автоматизированная последовательность этапов: сборка, тестирование, развертывание",
+        "Канал передачи данных между сервисами",
+        "Тип сетевого соединения",
+        "Специальная ветка в Git"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔧 **Pipeline:**\n\n**Этапы:**\n- Checkout кода\n- Сборка (build)\n- Тесты (unit, integration)\n- Деплой\n\n**Pipeline as Code:**\n- .gitlab-ci.yml\n- Jenkinsfile\n\n💡 **Запомните:** Pipeline = «автоматизированный процесс».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Какие инструменты CI/CD вы знаете?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Jenkins, GitLab CI, GitHub Actions, CircleCI, Bamboo, TeamCity, Azure DevOps",
+        "Docker, Kubernetes, Terraform",
+        "Prometheus, Grafana, ELK",
+        "Ansible, Puppet, Chef"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🛠️ **CI/CD инструменты:**\n\n**Популярные:**\n- Jenkins (open-source, гибкий)\n- GitLab CI (встроен в GitLab)\n- GitHub Actions (встроен в GitHub)\n- CircleCI (облачный)\n\n💡 **Запомните:** Jenkins = «классика», GitLab CI = «встроенный».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое артефакт (artifact) в CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Результат сборки (бинарный файл, Docker-образ, пакет, отчеты), который передается между этапами пайплайна",
+        "Лог выполнения пайплайна",
+        "Конфигурационный файл CI/CD",
+        "Временная директория для кэша"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **Артефакты:**\n\n**Примеры:**\n- JAR/WAR файлы\n- Docker-образы\n- Отчеты о тестах\n- Установочные пакеты\n\n💡 **Запомните:** Артефакт = «результат сборки».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое триггер (trigger) в CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Событие, запускающее выполнение пайплайна (push, pull request, schedule, webhook)",
+        "Утилита для ручного запуска деплоя",
+        "Скрипт очистки старых артефактов",
+        "Механизм отката изменений"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **Триггеры:**\n\n**Типы:**\n- push — отправка кода\n- pull request — создание PR\n- schedule — по расписанию\n- manual — ручной запуск\n\n💡 **Запомните:** Триггер = «событие запуска».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое стадия (stage) в пайплайне?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Логическая группа джобов, выполняемых последовательно (например, build → test → deploy)",
+        "Одна команда в скрипте сборки",
+        "Параллельное выполнение задач",
+        "Временная метка выполнения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **Stage (стадия):**\n\n**Примеры:**\n- build\n- test\n- deploy\n\n**Особенность:**\n- Джобы внутри стадии — параллельно\n- Стадии — последовательно\n\n💡 **Запомните:** Stage = «этап пайплайна».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое runner (агент) в CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Исполнитель, который запускает джобы CI/CD (может быть на отдельном сервере, в контейнере, в облаке)",
+        "Плагин для IDE",
+        "Репозиторий с артефактами",
+        "Утилита для отката деплоя"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏃 **Runner/Агент:**\n\n**Что делает:**\n- Получает задачи\n- Выполняет скрипты\n- Возвращает результат\n\n**Где:**\n- Физическая машина\n- VM, контейнер, K8s\n\n💡 **Запомните:** Runner = «исполнитель джоб».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое pipeline as code?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Описание CI/CD пайплайна в виде текстового файла в репозитории (например, Jenkinsfile, .gitlab-ci.yml)",
+        "Генерация кода на основе UI",
+        "Создание пайплайна через REST API",
+        "Хранение артефактов в репозитории кода"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **Pipeline as Code:**\n\n**Преимущества:**\n- Версионирование\n- Code review\n- Воспроизводимость\n\n**Файлы:**\n- Jenkinsfile\n- .gitlab-ci.yml\n- .github/workflows/\n\n💡 **Запомните:** Pipeline as Code = «конфиг в репозитории».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в GitLab CI запустить пайплайн только для определенной ветки?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "only: - main или rules: - if: $CI_COMMIT_BRANCH == \"main\"",
+        "branches: - main",
+        "when: manual",
+        "except: - develop"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **Ограничение веток:**\n\n**Синтаксис:**\n```yaml\nonly:\n  - main\n```\n\n**Или rules:**\n```yaml\nrules:\n  - if: $CI_COMMIT_BRANCH == \"main\"\n```\n\n💡 **Запомните:** only/rules = «фильтр веток».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что делает команда git push с точки зрения CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Запускает пайплайн (при наличии настроенного триггера на push)",
+        "Автоматически деплоит в production",
+        "Создает Docker-образ",
+        "Отправляет уведомление в Slack"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚀 **git push:**\n\n**Что происходит:**\n- Событие в репозитории\n- CI/CD регистрирует push\n- Запуск пайплайна\n\n💡 **Запомните:** push = «триггер CI/CD».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое unit-тесты и почему они важны в CI?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Автоматические тесты отдельных компонентов (функций, классов), запускаемые при каждой интеграции",
+        "Тесты производительности системы",
+        "Тесты взаимодействия между сервисами",
+        "Тесты пользовательского интерфейса"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🧪 **Unit-тесты:**\n\n**Особенности:**\n- Тестируют отдельные функции\n- Быстрые (секунды-минуты)\n- Изолированные\n\n**В CI:**\n- Запуск на каждый push\n- Блокируют мерж при провале\n\n💡 **Запомните:** Unit = «первая линия защиты».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое статический анализ кода (linters, code analysis)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Автоматическая проверка кода на стиль, потенциальные ошибки, уязвимости без его выполнения",
+        "Запуск приложения в тестовом окружении",
+        "Анализ производительности базы данных",
+        "Проверка безопасности сети"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **Статический анализ:**\n\n**Инструменты:**\n- ESLint, Pylint, RuboCop\n- SonarQube\n- ShellCheck\n\n**Проверяет:**\n- Code style\n- Потенциальные баги\n- Уязвимости\n\n💡 **Запомните:** Linter = «проверка без запуска».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в Jenkins задать выполнение джобы по расписанию?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "В конфигурации джобы указать \"Build periodically\" с cron-выражением (например, H 2 * * *)",
+        "Добавить триггер Poll SCM",
+        "Создать webhook",
+        "Использовать параметризованную сборку"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⏰ **Расписание в Jenkins:**\n\n**Build periodically:**\n- Синтаксис как cron\n- H 2 * * * — в 2 часа ночи\n- H — хэширование (распределение нагрузки)\n\n💡 **Запомните:** Build periodically = «cron для Jenkins».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое webhook в контексте CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "HTTP-коллбэк, автоматически вызываемый внешней системой при событии (push, PR) для запуска CI/CD",
+        "Интерфейс для ручного запуска пайплайна",
+        "Специальный тип артефакта",
+        "Прокси-сервер между CI и репозиторием"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **Webhook:**\n\n**Как работает:**\n- Git-сервер отправляет HTTP POST\n- CI/CD получает событие\n- Мгновенный запуск пайплайна\n\n**Преимущество:**\n- Без polling\n- Низкая задержка\n\n💡 **Запомните:** Webhook = «мгновенный запуск».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Какие метрики важны для оценки CI/CD процесса?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Время выполнения пайплайна, частота деплоев, процент успешных сборок, MTTR",
+        "Количество строк кода",
+        "Количество коммитов в день",
+        "Версия языка программирования"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **DORA-метрики:**\n\n**Ключевые:**\n- Deployment Frequency\n- Lead Time for Changes\n- MTTR (Mean Time To Recovery)\n- Change Failure Rate\n\n💡 **Запомните:** DORA = «метрики DevOps».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое артефакты и кэш в CI/CD, в чем разница?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Артефакты — результаты сборки, передаваемые между джобами; кэш — временные данные для ускорения сборок",
+        "Артефакты используются только в Jenkins, кэш — в GitLab",
+        "Кэш передается между разными пайплайнами, артефакты — только внутри одного",
+        "Это одно и то же"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **Артефакты vs Кэш:**\n\n**Артефакты:**\n- Результаты сборки\n- Передаются между джобами\n- Можно скачать\n\n**Кэш:**\n- Для ускорения\n- Не обязателен\n- Переиспользуется\n\n💡 **Запомните:** Артефакты = «результат», Кэш = «ускорение».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в CI/CD организовать параллельное выполнение джобов?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Разделить джобы на разные стадии или использовать ключи parallel/matrix для запуска независимых задач одновременно",
+        "Запустить несколько пайплайнов вручную",
+        "Использовать один джоб с большим количеством команд",
+        "Настроить последовательное выполнение всех джобов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **Параллелизация:**\n\n**Способы:**\n- Разные джобы в одной стадии\n- Matrix strategy\n- Разделение тестов\n\n**Требование:**\n- Независимые джобы\n- Достаточно runner'ов\n\n💡 **Запомните:** Параллельно = «быстрее».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое feedback loop в CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Время между внесением изменения и получением информации о его успешности или ошибке",
+        "Механизм автоматического отката деплоя",
+        "Цикл обновления артефактов",
+        "Процесс ручного ревью кода"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔁 **Feedback Loop:**\n\n**Что это:**\n- Время от push до результата\n- Чем короче, тем лучше\n\n**Идеал:**\n- Минуты или секунды\n- Быстрая обратная связь\n\n💡 **Запомните:** Feedback loop = «время до результата».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в Jenkins объявить Declarative Pipeline?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Declarative Pipeline использует простой синтаксис с блоками (pipeline, stages, steps); Scripted Pipeline — Groovy-код",
+        "Scripted Pipeline не поддерживает агенты",
+        "Declarative Pipeline не поддерживает post-действия",
+        "Разницы нет, это синонимы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **Declarative vs Scripted:**\n\n**Declarative:**\n- pipeline { stages { steps {} } }\n- Проще, валидация\n- Ограниченный Groovy\n\n**Scripted:**\n- Groovy DSL\n- Полная гибкость\n- Сложнее\n\n💡 **Запомните:** Declarative = «проще», Scripted = «гибче».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в GitLab CI определить переменные окружения для джобы?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Секция variables: на уровне пайплайна, джобы или в UI через Settings → CI/CD → Variables",
+        "Только через файл .env",
+        "Только через командную строку при запуске",
+        "Переменные в GitLab CI не поддерживаются"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔧 **Переменные в GitLab CI:**\n\n**Способы:**\n- variables: в .gitlab-ci.yml\n- UI: Settings → CI/CD → Variables\n- Встроенные: CI_COMMIT_SHA, CI_JOB_NAME\n\n**Опции:**\n- masked (скрыть в логах)\n- protected (только для защищенных веток)\n\n💡 **Запомните:** variables = «переменные окружения».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в GitHub Actions запустить пайплайн только при создании pull request в main?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "on: pull_request: branches: [ main ]",
+        "on: push: branches: [ main ]",
+        "on: workflow_dispatch:",
+        "on: schedule:"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **Триггеры в GitHub Actions:**\n\n**Синтаксис:**\n```yaml\non:\n  pull_request:\n    branches: [ main ]\n```\n\n**Другие:**\n- push — отправка кода\n- workflow_dispatch — ручной\n- schedule — по расписанию\n\n💡 **Запомните:** on: pull_request = «при PR».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое blue-green deployment?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Стратегия с двумя идентичными окружениями (blue — active, green — idle); переключение трафика мгновенно",
+        "Постепенное обновление с увеличением процента трафика",
+        "Развертывание только ночью",
+        "Удаление старой версии перед установкой новой"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔵🟢 **Blue-Green:**\n\n**Как работает:**\n- Blue — текущий production\n- Green — новая версия\n- Переключение трафика мгновенно\n\n**Преимущества:**\n- Без downtime\n- Легкий rollback\n\n💡 **Запомните:** Blue-Green = «два окружения, мгновенное переключение».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое canary deployment?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Постепенное направление процента трафика на новую версию (например, 5% → 20% → 100%) с мониторингом",
+        "Мгновенное переключение между двумя окружениями",
+        "Развертывание на подмножество серверов с последующей заменой",
+        "Обновление без простоев с использованием rolling update"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🐦 **Canary Deployment:**\n\n**Процесс:**\n- 1-5% трафика → новая версия\n- Мониторинг метрик\n- Постепенное увеличение\n\n**Преимущества:**\n- Минимальный blast radius\n- A/B тестирование\n\n💡 **Запомните:** Canary = «постепенный ввод».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в CI/CD реализовать откат (rollback) в случае неудачного деплоя?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Автоматический rollback по healthcheck или ручной через предыдущий артефакт",
+        "Только ручное восстановление из бэкапа",
+        "Переустановка ОС на сервере",
+        "Откат невозможен, только исправление бага и новый деплой"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔙 **Rollback:**\n\n**Способы:**\n- Автоматический по healthcheck\n- Ручной через UI\n- Переключение балансировщика\n\n**Важно:**\n- Хранить артефакты прошлых версий\n- Быстрое переключение\n\n💡 **Запомните:** Rollback = «быстрый откат».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в GitLab CI использовать кэширование для ускорения сборки?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Секция cache: с указанием путей и ключа для разных веток",
+        "Использовать artifacts: для кэша",
+        "Кэш в GitLab CI настраивается только через UI",
+        "GitLab CI не поддерживает кэширование"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **Кэш в GitLab CI:**\n\n**Синтаксис:**\n```yaml\ncache:\n  key: ${CI_COMMIT_REF_SLUG}\n  paths:\n    - node_modules/\n```\n\n**Ключ:**\n- Определяет общий кэш\n- Для веток/тегов\n\n💡 **Запомните:** cache = «ускорение сборки».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое матрица (matrix) в CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Параллельный запуск одной джобы с разными параметрами (версии языка, ОС, конфигурации)",
+        "Структура данных для хранения артефактов",
+        "Тип базы данных для CI/CD",
+        "Механизм шифрования секретов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔢 **Matrix:**\n\n**Зачем:**\n- Тестирование на разных версиях\n- Разные ОС одновременно\n\n**Пример:**\n- Python 3.8, 3.9, 3.10\n- Ubuntu, Windows, macOS\n\n💡 **Запомните:** Matrix = «параллельно с разными параметрами».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в Jenkins реализовать условное выполнение этапа?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать when { environment name: 'BRANCH', value: 'main' } в Declarative Pipeline",
+        "Использовать if в Scripted Pipeline",
+        "Использовать only в конфигурации джобы",
+        "Условное выполнение не поддерживается"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **Условия в Jenkins:**\n\n**when директива:**\n```groovy\nwhen {\n  branch 'main'\n}\n```\n\n**Условия:**\n- branch\n- environment\n- expression (Groovy)\n\n💡 **Запомните:** when = «условное выполнение».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое smoke-тесты?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Минимальный набор тестов для проверки критической функциональности после деплоя",
+        "Тесты производительности при высокой нагрузке",
+        "Тесты безопасности кода",
+        "Тесты пользовательского интерфейса"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💨 **Smoke-тесты:**\n\n**Что проверяют:**\n- Приложение «завелось»\n- Healthcheck возвращает 200\n- Подключение к БД работает\n\n**Когда:**\n- После деплоя\n- Перед полноценным тестированием\n\n💡 **Запомните:** Smoke = «дымовые тесты».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в GitLab CI задать, чтобы джоба выполнялась только вручную?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "when: manual",
+        "only: manual",
+        "trigger: manual",
+        "run: manual"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "👆 **Ручной запуск:**\n\n**Синтаксис:**\n```yaml\nwhen: manual\n```\n\n**Использование:**\n- Деплой в production\n- Требует подтверждения\n- Кнопка \"Play\" в UI\n\n💡 **Запомните:** when: manual = «ручное подтверждение».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое SAST и DAST?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "SAST — статический анализ безопасности кода; DAST — динамический анализ запущенного приложения",
+        "SAST — анализ производительности; DAST — анализ нагрузки",
+        "SAST — анализ конфигурации; DAST — анализ сети",
+        "SAST и DAST — инструменты мониторинга"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **SAST vs DAST:**\n\n**SAST:**\n- Статический анализ\n- Без выполнения\n- SonarQube, Checkmarx\n\n**DAST:**\n- Динамический анализ\n- Запущенное приложение\n- OWASP ZAP, Burp Suite\n\n💡 **Запомните:** SAST = «статика», DAST = «динамика».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в Jenkins настроить уведомления в Slack?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать плагин Slack Notification или этап slackSend в пайплайне",
+        "Настроить webhook в Slack без плагина",
+        "Использовать email-уведомления",
+        "Slack не интегрируется с Jenkins"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💬 **Slack в Jenkins:**\n\n**Плагин:**\n- Slack Notification\n- slackSend в пайплайне\n\n**Пример:**\n```groovy\nslackSend(color: 'good', message: 'Build succeeded')\n```\n\n💡 **Запомните:** slackSend = «уведомление в Slack».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое artifact repository?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Централизованное хранилище артефактов сборки (Docker-образы, JAR, npm пакеты)",
+        "Репозиторий исходного кода",
+        "База данных для хранения логов",
+        "Хранилище для резервных копий"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏪 **Artifact Repository:**\n\n**Примеры:**\n- JFrog Artifactory\n- Nexus Repository\n- GitLab Package Registry\n\n**Хранит:**\n- Docker-образы\n- JAR, npm, PyPI пакеты\n- Helm charts\n\n💡 **Запомните:** Artifact repo = «хранилище артефактов».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как организовать промоушен артефакта между окружениями?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Артефакт, собранный один раз, проходит через стадии (dev → staging → prod) без пересборки",
+        "Пересборка артефакта для каждого окружения",
+        "Копирование артефакта вручную",
+        "Использование разных Dockerfile для каждого окружения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📈 **Promotion:**\n\n**Принцип:**\n- Один артефакт\n- Через все окружения\n- Без пересборки\n\n**Теги:**\n- myapp:1.0.0-dev\n- myapp:1.0.0-prod\n\n💡 **Запомните:** Promotion = «один артефакт, много окружений».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое infrastructure as code (IaC)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Управление инфраструктурой через код; CI/CD автоматизирует применение изменений",
+        "Хранение конфигурации приложения в коде",
+        "Написание кода для бизнес-логики",
+        "Автоматизация только сборки приложения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏗️ **IaC:**\n\n**Инструменты:**\n- Terraform\n- AWS CloudFormation\n- Ansible\n\n**CI/CD для IaC:**\n- terraform plan в PR\n- terraform apply после мержа\n- Проверка синтаксиса\n\n💡 **Запомните:** IaC = «инфраструктура как код».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в GitLab CI использовать .pre и .post этапы?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Специальные этапы, выполняющиеся до всех остальных и после всех",
+        "Этапы для деплоя в pre-production и post-production",
+        "Этапы для предварительной и постобработки артефактов",
+        "Это deprecated функциональность"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **.pre и .post:**\n\n**.pre:**\n- Выполняется первой\n- Настройка окружения\n\n**.post:**\n- Выполняется последней\n- Даже при неудаче\n- Очистка ресурсов\n\n💡 **Запомните:** .pre = «до всех», .post = «после всех».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое GitOps?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Git как единственный источник истины; CI/CD автоматически синхронизирует состояние кластера с репозиторием",
+        "CI/CD без использования Git",
+        "Только управление кодом приложения, не инфраструктурой",
+        "Использование Git только для хранения артефактов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **GitOps:**\n\n**Принципы:**\n- Git — единственный источник истины\n- Оператор синхронизирует кластер с Git\n- Автоматическая синхронизация\n\n**Инструменты:**\n- ArgoCD\n- Flux\n\n💡 **Запомните:** GitOps = «Git как источник истины».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как реализовать semantic versioning (SemVer) для артефактов?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Автоматическое определение версии на основе тегов Git, commit message, или через утилиты",
+        "Ручное указание версии в файле конфигурации",
+        "Использование текущей даты в качестве версии",
+        "Отказ от версионирования"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔢 **SemVer:**\n\n**Формат:** MAJOR.MINOR.PATCH\n\n**Инструменты:**\n- semantic-release\n- standard-version\n\n**На основе:**\n- Git tags\n- Conventional Commits\n\n💡 **Запомните:** SemVer = «MAJOR.MINOR.PATCH».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в Jenkins организовать параметризованную сборку?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать параметры (boolean, string, choice) в конфигурации джобы и обращаться к ним через params.ИМЯ",
+        "Передавать параметры через командную строку при запуске",
+        "Использовать environment variables",
+        "Параметризованные сборки не поддерживаются"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔧 **Параметры в Jenkins:**\n\n**Типы:**\n- String, Boolean\n- Choice, Password\n- File\n\n**Доступ:**\n```groovy\nparams.ENVIRONMENT\n```\n\n💡 **Запомните:** params = «параметры сборки».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как спроектировать CI/CD для микросервисной архитектуры?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Каждый микросервис имеет собственный пайплайн; используются общие библиотеки; оркестрация деплоя через отдельный пайплайн",
+        "Один огромный пайплайн для всех сервисов",
+        "Только ручной деплой",
+        "Каждый микросервис собирается вручную"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔷 **Микросервисы:**\n\n**Подход:**\n- Свой CI пайплайн на сервис\n- Shared libraries\n- Release pipeline для оркестрации\n\n**Важно:**\n- Независимое версионирование\n- Contract testing\n\n💡 **Запомните:** Микросервисы = «автономные пайплайны».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как обеспечить безопасное хранение секретов в CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать встроенные механизмы CI/CD (GitLab CI Variables → masked/protected, GitHub Secrets, Jenkins Credentials)",
+        "Хранить секреты в открытом виде в репозитории",
+        "Использовать переменные окружения без защиты",
+        "Записывать секреты в Dockerfile"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **Секреты:**\n\n**Хранилища:**\n- GitLab CI Variables (masked, protected)\n- GitHub Secrets\n- Jenkins Credentials\n- Hashicorp Vault\n\n**Нельзя:**\n- В коде\n- В аргументах команд\n\n💡 **Запомните:** Секреты = «только в хранилище».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как реализовать parallel тестирование?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Разделить тестовый сьют на несколько джоб с использованием split по файлам/меткам или через matrix",
+        "Запускать все тесты последовательно",
+        "Использовать один мощный runner",
+        "Отключить тесты в CI/CD"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **Parallel Tests:**\n\n**Подходы:**\n- Шардинг (jest --shard)\n- Matrix strategy\n- Распределенные раннеры\n\n**Цель:**\n- Сократить время с часов до минут\n\n💡 **Запомните:** Parallel tests = «быстрее обратная связь».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое Jenkins Shared Library?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Библиотека Groovy-кода для переиспользования логики между разными Jenkinsfile",
+        "Библиотека для интеграции с Git",
+        "Хранилище артефактов Jenkins",
+        "Плагин для мониторинга производительности"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📚 **Shared Library:**\n\n**Зачем:**\n- DRY принцип\n- Единообразие пайплайнов\n- Централизованная логика\n\n**Использование:**\n```groovy\n@Library('my-lib')\n```\n\n💡 **Запомните:** Shared Library = «общая логика».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как деплоить в Kubernetes с помощью Helm?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В пайплайне выполнить helm upgrade --install release ./chart --values values-${ENV}.yaml",
+        "Использовать kubectl apply для каждого манифеста вручную",
+        "Хранить Helm чарты отдельно от кода",
+        "Использовать только Docker Compose"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚓ **Helm деплой:**\n\n**Процесс:**\n1. Сборка образа\n2. Обновление values\n3. helm upgrade --install\n4. Проверка rollout\n\n**Команда:**\n```bash\nhelm upgrade --install app ./chart --set image.tag=${CI_COMMIT_SHA}\n```\n\n💡 **Запомните:** Helm = «пакетный менеджер K8s».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в GitLab CI реализовать multi-project pipelines?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать trigger с указанием project, strategy: depend для ожидания результата",
+        "Использовать webhooks между проектами",
+        "Использовать артефакты из другого проекта",
+        "Multi-project pipelines не поддерживаются"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **Multi-Project Pipelines:**\n\n**Синтаксис:**\n```yaml\ntrigger:\n  project: my-group/e2e-tests\n  strategy: depend\n```\n\n**Зачем:**\n- Связь пайплайнов\n- Ожидание результата\n\n💡 **Запомните:** trigger: project = «зависимые пайплайны».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в Jenkins реализовать distributed builds?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Настроить несколько агентов с разными метками и в пайплайне указывать agent { label 'linux' }",
+        "Использовать один мастер для всего",
+        "Запускать сборки только на мастере",
+        "Использовать облачные агенты только вручную"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌐 **Distributed Builds:**\n\n**Агенты:**\n- Физические серверы\n- VM, контейнеры\n- Облачные (EC2, K8s)\n\n**В пайплайне:**\n```groovy\nagent { label 'linux' }\n```\n\n💡 **Запомните:** Distributed = «распределенная нагрузка».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как реализовать автоматическое создание release notes?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать инструменты (semantic-release, git-cliff), анализирующие commit messages",
+        "Писать release notes вручную",
+        "Использовать только теги Git",
+        "Автоматически копировать все commit messages"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **Release Notes:**\n\n**Инструменты:**\n- semantic-release\n- git-cliff\n- conventional-changelog\n\n**На основе:**\n- Conventional Commits\n- feat:, fix:, BREAKING CHANGE:\n\n💡 **Запомните:** Release notes = «авто-генерация».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое Trunk Based Development?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Стратегия с одной основной веткой и короткоживущими feature-ветками; CI/CD обеспечивает частую интеграцию",
+        "Множество долгоживущих веток с ручным мержем",
+        "Отсутствие веток, только main",
+        "Использование только тегов для релизов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌳 **Trunk Based Development:**\n\n**Принципы:**\n- Одна main/trunk ветка\n- Короткоживущие feature-ветки (1-2 дня)\n- Частые мержи\n\n**Требует:**\n- Быстрых тестов\n- Feature flags\n\n💡 **Запомните:** TBD = «частая интеграция в main».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как деплоить на основе Git tags?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В пайплайне добавить правило: only: tags и использовать имя тега как версию",
+        "Деплоить каждый коммит",
+        "Использовать только ветки для релизов",
+        "Ручной деплой из UI"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏷️ **Deploy by Tags:**\n\n**GitLab CI:**\n```yaml\nonly:\n  - tags\n```\n\n**GitHub Actions:**\n```yaml\non:\n  push:\n    tags: [ 'v*' ]\n```\n\n💡 **Запомните:** Tags = «релизный триггер».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как тестировать на совместимость с разными версиями зависимостей?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать matrix strategy, где в качестве параметра указывается версия языка",
+        "Тестировать только на одной версии",
+        "Использовать контейнеры с разными версиями вручную",
+        "Тестирование версий не требуется"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔢 **Matrix Testing:**\n\n**GitHub Actions:**\n```yaml\nstrategy:\n  matrix:\n    python-version: [3.8, 3.9, 3.10]\n```\n\n**Результат:**\n- Отдельный запуск на версию\n- Видно где ошибка\n\n💡 **Запомните:** Matrix = «тест на всех версиях».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как сканировать Docker-образы на уязвимости?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать инструменты (Trivy, Clair, Snyk) в пайплайне после сборки образа",
+        "Проверять только на этапе деплоя",
+        "Использовать только ручную проверку",
+        "Docker-образы безопасны по умолчанию"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **Image Scanning:**\n\n**Инструменты:**\n- Trivy\n- Clair\n- Snyk\n- Docker Scout\n\n**В пайплайне:**\n```bash\ntrivy image --severity HIGH,CRITICAL --exit-code 1 myapp:latest\n```\n\n💡 **Запомните:** Scanning = «блокировка уязвимостей».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в Jenkins реализовать обработку ошибок и уведомления?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать блок post { failure { emailext(...) } }",
+        "Использовать try-catch в Scripted Pipeline",
+        "Использовать always для отправки уведомлений",
+        "Jenkins не поддерживает уведомления"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📧 **Post-действия:**\n\n**Условия:**\n- always\n- success\n- failure\n- unstable\n\n**Пример:**\n```groovy\npost {\n  failure {\n    emailext(subject: 'Build failed', to: 'team@example.com')\n  }\n}\n```\n\n💡 **Запомните:** post = «действия после завершения».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Что такое drift detection?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Обнаружение расхождения между декларативным состоянием (IaC) и реальной инфраструктурой",
+        "Мониторинг производительности приложений",
+        "Обнаружение утечек памяти",
+        "Контроль версий кода"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📉 **Drift Detection:**\n\n**Проблема:**\n- Ручные изменения\n- Аварийные правки\n- Дрейф от IaC\n\n**Решение:**\n- Регулярный terraform plan\n- Auto-remediation\n\n💡 **Запомните:** Drift = «расхождение от IaC».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как реализовать continuous database migration?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В пайплайне после деплоя выполнить миграции БД с проверкой обратной совместимости",
+        "Миграции выполняются вручную DBA",
+        "Миграции только при создании нового окружения",
+        "Использовать только ORM без миграций"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🗄️ **DB Migration:**\n\n**Инструменты:**\n- Flyway\n- Liquibase\n- Alembic\n\n**Принципы:**\n- Идемпотентность\n- Обратная совместимость\n- Проверка на тестовых данных\n\n💡 **Запомните:** Migration = «авто-применение схем».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как в GitLab CI создать динамическое окружение для каждого MR?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать environment: name: review/$CI_COMMIT_REF_SLUG с on_stop для удаления",
+        "Вручную создавать окружение для каждого PR",
+        "Использовать только общий staging",
+        "Динамические окружения не поддерживаются"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **Review Apps:**\n\n**Синтаксис:**\n```yaml\nenvironment:\n  name: review/$CI_COMMIT_REF_SLUG\n  on_stop: stop-review\n```\n\n**Что делает:**\n- Создает окружение для MR\n- Удаляет при закрытии\n\n💡 **Запомните:** Review Apps = «окружение на MR».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как контролировать покрытие кода тестами?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Запускать coverage инструмент, парсить отчет, задать порог (например, не ниже 80%)",
+        "Проверять покрытие только вручную",
+        "Использовать только количество тестов",
+        "Покрытие не важно, если есть e2e тесты"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **Code Coverage:**\n\n**Инструменты:**\n- coverage.py\n- JaCoCo\n- Istanbul\n\n**В пайплайне:**\n- Замер покрытия\n- Порог (80%)\n- Блокировка при снижении\n\n💡 **Запомните:** Coverage = «контроль покрытия».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как управлять доступом к общему ресурсу в Jenkins?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать плагин Lockable Resources для резервирования ресурса на время выполнения джобы",
+        "Использовать обычные переменные",
+        "Использовать глобальные метки агентов",
+        "Jenkins не поддерживает блокировки ресурсов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔒 **Lockable Resources:**\n\n**Плагин:**\n- Lockable Resources\n\n**Использование:**\n```groovy\nlock(resource: 'test-db') {\n  sh 'run-tests.sh'\n}\n```\n\n💡 **Запомните:** lock = «блокировка ресурса».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как автоматизировать тесты производительности?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "После деплоя в staging запустить нагрузочные тесты (k6, JMeter) с отправкой отчетов",
+        "Тестировать производительность только вручную перед релизом",
+        "Использовать только unit-тесты",
+        "Тесты производительности не автоматизируются"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **Performance Tests:**\n\n**Инструменты:**\n- k6\n- JMeter\n- Gatling\n\n**Процесс:**\n- Деплой в staging\n- Запуск тестов\n- Сравнение с baseline\n\n💡 **Запомните:** Perf tests = «обнаружение регрессий».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    },
+    {
+      "text": "Как оптимизировать CI/CD для монолита?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Разделить пайплайн на этапы с параллелизацией тестов; использовать кэширование; применять incremental builds",
+        "Запускать полную сборку и тестирование каждый раз последовательно",
+        "Сократить тестирование до минимума",
+        "Переписать монолит в микросервисы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏛️ **Монолит оптимизация:**\n\n**Стратегии:**\n- Инкрементальная сборка\n- Параллельные тесты\n- Кэширование зависимостей\n- Вынос линтеров\n\n💡 **Запомните:** Монолит = «параллелизация + кэш».",
+      "profession_name": "DevOps",
+      "category_name": "CI/CD"
+    }
+  ]
+}

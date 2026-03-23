@@ -1,0 +1,967 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-23",
+  "total": 60,
+  "questions": [
+    {
+      "text": "Что такое IP-адрес?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Уникальный идентификатор устройства в сети",
+        "Адрес электронной почты",
+        "Имя компьютера в локальной сети",
+        "Серийный номер сетевой карты"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📍 **IP-адрес** — числовой идентификатор устройства в сети TCP/IP.\n\n**Виды:**\n- IPv4 (32 бита): 192.168.1.1\n- IPv6 (128 бит): 2001:db8::1\n\n**Типы:**\n- Статический — назначен вручную\n- Динамический — получен через DHCP\n\n💡 **Запомните:** IP = «адрес дома» в интернете.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое MAC-адрес?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Уникальный аппаратный идентификатор сетевого интерфейса",
+        "Адрес сетевого принтера",
+        "Тип кабельного соединения",
+        "Адрес почтового сервера"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔖 **MAC-адрес** — уникальный 48-битный идентификатор сетевого интерфейса.\n\n**Формат:** 00:1A:2B:3C:4D:5E\n\n**Уровень:** Канальный (L2) OSI\n\n**Важно:** Не меняется (кроме программной подмены)\n\n💡 **Запомните:** MAC = «серийный номер» сетевой карты.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что означает аббревиатура DNS?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Domain Name System — система доменных имен",
+        "Data Network Service",
+        "Dynamic Name Server",
+        "Digital Network System"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📞 **DNS (Domain Name System)** — «телефонная книга» интернета.\n\n**Что делает:** Преобразует доменные имена (google.com) в IP-адреса (142.250.185.46)\n\n**Порт:** 53 (TCP и UDP)\n\n**Иерархия:** Корневые → TLD (.com) → Авторитативные\n\n💡 **Запомните:** DNS = «переводчик» имён в адреса.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Какие порты используются для HTTP и HTTPS по умолчанию?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "HTTP — 80, HTTPS — 443",
+        "HTTP — 443, HTTPS — 80",
+        "HTTP — 8080, HTTPS — 8443",
+        "HTTP — 25, HTTPS — 110"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚪 **Порты по умолчанию:**\n\n**HTTP:** 80 (незашифрованный)\n**HTTPS:** 443 (TLS/SSL шифрование)\n\n**Другие:**\n- 8080 — альтернативный HTTP (прокси, тесты)\n- 25 — SMTP (почта)\n- 110 — POP3\n\n💡 **Запомните:** 80 = HTTP, 443 = HTTPS.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое localhost и какой IP ему соответствует?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Текущее устройство; IP — 127.0.0.1",
+        "Сервер в интернете; IP — 8.8.8.8",
+        "Маршрутизатор; IP — 192.168.1.1",
+        "Облачный сервер; IP — 0.0.0.0"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **localhost** — имя текущего устройства.\n\n**IP-адрес:** 127.0.0.1 (IPv4) или ::1 (IPv6)\n\n**Особенность:** Соединения не выходят за пределы устройства\n\n**Использование:** Тестирование без сети\n\n💡 **Запомните:** localhost = «я сам».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что делает команда ping?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Проверяет доступность узла и время отклика",
+        "Показывает маршрут до узла",
+        "Сканирует открытые порты",
+        "Определяет IP по доменному имени"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏓 **ping** — проверка связности через ICMP.\n\n**Что делает:**\n- Отправляет ICMP echo-запросы\n- Измеряет RTT (время отклика)\n- Показывает потерю пакетов\n\n**Уровень:** Сетевой (L3)\n\n💡 **Запомните:** ping = «ты там?» + «как быстро?».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое подсеть (subnet)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Логическое разделение IP-сети на сегменты",
+        "Тип сетевого кабеля",
+        "Сервер для управления трафиком",
+        "Протокол шифрования данных"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔪 **Subnet** — деление сети на части.\n\n**Зачем:**\n- Управление трафиком\n- Безопасность\n- Производительность\n\n**Маска:** Определяет границу сеть/хост\n\n**Пример:** 192.168.1.0/24\n\n💡 **Запомните:** Subnet = «нарезка» сети.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Какой IP — broadcast в сети 192.168.1.0/24?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "192.168.1.255",
+        "192.168.1.0",
+        "192.168.1.1",
+        "255.255.255.255"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📢 **Broadcast** — рассылка всем в сети.\n\n**Для /24:** 192.168.1.255 (последний адрес)\n\n**255.255.255.255:** Ограниченный broadcast\n\n**192.168.1.0:** Адрес сети (не хоста)\n\n💡 **Запомните:** Broadcast = «всем в сети».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое шлюз по умолчанию (default gateway)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Устройство для выхода в другие сети",
+        "Первый коммутатор в сети",
+        "DNS-сервер для разрешения имен",
+        "DHCP-сервер для раздачи адресов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚪 **Default Gateway** — выход из локальной сети.\n\n**Что делает:** Маршрутизатор, куда отправляются пакеты «неизвестно куда»\n\n**Пример:** 192.168.1.1\n\n💡 **Запомните:** Шлюз = «дверь» в интернет.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Какой протокол автоматически назначает IP-адреса?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "DHCP (Dynamic Host Configuration Protocol)",
+        "DNS",
+        "ARP",
+        "NAT"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🎁 **DHCP** — автоматическая настройка сети.\n\n**Процесс:**\n1. Discover (клиент ищет)\n2. Offer (сервер предлагает)\n3. Request (клиент просит)\n4. Ack (сервер подтверждает)\n\n**Порты:** 67 (сервер), 68 (клиент)\n\n💡 **Запомните:** DHCP = «автоматический раздатчик IP».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое NAT (Network Address Translation)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Преобразование частных IP в публичные",
+        "Протокол шифрования трафика",
+        "Тип сетевого кабеля",
+        "Программа для мониторинга"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **NAT** — трансляция адресов.\n\n**Зачем:**\n- Несколько устройств → один публичный IP\n- Экономия IPv4\n- Скрытие внутренней сети\n\n**Типы:** SNAT, DNAT, PAT\n\n💡 **Запомните:** NAT = «переводчик» IP.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Какой протокол обеспечивает надёжную передачу с установлением соединения?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "TCP (Transmission Control Protocol)",
+        "UDP",
+        "IP",
+        "ICMP"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "✅ **TCP** — надёжный транспорт.\n\n**Особенности:**\n- Установка соединения (handshake)\n- Подтверждения (ACK)\n- Порядок доставки\n- Контроль перегрузки\n\n**Использование:** HTTP, HTTPS, SSH, FTP\n\n💡 **Запомните:** TCP = «надёжно, но медленнее».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "В чем основное отличие UDP от TCP?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "UDP без установления соединения, не гарантирует доставку",
+        "UDP всегда быстрее TCP, но менее безопасен",
+        "UDP работает только на IPv6",
+        "UDP не может передавать большие объемы данных"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **UDP** — быстрый, но ненадёжный.\n\n**Особенности:**\n- Без установки соединения\n- Без гарантий доставки\n- Меньшие накладные расходы\n\n**Использование:** DNS, VoIP, видео, игры\n\n💡 **Запомните:** UDP = «быстро, но без гарантий».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое ARP и для чего он используется?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Протокол для определения MAC-адреса по IP",
+        "Протокол для определения IP по домену",
+        "Протокол для маршрутизации между сетями",
+        "Протокол для автоматической настройки IP"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **ARP (Address Resolution Protocol)** — IP → MAC.\n\n**Как работает:**\n1. Broadcast: «Кто имеет IP X?»\n2. Ответ: «У меня MAC Y»\n3. Кэширование в ARP-таблице\n\n**Уровень:** Канальный (L2)\n\n💡 **Запомните:** ARP = «переводчик» IP в MAC.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое VLAN (Virtual Local Area Network)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Логическое разделение физической сети на изолированные сегменты",
+        "Тип сетевого протокола",
+        "Программа для мониторинга трафика",
+        "Устройство для усиления сигнала"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔷 **VLAN** — виртуальные сети.\n\n**Зачем:**\n- Изоляция трафика\n- Безопасность\n- Уменьшение broadcast\n\n**Тег:** 802.1Q в Ethernet-кадре\n\n💡 **Запомните:** VLAN = «логические сети поверх физических».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Какая команда показывает таблицу маршрутизации в Linux?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "route -n или ip route show",
+        "ifconfig",
+        "netstat -an",
+        "arp -a"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🗺️ **Таблица маршрутизации** — куда отправлять пакеты.\n\n**Команды:**\n- `route -n` — классическая\n- `ip route show` — современная\n\n**Запись по умолчанию:** 0.0.0.0/0\n\n💡 **Запомните:** `ip route` = «карта сети».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что означает код состояния HTTP 404?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Not Found — ресурс не найден",
+        "Internal Server Error — ошибка сервера",
+        "Forbidden — доступ запрещен",
+        "OK — запрос выполнен успешно"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "❌ **404 Not Found** — ресурс не найден.\n\n**Классы статусов:**\n- 2xx — успех (200 OK)\n- 3xx — перенаправление\n- 4xx — ошибка клиента\n- 5xx — ошибка сервера\n\n💡 **Запомните:** 4xx = «ошибка клиента», 5xx = «ошибка сервера».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое прокси-сервер (proxy)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Промежуточный сервер между клиентом и целевым сервером",
+        "Сервер для хранения резервных копий",
+        "Сервер для шифрования трафика",
+        "Сервер для раздачи IP-адресов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **Proxy** — посредник.\n\n**Функции:**\n- Кэширование\n- Фильтрация\n- Анонимизация\n- Балансировка\n\n**Типы:** Forward (для клиентов), Reverse (для серверов)\n\n💡 **Запомните:** Proxy = «посредник».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Какой протокол для безопасного удалённого управления сервером?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "SSH (Secure Shell)",
+        "Telnet",
+        "FTP",
+        "SNMP"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **SSH** — безопасный доступ.\n\n**Порт:** 22\n\n**Особенности:**\n- Шифрование всех данных\n- Аутентификация по ключам\n- Туннелирование\n\n**Telnet (23)** — небезопасный аналог\n\n💡 **Запомните:** SSH = «безопасный терминал».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое брандмауэр (firewall)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Система фильтрации трафика на основе правил",
+        "Физическое устройство для соединения кабелей",
+        "Программа для мониторинга производительности",
+        "Сервер для хранения логов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🛡️ **Firewall** — межсетевой экран.\n\n**Фильтрация:**\n- По IP-адресам\n- По портам\n- По протоколам\n- По состоянию (stateful)\n\n**Примеры:** iptables, nftables, Windows Firewall\n\n💡 **Запомните:** Firewall = «охранник сети».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "В чем разница между router и switch?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Router — L3 (IP), соединяет сети; switch — L2 (MAC), в одной сети",
+        "Router только с Ethernet, switch — с Wi-Fi",
+        "Router медленнее switch во всех сценариях",
+        "Switch выполняет NAT, router — нет"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔌 **Router vs Switch:**\n\n**Router (L3):**\n- Решения по IP\n- Соединяет разные сети\n- NAT, маршрутизация\n\n**Switch (L2):**\n- Коммутация по MAC\n- В пределах одной сети\n- VLAN, QoS\n\n💡 **Запомните:** Router = «между сетями», Switch = «внутри сети».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как записывается 192.168.1.0 с маской 255.255.255.0 в CIDR?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "192.168.1.0/24",
+        "192.168.1.0/16",
+        "192.168.1.0/32",
+        "192.168.1.0/8"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **CIDR** — бесклассовая маршрутизация.\n\n**Формат:** IP/префикс\n\n**255.255.255.0** = 24 единичных бита = **/24**\n\n**Преимущества:**\n- Гибкое деление сетей\n- Агрегация маршрутов\n\n💡 **Запомните:** /24 = 255.255.255.0, /16 = 255.255.0.0",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что происходит при отправке пакета в другую сеть?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Пакет отправляется на шлюз по умолчанию",
+        "Пакет отправляется широковещательно",
+        "Пакет отбрасывается с ошибкой",
+        "Пакет передается напрямую через ARP"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📨 **Маршрутизация:**\n\n**Процесс:**\n1. Проверка: своя сеть или чужая (AND с маской)\n2. Если чужая → ARP для шлюза\n3. Инкапсуляция в кадр с MAC шлюза\n4. Маршрутизатор пересылает дальше\n\n💡 **Запомните:** Чужая сеть = шлюз.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Какие диапазоны IP зарезервированы для частных сетей (RFC 1918)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16",
+        "8.8.8.0/24, 4.4.4.0/24, 1.1.1.0/24",
+        "127.0.0.0/8, 169.254.0.0/16, 224.0.0.0/4",
+        "192.0.0.0/24, 198.0.0.0/24, 203.0.0.0/24"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏠 **Частные диапазоны:**\n\n**Class A:** 10.0.0.0 — 10.255.255.255 (/8)\n**Class B:** 172.16.0.0 — 172.31.255.255 (/12)\n**Class C:** 192.168.0.0 — 192.168.255.255 (/16)\n\n**Особенность:** Не маршрутизируются в интернете\n\n💡 **Запомните:** 10.x, 172.16-31.x, 192.168.x — локальные.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое TTL (Time to Live) в IP-пакете?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Поле, ограничивающее количество переходов (hops)",
+        "Время жизни пакета в секундах",
+        "Размер пакета в байтах",
+        "Приоритет пакета при маршрутизации"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⏱️ **TTL** — счётчик переходов.\n\n**Как работает:**\n- Каждый роутер уменьшает на 1\n- При 0 → отбрасывание + ICMP Time Exceeded\n\n**Зачем:** Предотвращение зацикливания\n\n**Использование:** traceroute\n\n💡 **Запомните:** TTL = «сколько роутеров пройдёт».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает traceroute?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Отправляет пакеты с увеличивающимся TTL, анализирует ICMP-ответы",
+        "Отправляет ARP-запросы каждому маршрутизатору",
+        "Использует DNS-запросы для определения маршрута",
+        "Сканирует все порты на промежуточных узлах"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **traceroute** — путь пакета.\n\n**Алгоритм:**\n1. TTL=1 → 1-й роутер → ICMP Time Exceeded\n2. TTL=2 → 2-й роутер → ICMP\n3. ... пока не достигнет цели\n\n**Результат:** Все хопы на пути\n\n💡 **Запомните:** traceroute = «карта пути».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "В чем разница между заголовками TCP и UDP?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "TCP сложнее: sequence, ack, окна, флаги; UDP простой (8 байт)",
+        "Заголовок UDP содержит поля для установления соединения",
+        "TCP не использует контрольную сумму",
+        "UDP имеет поле для приоритета пакета"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **Заголовки:**\n\n**TCP (20-60 байт):**\n- Ports, seq, ack, flags (SYN, ACK, FIN...)\n- Window, checksum\n\n**UDP (8 байт):**\n- Ports, length, checksum\n\n💡 **Запомните:** TCP = «сложный», UDP = «минимализм».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое MTU и что происходит при превышении?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Максимальный размер кадра; при превышении — фрагментация",
+        "Максимальное время жизни пакета",
+        "Максимальная пропускная способность канала",
+        "Максимальное количество маршрутизаторов на пути"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📏 **MTU (Maximum Transmission Unit):**\n\n**Стандарт Ethernet:** 1500 байт\n\n**При превышении:**\n- Фрагментация на части\n- Или ICMP «Fragmentation Needed»\n\n**Проблемы:** VPN, туннели\n\n💡 **Запомните:** MTU = «максимальный размер кадра».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое 3-way handshake в TCP?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "SYN → SYN-ACK → ACK",
+        "SYN → ACK → FIN",
+        "ACK → SYN → ACK",
+        "SYN → ACK → RST"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🤝 **TCP handshake:**\n\n**Шаги:**\n1. Клиент → SYN (seq=X)\n2. Сервер → SYN-ACK (seq=Y, ack=X+1)\n3. Клиент → ACK (ack=Y+1)\n\n**Результат:** Соединение ESTABLISHED\n\n💡 **Запомните:** SYN → SYN-ACK → ACK = «привет, привет, ок».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое FIN и RST флаги в TCP?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "FIN — штатное завершение; RST — аварийный сброс",
+        "FIN — для установления соединения; RST — для подтверждения",
+        "FIN — для фрагментации; RST — для перезагрузки",
+        "FIN и RST используются только в UDP"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚪 **Флаги завершения:**\n\n**FIN:**\n- Штатное завершение\n- 4 шага: FIN, ACK, FIN, ACK\n\n**RST:**\n- Аварийный сброс\n- Мгновенное разрывание\n\n💡 **Запомните:** FIN = «до свидания», RST = «отстань!».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает DNS-резолвинг?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Клиент → локальный резолвер → корневые → TLD → авторитативные → ответ",
+        "Клиент отправляет запрос напрямую на корневые серверы",
+        "DNS работает только через широковещательные запросы",
+        "Резолвинг выполняется только по UDP на порту 53"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **DNS-резолвинг:**\n\n**Цепочка:**\n1. Клиент → локальный резолвер\n2. Резолвер → корневой DNS\n3. Корневой → TLD (.com)\n4. TLD → авторитативный\n5. Ответ клиенту + кэш\n\n💡 **Запомните:** DNS = «иерархический поиск».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Какие типы DNS-записей вы знаете?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "A (IPv4), AAAA (IPv6), CNAME, MX, TXT, NS, PTR",
+        "HTTP, FTP, SMTP, POP3",
+        "GET, POST, PUT, DELETE",
+        "TCP, UDP, ICMP, ARP"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **DNS-записи:**\n\n**A** — IPv4 адрес\n**AAAA** — IPv6 адрес\n**CNAME** — алиас\n**MX** — почта\n**TXT** — текст (SPF, DKIM)\n**NS** — nameserver\n**PTR** — обратный lookup\n\n💡 **Запомните:** A = IP, CNAME = алиас, MX = почта.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое TCP window size?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Механизм управления потоком — сколько данных отправить без подтверждения",
+        "Размер сегмента TCP",
+        "Количество одновременно открытых соединений",
+        "Время ожидания подтверждения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🪟 **TCP Window:**\n\n**Что делает:** Управление потоком (flow control)\n\n**Как:** Получатель указывает, сколько байт готов принять\n\n**Window scaling:** До 1 ГБ для высокоскоростных сетей\n\n💡 **Запомните:** Window = «сколько влезет».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "В чем разница между HTTP Keep-Alive и TCP Keepalive?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "HTTP Keep-Alive — повторное использование соединения; TCP Keepalive — проверка живости",
+        "Это одно и то же",
+        "HTTP Keep-Alive работает на транспортном уровне",
+        "TCP Keepalive используется только для HTTP"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **Keep-Alive vs Keepalive:**\n\n**HTTP Keep-Alive:**\n- Одно TCP для нескольких HTTP-запросов\n- Экономия на handshake\n\n**TCP Keepalive:**\n- Проверка, живо ли соединение\n- Пустые сегменты\n\n💡 **Запомните:** HTTP = «пере reuse», TCP = «ты жив?».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое SSL/TLS handshake?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Установление защищённого соединения: сертификаты, шифры, ключи",
+        "Аутентификация по паролю",
+        "Сжатие данных перед передачей",
+        "Установление TCP-соединения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **TLS Handshake:**\n\n**Этапы:**\n1. ClientHello (шифры, random)\n2. ServerHello + сертификат\n3. Проверка сертификата\n4. Обмен ключами (DH/RSA)\n5. Генерация сессионных ключей\n6. Finished\n\n💡 **Запомните:** Handshake = «договорились о шифровании».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое SNI (Server Name Indication)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Расширение TLS для указания домена при handshake",
+        "Протокол для мониторинга серверов",
+        "Система именования серверов в DNS",
+        "Механизм балансировки нагрузки"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏷️ **SNI:**\n\n**Зачем:** Несколько HTTPS-сайтов на одном IP\n\n**Как:** Клиент указывает домен в ClientHello\n\n**Без SNI:** Отдельный IP для каждого сертификата\n\n💡 **Запомните:** SNI = «какой сайт нужен» до handshake.",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как проверить открытые порты на сервере?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "nmap -p 1-1000 target.com или nc -zv target.com port",
+        "ping target.com",
+        "traceroute target.com",
+        "dig target.com"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **Сканирование портов:**\n\n**nmap:**\n- `nmap -p 80,443 host` — конкретные\n- `nmap -p- host` — все (медленно)\n\n**nc (netcat):**\n- `nc -zv host port` — проверка одного\n\n⚠️ **Важно:** Сканирование без разрешения может быть незаконным\n\n💡 **Запомните:** nmap = «сканер», nc = «быстрая проверка».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "В чем разница между GET и POST?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "GET — параметры в URL, идемпотентный; POST — данные в теле, не идемпотентный",
+        "GET передает данные в теле запроса",
+        "POST всегда шифрует данные",
+        "GET медленнее POST"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📤 **GET vs POST:**\n\n**GET:**\n- Параметры в URL\n- Идемпотентен\n- Кэшируется\n\n**POST:**\n- Данные в теле\n- Не идемпотентен\n- Не кэшируется\n\n💡 **Запомните:** GET = «дай», POST = «возьми/создай».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое балансировка нагрузки (load balancing)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Распределение трафика между серверами для доступности и производительности",
+        "Оптимизация сетевых маршрутов",
+        "Сжатие трафика для экономии带宽",
+        "Шифрование трафика между серверами"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚖️ **Load Balancing:**\n\n**Зачем:**\n- Отказоустойчивость\n- Масштабируемость\n- Оптимизация\n\n**Уровни:**\n- L4 (транспортный): IP+порт\n- L7 (прикладной): HTTP\n\n**Алгоритмы:** Round-robin, least connections\n\n💡 **Запомните:** LB = «распредели нагрузку».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое WebSocket и чем он отличается от HTTP?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "WebSocket — двунаправленная связь в реальном времени; HTTP — запрос-ответ",
+        "WebSocket — это тип HTTP-запроса",
+        "WebSocket работает только через UDP",
+        "WebSocket не может передавать бинарные данные"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔌 **WebSocket:**\n\n**Особенности:**\n- Двунаправленная связь\n- Одно TCP-соединение\n- Сервер может отправить данные в любой момент\n\n**Использование:** Чаты, игры, биржа, real-time\n\n**HTTP:** Клиент запросил → сервер ответил\n\n💡 **Запомните:** WebSocket = «постоянный канал».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает BGP и где применяется?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Протокол внешней маршрутизации между автономными системами (AS)",
+        "Протокол внутренней маршрутизации в локальной сети",
+        "Протокол для автоматической настройки IP-адресов",
+        "Протокол для обнаружения соседей в сети"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌐 **BGP (Border Gateway Protocol):**\n\n**Зачем:** Маршрутизация между AS (провайдерами)\n\n**Особенности:**\n- TCP порт 179\n- Path vector протокол\n- Политики (AS_PATH, MED, local preference)\n\n**Типы:** eBGP (между AS), iBGP (внутри AS)\n\n💡 **Запомните:** BGP = «клей интернета».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое VPC и как организуется сеть в облаке?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Изолированный виртуальный сегмент сети с контролем IP, подсетей, маршрутизации",
+        "Тип виртуальной машины",
+        "Сервис хранения данных",
+        "Протокол шифрования облачного трафика"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "☁️ **VPC (Virtual Private Cloud):**\n\n**Компоненты:**\n- CIDR, подсети (public/private)\n- Таблицы маршрутизации\n- Шлюзы (IGW, NAT, VPN)\n- Security Groups, NACL\n\n**Примеры:** AWS VPC, Azure VNet, GCP VPC\n\n💡 **Запомните:** VPC = «ваша сеть в облаке».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает CDN и какие проблемы решает?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Распределённая сеть серверов для доставки контента с географически близких узлов",
+        "Сервис для балансировки нагрузки между дата-центрами",
+        "Сеть для шифрования трафика",
+        "Система для автоматического масштабирования серверов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚀 **CDN (Content Delivery Network):**\n\n**Как:** Кэширование на edge-серверах\n\n**Преимущества:**\n- Снижение latency\n- Разгрузка origin\n- DDoS-защита\n\n**Примеры:** Cloudflare, Akamai, AWS CloudFront\n\n💡 **Запомните:** CDN = «контент ближе к пользователю».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое eBPF и как используется в сетях?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Технология выполнения кода в ядре Linux для фильтрации и модификации трафика",
+        "Протокол для фильтрации пакетов",
+        "Тип сетевого интерфейса",
+        "Утилита для трассировки маршрутов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔬 **eBPF (Extended Berkeley Packet Filter):**\n\n**Возможности:**\n- Фильтрация пакетов (XDP)\n- Балансировка (Cilium)\n- Мониторинг\n- Сетевые политики\n\n**Преимущество:** Без изменения ядра\n\n💡 **Запомните:** eBPF = «программируемое ядро».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает IPsec и какие режимы существуют?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Защита IP на сетевом уровне; режимы: транспортный (payload) и туннельный (весь пакет)",
+        "Защита на транспортном уровне",
+        "Режимы: активный и пассивный",
+        "Режимы: клиент-сервер и peer-to-peer"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **IPsec (Internet Protocol Security):**\n\n**Режимы:**\n- Transport — шифрует payload\n- Tunnel — шифрует весь пакет (VPN)\n\n**Компоненты:**\n- AH (аутентификация)\n- ESP (шифрование)\n- IKE (ключи, порт 500)\n\n💡 **Запомните:** IPsec = «VPN на уровне IP».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое HTTP/2 и преимущества перед HTTP/1.1?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Мультиплексирование, сжатие заголовков (HPACK), server push, двоичный протокол",
+        "Поддержка только HTTPS",
+        "Увеличенный размер заголовков",
+        "Отказ от keep-alive соединений"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **HTTP/2:**\n\n**Улучшения:**\n- Двоичный протокол\n- Мультиплексирование (множество потоков в одном соединении)\n- HPACK (сжатие заголовков)\n- Server push\n\n**Требует:** TLS (формально необязательно)\n\n💡 **Запомните:** HTTP/2 = «быстрее, эффективнее».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает HTTP/3 и чем отличается от HTTP/2?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "HTTP/3 поверх QUIC (UDP), устраняет head-of-line blocking на TCP",
+        "HTTP/3 — это HTTP/2 с обязательным шифрованием",
+        "HTTP/3 использует SCTP вместо TCP",
+        "HTTP/3 не поддерживает мультиплексирование"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚀 **HTTP/3:**\n\n**Основа:** QUIC (UDP + TLS 1.3)\n\n**Преимущества:**\n- Нет head-of-line blocking\n- 0-RTT handshake\n- Лучше на мобильных сетях\n\n**Статус:** Поддерживается CDN и браузерами\n\n💡 **Запомните:** HTTP/3 = «UDP вместо TCP».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое Service Mesh и связь с Kubernetes?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Инфраструктурный уровень для управления трафиком между микросервисами",
+        "Тип сетевого протокола для контейнеров",
+        "Плагин для балансировки нагрузки в облаке",
+        "Альтернатива CNI в Kubernetes"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🕸️ **Service Mesh (Istio, Linkerd):**\n\n**Функции:**\n- mTLS (шифрование)\n- Трассировка\n- Canary-деплои\n- Circuit breaking\n\n**Реализация:** Sidecar-прокси (Envoy)\n\n**Поверх:** CNI\n\n💡 **Запомните:** Service Mesh = «умная сеть для микросервисов».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает маршрутизация в Kubernetes (CNI, kube-proxy)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "CNI — связность подов (IPAM); kube-proxy — Service через iptables/ipvs",
+        "kube-proxy управляет маршрутизацией между узлами",
+        "CNI только выделяет IP-адреса",
+        "Маршрутизация в Kubernetes не настраивается"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "☸️ **Kubernetes Network:**\n\n**CNI (Calico, Cilium, Flannel):**\n- IPAM (выделение IP)\n- Связность между подами\n- Overlay (VXLAN) или BGP\n\n**kube-proxy:**\n- Service (ClusterIP)\n- iptables или IPVS правила\n\n💡 **Запомните:** CNI = «сеть», kube-proxy = «Service».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "В чем разница между Network Policy и Security Group?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Network Policy — L3/L4 внутри кластера (east-west); Security Group — на границе облака (north-south)",
+        "Network Policy только с Ingress, Security Group — с Egress",
+        "Это одно и то же",
+        "Network Policy настраивается в облачной консоли"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🛡️ **Network Policy vs Security Group:**\n\n**Network Policy (K8s):**\n- Между подами\n- East-west трафик\n- Реализует CNI\n\n**Security Group (Cloud):**\n- На границе ресурса\n- North-south трафик\n- Stateful\n\n💡 **Запомните:** Network Policy = «внутри», Security Group = «снаружи».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работают GRE и VXLAN туннели?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "GRE — инкапсуляция протоколов; VXLAN — L2 поверх L3, расширение VLAN до 16 млн",
+        "VXLAN работает только на L2",
+        "GRE используется только для IPv6",
+        "VXLAN не поддерживает multicast"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **Туннели:**\n\n**GRE:**\n- Инкапсуляция любых протоколов\n- VPN, IPv6 over IPv4\n\n**VXLAN:**\n- L2 over UDP (порт 4789)\n- 16 млн сегментов (vs 4096 VLAN)\n- VTEP для инкапсуляции\n\n💡 **Запомните:** GRE = «универсальный», VXLAN = «overlay для DC».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает Anycast и отличие от Unicast/Multicast?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Anycast — один IP нескольким узлам; маршрутизатор направляет к ближайшему",
+        "Anycast — широковещательная рассылка всем узлам",
+        "Anycast — отправка данных группе узлов",
+        "Anycast — синоним Unicast"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📡 **Типы адресации:**\n\n**Unicast:** Один → один\n**Broadcast:** Один → все (L2)\n**Multicast:** Один → группа\n**Anycast:** Один IP → много узлов → ближайший (BGP)\n\n**Использование:** DNS (8.8.8.8), CDN\n\n💡 **Запомните:** Anycast = «один IP, много мест, ближайший wins».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое DDoS-атака и методы защиты?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Распределённая атака «отказ в обслуживании»; защита: rate limiting, scrubbing, Anycast, WAF",
+        "Вирус, шифрующий данные",
+        "Атака на DNS с подменой записей",
+        "Фишинговые письма сотрудникам"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💣 **DDoS (Distributed Denial of Service):**\n\n**Типы:**\n- Volumetric (UDP flood)\n- Protocol (SYN flood)\n- Application Layer (HTTP flood)\n\n**Защита:**\n- Rate limiting\n- WAF\n- Scrubbing centers\n- Anycast\n\n💡 **Запомните:** DDoS = «перегрузить», защита = «отфильтровать».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает TCP Congestion Control?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Механизмы регулирования скорости для предотвращения перегрузки (Cubic, BBR, Reno)",
+        "Протокол для балансировки нагрузки",
+        "Алгоритм сжатия TCP-пакетов",
+        "Механизм обнаружения потери пакетов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚦 **TCP Congestion Control:**\n\n**Фазы:**\n- Slow Start (экспоненциально)\n- Congestion Avoidance (линейно)\n\n**Алгоритмы:**\n- Reno (классический)\n- Cubic (Linux по умолчанию)\n- BBR (на основе bandwidth)\n\n💡 **Запомните:** Congestion Control = «не душить сеть».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает SD-WAN?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Программно-определяемые WAN, централизованное управление соединениями (MPLS, LTE, Internet)",
+        "Тип VPN для удалённых сотрудников",
+        "Протокол маршрутизации для дата-центров",
+        "Система мониторинга сетевого трафика"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌐 **SD-WAN:**\n\n**Возможности:**\n- Выбор транспорта (MPLS, broadband, LTE)\n- Application-aware routing\n- IPsec шифрование\n- Zero-touch provisioning\n\n**Преимущество:** Замена дорогих MPLS\n\n💡 **Запомните:** SD-WAN = «умная WAN».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работают DNS over HTTPS (DoH) и DNS over TLS (DoT)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Протоколы шифрования DNS для конфиденциальности и защиты от перехвата",
+        "DoH заменяет DNS полностью",
+        "DoT работает только через порт 80",
+        "DoH и DoT замедляют работу DNS в 10 раз"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **Защищённый DNS:**\n\n**DoT (DNS over TLS):**\n- Порт 853\n- TLS шифрование\n\n**DoH (DNS over HTTPS):**\n- Порт 443\n- Маскируется под HTTPS\n\n**Преимущество:** Конфиденциальность\n**Недостаток:** Сложнее корпоративный контроль\n\n💡 **Запомните:** DoH/DoT = «зашифрованный DNS».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает MPLS?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Коммутация по меткам вместо IP для ускорения и QoS в провайдерских сетях",
+        "Протокол для беспроводных сетей",
+        "Альтернатива Ethernet в дата-центрах",
+        "Протокол для автоматической настройки VLAN"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏷️ **MPLS (Multiprotocol Label Switching):**\n\n**Как:** Коммутация по коротким меткам вместо IP\n\n**Преимущества:**\n- Ускорение\n- QoS (приоритизация)\n- VPN (L2/L3)\n\n**Использование:** Провайдеры, корпоративные WAN\n\n💡 **Запомните:** MPLS = «метки вместо IP».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Что такое TCP TSO, LRO, GRO?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Механизмы оффлоуда обработки TCP в NIC для снижения нагрузки на CPU",
+        "Алгоритмы сжатия данных",
+        "Протоколы для управления перегрузкой",
+        "Утилиты для мониторинга сети"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **Оффлоуды NIC:**\n\n**TSO (TCP Segmentation Offload):**\n- NIC разбивает большие сегменты\n\n**LRO/GRO (Receive Offload):**\n- Агрегация входящих пакетов\n\n**Зачем:** Снижение нагрузки на CPU для 10/25/100GbE\n\n💡 **Запомните:** TSO/LRO/GRO = «разгрузка CPU».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает LLDP?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Протокол канального уровня для обнаружения соседних устройств и обмена информацией",
+        "Протокол для динамической маршрутизации",
+        "Протокол для аутентификации устройств",
+        "Протокол для синхронизации времени"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **LLDP (Link Layer Discovery Protocol):**\n\n**Что передаёт (TLV):**\n- Chassis ID, Port ID\n- System name, capabilities\n- VLAN, management address\n\n**Использование:**\n- Построение топологии\n- Проверка подключений\n\n💡 **Запомните:** LLDP = «кто мой сосед?».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    },
+    {
+      "text": "Как работает PXE (сетевая загрузка)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Загрузка ОС по сети (DHCP + TFTP) без локального носителя",
+        "Протокол для удалённого управления серверами",
+        "Механизм автоматической настройки BIOS",
+        "Протокол для клонирования дисков по сети"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💾 **PXE (Preboot Execution Environment):**\n\n**Процесс:**\n1. DHCP-запрос с опцией PXE\n2. DHCP-ответ: IP, TFTP-сервер, загрузчик\n3. Загрузка через TFTP\n4. Загрузка ядра/initrd\n\n**Использование:** Массовая установка ОС\n\n💡 **Запомните:** PXE = «загрузка без диска».",
+      "profession_name": "DevOps",
+      "category_name": "Сети"
+    }
+  ]
+}

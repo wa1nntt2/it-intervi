@@ -27,6 +27,9 @@ const api = axios.create({
   withCredentials: true,  // Важно: отправлять cookies автоматически
 })
 
+// Экспорт api для использования в компонентах
+export { api }
+
 /**
  * Получить CSRF токен из cookies или памяти.
  */
@@ -49,14 +52,20 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   if (typeof window !== 'undefined') {
     token = window.sessionStorage.getItem('auth_token')
   }
-  
+
   // Если нет в sessionStorage, пробуем получить из store
   if (!token) {
     token = useAuthStore.getState().token
   }
-  
+
+  // Логи для отладки
+  console.log('[api interceptor]', config.method?.toUpperCase(), config.url, 'token exists:', !!token, 'token length:', token?.length)
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
+    console.log('[api interceptor] Authorization header added')
+  } else {
+    console.warn('[api interceptor] No token found for request:', config.url)
   }
 
   // Добавляем CSRF токен для state-changing операций
@@ -293,10 +302,22 @@ export const professionsApi = {
  * API методы для работы с вопросами.
  */
 export const questionsApi = {
-  /** Получить все вопросы или по профессии (с пагинацией) */
-  getAll: async (professionId?: number, page: number = 1, pageSize: number = 100) => {
+  /** Получить все вопросы или по профессии (с пагинацией и фильтрами) */
+  getAll: async (
+    professionId?: number,
+    page: number = 1,
+    pageSize: number = 100,
+    search?: string,
+    categoryId?: number,
+    difficulty?: string,
+    questionType?: string
+  ) => {
     const params: Record<string, any> = { page, page_size: pageSize }
     if (professionId) params.profession_id = professionId
+    if (search) params.search = search
+    if (categoryId) params.category_id = categoryId
+    if (difficulty) params.difficulty = difficulty
+    if (questionType) params.question_type = questionType
     const response = await api.get('/questions/', { params })
     return response.data
   },

@@ -29,6 +29,7 @@ export interface Question {
   correct_order?: number[] | null  // Правильный порядок (для Ordering)
   explanation?: string | null  // Пояснение к ответу
   category_ids?: number[]  // ID категорий вопроса
+  categories?: Category[]  // Категории вопроса
 }
 
 /** Ответ пользователя на вопрос */

@@ -1,0 +1,487 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-23",
+  "total": 30,
+  "questions": [
+    {
+      "text": "Что такое Infrastructure as Code (IaC)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Подход к управлению инфраструктурой через код и автоматизацию, а не через ручные операции",
+        "Написание кода для приложений, который сам управляет инфраструктурой",
+        "Использование графических интерфейсов для настройки серверов",
+        "Хранение конфигураций серверов в документации Word"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏗️ **IaC:**\n\n**Преимущества:**\n- Воспроизводимость\n- Версионность\n- Автоматизация\n- Консистентность\n\n**Инструменты:**\n- Terraform\n- Ansible\n- CloudFormation\n\n💡 **Запомните:** IaC = «инфраструктура как код».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "В чем разница между декларативным и императивным подходом в IaC?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Декларативный — желаемое состояние (what); императивный — конкретные шаги (how)",
+        "Декларативный — описываются шаги; императивный — желаемое состояние",
+        "Декларативный используется только для сетей",
+        "Императивный не поддерживается в современных инструментах"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **Подходы:**\n\n**Декларативный:**\n- Что нужно получить\n- Terraform, CloudFormation\n- Идемпотентность\n\n**Императивный:**\n- Как достичь\n- Ansible playbooks\n- Последовательность шагов\n\n💡 **Запомните:** Декларативный = «что», Императивный = «как».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое Terraform и для чего он используется?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Инструмент для provisioning инфраструктуры через декларативные конфигурации (HCL)",
+        "Инструмент для управления конфигурацией (настройка установленного ПО)",
+        "Инструмент для оркестрации контейнеров",
+        "Инструмент для мониторинга инфраструктуры"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌍 **Terraform:**\n\n**Что делает:**\n- Provisioning инфраструктуры\n- 100+ провайдеров\n- HCL язык\n\n**Компоненты:**\n- State файл\n- Plan\n- Apply\n\n💡 **Запомните:** Terraform = «создание инфраструктуры».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое провайдер (provider) в Terraform?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Плагин, обеспечивающий взаимодействие с API конкретной платформы (AWS, Azure, GCP)",
+        "Поставщик лицензий на Terraform",
+        "Тип ресурса в Terraform",
+        "Хранилище state-файлов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔌 **Провайдер:**\n\n**Примеры:**\n- AWS\n- AzureRM\n- Google Cloud\n- Kubernetes\n\n**Конфигурация:**\n```hcl\nprovider \"aws\" {\n  region = \"us-east-1\"\n}\n```\n\n💡 **Запомните:** Провайдер = «API адаптер».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как в Terraform определить ресурс (resource)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Блок resource \"aws_instance\" \"web\" { ... } с указанием типа ресурса и его параметров",
+        "Блок resource \"web\" { type = \"aws_instance\" }",
+        "Блок provider \"aws\" { resource \"web\" }",
+        "Блок module \"web\" { source = \"aws/instance\" }"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **Ресурс:**\n\n**Синтаксис:**\n```hcl\nresource \"aws_instance\" \"web\" {\n  ami           = \"ami-123\"\n  instance_type = \"t2.micro\"\n}\n```\n\n**Части:**\n- aws_instance — тип\n- web — локальное имя\n\n💡 **Запомните:** resource \"тип\" \"имя\" { ... }.",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое state-файл в Terraform?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Файл (terraform.tfstate), содержащий соответствие между кодом и реальными ресурсами",
+        "Файл конфигурации провайдеров",
+        "Файл с логами выполнения Terraform",
+        "Файл с переменными окружения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📄 **State файл:**\n\n**Содержит:**\n- ID ресурсов\n- Атрибуты\n- Зависимости\n\n**Важно:**\n- Хранить безопасно\n- Шифровать\n- Не в Git!\n\n💡 **Запомните:** State = «источник истины».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как организовать хранение state-файла для командной работы?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Использовать backend (S3, Azure Storage, GCS) с поддержкой блокировок",
+        "Хранить state-файл в репозитории Git",
+        "Хранить state-файл на локальной машине одного разработчика",
+        "Не хранить state-файл, всегда создавать ресурсы заново"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔒 **Remote Backend:**\n\n**Варианты:**\n- S3 + DynamoDB\n- Azure Storage\n- GCS\n- Terraform Cloud\n\n**Зачем:**\n- Блокировки\n- Безопасность\n- Командная работа\n\n💡 **Запомните:** State в Git = «плохо».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое Ansible и для чего он используется?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Инструмент для управления конфигурацией и автоматизации развертывания ПО (агентless, через SSH)",
+        "Инструмент для provisioning облачной инфраструктуры",
+        "Инструмент для оркестрации контейнеров",
+        "Система мониторинга серверов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🎯 **Ansible:**\n\n**Особенности:**\n- Agentless (SSH)\n- YAML playbooks\n- Идемпотентность\n\n**Использование:**\n- Установка ПО\n- Конфигурация\n- Деплой\n\n💡 **Запомните:** Ansible = «настройка ПО».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "В чем разница между Terraform и Ansible?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Terraform — provisioning инфраструктуры; Ansible — configuration management (настройка ПО)",
+        "Ansible — provisioning, Terraform — configuration management",
+        "Terraform работает через SSH, Ansible — через API",
+        "Разницы нет, они взаимозаменяемы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **Terraform vs Ansible:**\n\n**Terraform:**\n- Создание ресурсов\n- API облаков\n- State файл\n\n**Ansible:**\n- Настройка ПО\n- SSH\n- Inventory\n\n💡 **Запомните:** Terraform + Ansible = «создать + настроить».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое модуль (module) в Terraform?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Контейнер для группы ресурсов, которые используются вместе; позволяет переиспользовать код",
+        "Плагин провайдера",
+        "Отдельный ресурс Terraform",
+        "Файл с переменными"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **Модуль:**\n\n**Зачем:**\n- Переиспользование\n- Организация кода\n- Версионирование\n\n**Использование:**\n```hcl\nmodule \"vpc\" {\n  source = \"terraform-aws-modules/vpc/aws\"\n}\n```\n\n💡 **Запомните:** Модуль = «переиспользуемый код».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как в Terraform управлять несколькими окружениями (dev, staging, prod)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать workspace, разные backend-конфигурации, или отдельные директории с переменными",
+        "Использовать один state-файл для всех окружений",
+        "Хранить все окружения в одном файле конфигурации",
+        "Не разделять окружения, dev и prod одинаковы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌿 **Окружения:**\n\n**Подходы:**\n- Workspaces\n- Отдельные директории\n- -var-file\n\n**Структура:**\n```\nenvironments/\n  dev/\n  staging/\n  prod/\n```\n\n💡 **Запомните:** Изоляция state = «безопаснее».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что делает команда terraform plan?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Вычисляет и показывает план изменений без применения к реальной инфраструктуре",
+        "Применяет изменения в инфраструктуре",
+        "Уничтожает все ресурсы",
+        "Сохраняет state-файл"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **terraform plan:**\n\n**Что показывает:**\n- Создание (+)\n- Изменение (~)\n- Удаление (-)\n\n**В CI/CD:**\n- Review перед apply\n- Проверка изменений\n\n💡 **Запомните:** Plan = «preview изменений».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как обращаться к атрибутам ресурсов из других модулей?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать выходные переменные (outputs) и ссылаться на них как module.vpc.vpc_id",
+        "Использовать глобальные переменные",
+        "Копировать значения вручную",
+        "Использовать data sources для чтения существующих ресурсов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **Outputs:**\n\n**В модуле:**\n```hcl\noutput \"vpc_id\" {\n  value = aws_vpc.main.id\n}\n```\n\n**Использование:**\n```hcl\nvpc_id = module.vpc.vpc_id\n```\n\n💡 **Запомните:** module.name.output = «доступ к выходу».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое remote state в Terraform?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Механизм хранения state-файла в удаленном хранилище с возможностью чтения из других конфигураций",
+        "State-файл, хранящийся на удаленном сервере без блокировок",
+        "State-файл, который нельзя читать из других конфигураций",
+        "State-файл, автоматически синхронизируемый с Git"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌐 **Remote State:**\n\n**Преимущества:**\n- Командная работа\n- Блокировки\n- Чтение из других конфигов\n\n**Data source:**\n```hcl\ndata \"terraform_remote_state\" \"vpc\" { ... }\n```\n\n💡 **Запомните:** Remote state = «shared state».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как в Ansible организовать выполнение задач на группе серверов (inventory)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать файл inventory (INI или YAML) с определением групп хостов и переменных",
+        "Задавать хосты в командной строке через -H",
+        "Использовать только локальный запуск",
+        "Inventory не нужен, Ansible сам находит серверы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **Inventory:**\n\n**Формат (INI):**\n```ini\n[webservers]\nweb1.example.com\nweb2.example.com\n```\n\n**В playbook:**\n```yaml\nhosts: webservers\n```\n\n💡 **Запомните:** Inventory = «список хостов».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое переменные (variables) в Terraform и как их передавать?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Переменные объявляются через variable, значения задаются через -var, -var-file, TF_VAR_, или .tfvars",
+        "Переменные объявляются через input",
+        "Переменные нельзя переопределять",
+        "Переменные хранятся только в state-файле"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔧 **Переменные:**\n\n**Объявление:**\n```hcl\nvariable \"instance_type\" {\n  default = \"t2.micro\"\n}\n```\n\n**Передача:**\n1. .tfvars файл\n2. TF_VAR_ env\n3. -var флаг\n\n💡 **Запомните:** var.name = «использование».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое модули Terraform Registry?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Публичный репозиторий модулей, которые можно подключать через source с указанием версии",
+        "Хранилище state-файлов",
+        "Плагин для IDE",
+        "Система мониторинга модулей"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏪 **Terraform Registry:**\n\n**Использование:**\n```hcl\nmodule \"vpc\" {\n  source  = \"terraform-aws-modules/vpc/aws\"\n  version = \"5.0.0\"\n}\n```\n\n**Преимущества:**\n- Best practices\n- Проверенные модули\n\n💡 **Запомните:** Registry = «магазин модулей».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как в Ansible использовать роли (roles)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Роль — структурированный набор задач, переменных, шаблонов в директориях (tasks, handlers, templates)",
+        "Роль — это отдельный playbook",
+        "Роль — это инвентарный файл",
+        "Роль — это модуль Ansible"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🎭 **Роли:**\n\n**Структура:**\n```\nrole/\n  tasks/\n  handlers/\n  templates/\n  vars/\n  defaults/\n```\n\n**Использование:**\n```yaml\nroles:\n  - nginx\n  - postgres\n```\n\n💡 **Запомните:** Роль = «переиспользуемый playbook».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое идемпотентность в IaC?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Свойство операции, при котором повторное применение не меняет состояние системы",
+        "Способность выполнять операции быстрее при каждом повторении",
+        "Возможность откатить изменения",
+        "Свойство, при котором система всегда возвращает один и тот же результат"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "♾️ **Идемпотентность:**\n\n**Что дает:**\n- Безопасный rerun\n- Нет побочных эффектов\n- Консистентность\n\n**Пример:**\n- Terraform apply × 2 = тот же результат\n\n💡 **Запомните:** Идемпотентность = «безопасный повтор».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как импортировать существующие ресурсы в Terraform?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "terraform import aws_instance.web i-1234567890abcdef0",
+        "terraform apply --import",
+        "terraform state import",
+        "Импорт не поддерживается"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📥 **terraform import:**\n\n**Синтаксис:**\n```\nterraform import <resource> <id>\n```\n\n**Процесс:**\n1. Написать ресурс в .tf\n2. terraform import\n3. terraform plan\n\n💡 **Запомните:** Import = «взять под управление».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как спроектировать структуру Terraform для крупной организации?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Монорепозиторий: modules/, environments/; remote state с разделением по компонентам и окружениям",
+        "Один большой проект с одним state-файлом для всей инфраструктуры",
+        "Каждая команда хранит код в отдельном репозитории без общих модулей",
+        "Не использовать модули, дублировать код для каждого окружения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏢 **Структура:**\n\n```\nterraform/\n  modules/\n  environments/\n    dev/\n    prod/\n```\n\n**Принципы:**\n- Разделение state\n- Общие модули\n- CI/CD на компонент\n\n💡 **Запомните:** Разделение = «меньше blast radius».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как управлять большим количеством ресурсов с помощью циклов в Terraform?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать count (с индексом) и for_each (для map/set) для динамического создания",
+        "Использовать только ручное дублирование блоков",
+        "Использовать count только для модулей",
+        "Циклы не поддерживаются в Terraform"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔁 **Циклы:**\n\n**count:**\n```hcl\ncount = 3\nname = \"web-${count.index}\"\n```\n\n**for_each:**\n```hcl\nfor_each = toset([\"web1\", \"web2\"])\nname = each.value\n```\n\n💡 **Запомните:** count = «индекс», for_each = «ключ».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как управлять чувствительными данными в Terraform?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать sensitive = true, backend с шифрованием, внешние источники секретов (Vault)",
+        "Хранить секреты в state в открытом виде",
+        "Не использовать секреты в Terraform",
+        "Хранить секреты в переменных окружения без защиты"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **Секреты:**\n\n**Меры:**\n- sensitive = true\n- Шифрование backend\n- Vault integration\n- Не в Git!\n\n**Data source:**\n```hcl\ndata \"aws_secretsmanager_secret\"\n```\n\n💡 **Запомните:** Секреты = «только в Vault».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как реализовать управление жизненным циклом ресурсов в Terraform?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать мета-аргументы lifecycle с prevent_destroy, ignore_changes, create_before_destroy",
+        "Использовать отдельные команды для управления жизненным циклом",
+        "Жизненный цикл не настраивается в Terraform",
+        "Использовать depends_on для управления порядком удаления"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **Lifecycle:**\n\n```hcl\nlifecycle {\n  prevent_destroy = true\n  ignore_changes = [tags]\n  create_before_destroy = true\n}\n```\n\n**Зачем:**\n- Защита от удаления\n- Игнор внешних изменений\n\n💡 **Запомните:** Lifecycle = «правила жизни ресурса».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как работает Terraform с несколькими провайдерами и alias'ами?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Можно объявить несколько конфигураций одного провайдера с alias и использовать через provider = aws.west",
+        "Terraform поддерживает только один провайдер на конфигурацию",
+        "Alias используется только для разных версий провайдера",
+        "Несколько провайдеров нельзя использовать в одном модуле"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **Alias:**\n\n```hcl\nprovider \"aws\" {\n  alias  = \"west\"\n  region = \"us-west-2\"\n}\n\nresource \"aws_instance\" \"west\" {\n  provider = aws.west\n}\n```\n\n💡 **Запомните:** provider = aws.alias = «выбор провайдера».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как в Ansible управлять секретами безопасно?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать Ansible Vault для шифрования переменных, интеграцию с HashiCorp Vault, AWS Secrets Manager",
+        "Хранить секреты в открытом виде в переменных",
+        "Использовать только переменные окружения",
+        "Ansible не имеет механизмов безопасного хранения секретов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔒 **Ansible Vault:**\n\n**Команды:**\n- ansible-vault create\n- ansible-vault encrypt\n- --ask-vault-pass\n\n**Интеграция:**\n- HashiCorp Vault\n- AWS Secrets Manager\n\n💡 **Запомните:** Vault = «шифрование переменных».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как тестировать конфигурации Terraform?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать Terratest для интеграционных тестов, terraform plan в CI/CD, Checkov, tfsec",
+        "Тестировать Terraform невозможно",
+        "Использовать только ручную проверку после apply",
+        "Использовать terraform validate как единственный тест"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🧪 **Тестирование:**\n\n**Уровни:**\n- terraform validate (синтаксис)\n- tfsec, checkov (security)\n- Terratest (интеграция)\n\n**В CI/CD:**\n- Plan на PR\n- Apply на merge\n\n💡 **Запомните:** Terratest = «Go тесты для TF».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Что такое drift detection и как его реализовать?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Обнаружение расхождения между желаемым и реальным состоянием; периодический terraform plan в CI/CD",
+        "Drift detection — автоматическое исправление дрейфа",
+        "Drift не может быть обнаружен, только исправлен вручную",
+        "Terraform автоматически исправляет drift при каждом apply"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📉 **Drift Detection:**\n\n**Как:**\n- Периодический plan\n- Без apply\n- Отчет в Slack\n\n**Реакция:**\n- terraform apply (исправить)\n- Обновить конфиг\n\n💡 **Запомните:** Drift = «ручные изменения».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как реализовать GitOps подход с Terraform?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Хранить конфигурации в Git; CI/CD запускает plan на PR, apply при merge; Git как единственный источник истины",
+        "Применять Terraform вручную на сервере",
+        "Хранить state в Git и применять из него",
+        "Использовать Terraform без Git"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **GitOps:**\n\n**Принципы:**\n- Git = источник истины\n- PR + review\n- Plan в комментарии\n- Apply на merge\n\n**Инструменты:**\n- Atlantis\n- Terraform Cloud\n\n💡 **Запомните:** GitOps = «Git → инфраструктура».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    },
+    {
+      "text": "Как мигрировать ресурсы между state-файлами?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать terraform state mv для перемещения ресурсов между state-файлами и модулями",
+        "Удалить ресурсы и создать заново",
+        "Редактировать state-файл вручную",
+        "Миграция ресурсов не поддерживается"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚚 **terraform state mv:**\n\n**Синтаксис:**\n```\nterraform state mv \\\n  aws_instance.web \\\n  module.web.aws_instance.web\n```\n\n**Важно:**\n- Backup state\n- Plan после\n\n💡 **Запомните:** state mv = «переместить в state».",
+      "profession_name": "DevOps",
+      "category_name": "Infrastructure as Code"
+    }
+  ]
+}

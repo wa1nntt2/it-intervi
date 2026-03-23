@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useAuthStore } from '../stores/authStore'
 import { Sidebar } from '../components/admin/Sidebar'
+import { api } from '../services/api'
+import { toast } from '../stores/toastStore'
 
 interface User {
   id: number
@@ -13,21 +16,31 @@ export default function AdminUsers() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null)
+  const { isAuthenticated, isLoading } = useAuthStore()
 
   useEffect(() => {
-    loadUsers()
-  }, [])
+    // Ждём завершения инициализации сессии
+    if (!isLoading && isAuthenticated) {
+      loadUsers()
+    } else if (!isLoading && !isAuthenticated) {
+      // Не аутентифицирован - не загружаем
+      setLoading(false)
+    }
+  }, [isAuthenticated, isLoading])
 
   const loadUsers = async () => {
     setLoading(true)
     try {
-      const response = await fetch('/api/users/')
-      if (response.ok) {
-        const data = await response.json()
-        setUsers(data)
-      }
+      // Проверка токена
+      const token = typeof window !== 'undefined' ? window.sessionStorage.getItem('auth_token') : null
+      console.log('[AdminUsers] loadUsers, token exists:', !!token)
+      
+      const response = await api.get('/users/')
+      console.log('[AdminUsers] Users loaded:', response.data)
+      setUsers(response.data)
     } catch (error) {
       console.error('Failed to load users:', error)
+      toast.error('Не удалось загрузить пользователей')
     } finally {
       setLoading(false)
     }
@@ -35,15 +48,13 @@ export default function AdminUsers() {
 
   const handleDelete = async (userId: number) => {
     try {
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'DELETE',
-      })
-      if (response.ok) {
-        setUsers(users.filter(u => u.id !== userId))
-        setDeleteConfirm(null)
-      }
+      await api.delete(`/users/${userId}`)
+      toast.success('Пользователь удален')
+      setUsers(users.filter(u => u.id !== userId))
+      setDeleteConfirm(null)
     } catch (error) {
       console.error('Failed to delete user:', error)
+      toast.error('Не удалось удалить пользователя')
     }
   }
 

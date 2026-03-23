@@ -23,7 +23,7 @@
 |------------|------------|
 | **FastAPI** | Веб-фреймворк |
 | **SQLAlchemy** | ORM |
-| **SQLite** | База данных |
+| **SQLite / PostgreSQL** | База данных (поддержка обеих БД) |
 | **Pydantic** | Валидация данных |
 | **python-jose** | JWT токены |
 | **passlib + bcrypt** | Хеширование паролей |
@@ -352,7 +352,13 @@ npm run build
 
 ```bash
 # Database
-DATABASE_URL=sqlite:///./interview_trainer.db
+# Для разработки (SQLite):
+DATABASE_URL=sqlite:///./data/interview_trainer.db
+
+# Для production (PostgreSQL - рекомендуется):
+# DATABASE_URL=postgresql://user:password@localhost:5432/interview_trainer
+# Или для Docker Compose:
+# DATABASE_URL=postgresql://postgres:password@postgres:5432/interview_trainer
 
 # Security - ОБЯЗАТЕЛЬНО измените в production!
 SECRET_KEY=your-secret-key-min-32-chars

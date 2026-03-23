@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { professionsApi, questionsApi, interviewsApi } from '../services/api'
 import { Profession, Question, Category } from '../types'
 import { Sidebar } from '../components/admin/Sidebar'
@@ -71,9 +71,15 @@ export default function Admin() {
   useEffect(() => {
     if (professions.length > 0) {
       loadCategories()
-      loadQuestions()
     }
   }, [professions])
+
+  // Перезагрузка вопросов при изменении фильтров
+  useEffect(() => {
+    if (professions.length > 0) {
+      loadQuestions()
+    }
+  }, [selectedProfession, selectedDifficulty, selectedType, selectedCategory, searchQuery])
 
   // Обработчик открытия модального окна добавления категории
   useEffect(() => {
@@ -102,20 +108,36 @@ export default function Admin() {
     setCategories(allCategories)
   }
 
-  const loadQuestions = async () => {
+  const loadQuestions = useCallback(async () => {
     setLoading(true)
     try {
-      // Загружаем все вопросы постранично
+      // Загружаем все вопросы постранично с фильтрами
       let allQuestions: Question[] = []
       let page = 1
       const pageSize = 100
       let hasMore = true
-      
+
+      // Собираем фильтры
+      const filters: Record<string, any> = {}
+      if (selectedProfession) filters.professionId = parseInt(selectedProfession)
+      if (selectedDifficulty) filters.difficulty = selectedDifficulty
+      if (selectedType) filters.questionType = selectedType
+      if (selectedCategory) filters.categoryId = parseInt(selectedCategory)
+      if (searchQuery) filters.search = searchQuery
+
       while (hasMore) {
-        const response = await questionsApi.getAll(undefined, page, pageSize)
+        const response = await questionsApi.getAll(
+          filters.professionId,
+          page,
+          pageSize,
+          filters.search,
+          filters.categoryId,
+          filters.difficulty,
+          filters.questionType
+        )
         const questionsData = response.items || response
         allQuestions = [...allQuestions, ...questionsData]
-        
+
         // Проверяем есть ли ещё страницы
         if (response.meta && response.meta.total_pages > page) {
           page++
@@ -123,7 +145,7 @@ export default function Admin() {
           hasMore = false
         }
       }
-      
+
       setQuestions(allQuestions)
       validateQuestions(allQuestions)
     } catch (error) {
@@ -131,7 +153,7 @@ export default function Admin() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedProfession, selectedDifficulty, selectedType, selectedCategory, searchQuery])
 
   // Валидация вопросов
   const validateQuestions = (questions: Question[]) => {
@@ -178,15 +200,8 @@ export default function Admin() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  // Фильтрация вопросов
-  const filteredQuestions = questions.filter((q) => {
-    const matchesSearch = q.text.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesProfession = !selectedProfession || q.profession_id.toString() === selectedProfession
-    const matchesDifficulty = !selectedDifficulty || q.difficulty === selectedDifficulty
-    const matchesType = !selectedType || q.question_type === selectedType
-    const matchesCategory = !selectedCategory || (q as any).category_ids?.includes(parseInt(selectedCategory))
-    return matchesSearch && matchesProfession && matchesDifficulty && matchesType && matchesCategory
-  })
+  // Фильтрация вопросов (теперь выполняется на сервере)
+  const filteredQuestions = questions
 
   // Пагинация
   const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage)

@@ -1,0 +1,487 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-23",
+  "total": 30,
+  "questions": [
+    {
+      "text": "Что такое мониторинг в контексте IT-инфраструктуры?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Процесс сбора, анализа и визуализации данных о состоянии систем для обеспечения их надежности",
+        "Процесс резервного копирования данных",
+        "Инструмент для написания кода",
+        "Система управления конфигурациями"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **Мониторинг:**\n\n**Что включает:**\n- Сбор метрик (CPU, память, диск)\n- Анализ логов\n- Визуализация данных\n\n**Цели:**\n- Обнаружение инцидентов\n- Диагностика причин\n- Планирование мощностей\n\n💡 **Запомните:** Мониторинг = «наблюдение за системой».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Какие основные компоненты обычно мониторятся на сервере?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "CPU, память (RAM), дисковое пространство, сетевой интерфейс, загрузка системы",
+        "Только версия операционной системы",
+        "Только количество запущенных процессов",
+        "Только температура процессора"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🖥️ **Базовый мониторинг:**\n\n**CPU:**\n- user, system, idle, iowait\n\n**Память:**\n- использовано, свободно, swap\n\n**Диск:**\n- пространство, inode, IOPS\n\n**Сеть:**\n- трафик, ошибки\n\n💡 **Запомните:** CPU, RAM, Disk, Network = «базовая четверка».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое метрика (metric) в системах мониторинга?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Числовое значение, характеризующее состояние системы в определенный момент времени",
+        "Текстовое сообщение об ошибке",
+        "Событие, сгенерированное приложением",
+        "Название сервера в инфраструктуре"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📈 **Метрика:**\n\n**Компоненты:**\n- Имя (cpu_usage)\n- Значение (число)\n- Временная метка\n- Метки (labels)\n\n**Типы:**\n- gauge (текущее)\n- counter (счетчик)\n- histogram (распределение)\n\n💡 **Запомните:** Метрика = «числовое измерение».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое alerting (алертинг) в мониторинге?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Автоматическое уведомление при достижении метрикой определенного порога",
+        "Графическое отображение метрик на дашборде",
+        "Сбор и хранение логов",
+        "Резервное копирование конфигураций"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚨 **Alerting:**\n\n**Каналы:**\n- Slack, email\n- PagerDuty, OpsGenie\n\n**Хороший алертинг:**\n- Точный (минимум ложных)\n- Своевременный\n- Информативный\n\n💡 **Запомните:** Алерт = «требует реакции».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Какие инструменты мониторинга вы знаете?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Prometheus, Grafana, Zabbix, Nagios, Datadog, New Relic, Elastic Stack (ELK)",
+        "Docker, Kubernetes, Terraform",
+        "Jenkins, GitLab CI, GitHub Actions",
+        "Nginx, Apache, HAProxy"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🛠️ **Инструменты:**\n\n**Сбор метрик:**\n- Prometheus, Zabbix\n- Datadog, New Relic\n\n**Визуализация:**\n- Grafana, Kibana\n\n**Логи:**\n- ELK, Loki\n\n💡 **Запомните:** Prometheus + Grafana = «стандарт K8s».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое black-box мониторинг?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Мониторинг системы снаружи, через внешние интерфейсы (HTTP-запросы, ping, проверка портов)",
+        "Мониторинг внутренних метрик приложения",
+        "Мониторинг логов приложения",
+        "Мониторинг с использованием агентов внутри контейнеров"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⬛ **Black-box:**\n\n**Проверяет:**\n- HTTP healthcheck\n- SSL-сертификат\n- DNS-разрешение\n- ICMP ping\n\n**Инструменты:**\n- Blackbox Exporter\n- Uptime Robot\n\n💡 **Запомните:** Black-box = «взгляд снаружи».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое white-box мониторинг?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Мониторинг внутреннего состояния системы: метрики приложения, JVM, бизнес-метрики",
+        "Мониторинг только внешних интерфейсов",
+        "Мониторинг сетевого оборудования",
+        "Мониторинг с использованием внешних сервисов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⬜ **White-box:**\n\n**Источники:**\n- Node Exporter\n- cAdvisor\n- JMX, APM-агенты\n\n**Дает:**\n- Детальную диагностику\n- JVM метрики\n- Бизнес-метрики\n\n💡 **Запомните:** White-box = «взгляд изнутри».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Какие бывают уровни мониторинга?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Инфраструктурный (серверы, сеть), прикладной (приложения), бизнес-уровень (KPI)",
+        "Только сетевой уровень",
+        "Только уровень приложений",
+        "Только уровень базы данных"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **Уровни:**\n\n**Инфраструктурный:**\n- Железо, сеть\n\n**Платформенный:**\n- K8s, БД, очереди\n\n**Прикладной:**\n- latency, error rate\n\n**Бизнес:**\n- продажи, пользователи\n\n💡 **Запомните:** Уровни = «разные срезы».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое observability (наблюдаемость)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Способность понять внутреннее состояние системы по внешним данным (метрики, логи, трассировки)",
+        "Мониторинг — это подмножество observability",
+        "Observability — это только трассировка",
+        "Это одно и то же"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **Observability:**\n\n**Три столпа:**\n- Метрики (количественные)\n- Логи (события)\n- Трассировки (распределенные)\n\n**Отличие:**\n- Мониторинг = заранее определенные метрики\n- Observability = произвольные вопросы\n\n💡 **Запомните:** Observability = «шире мониторинга».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что содержит дашборд мониторинга?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Визуальное представление ключевых метрик (графики, таблицы, heatmaps)",
+        "Только текстовые логи",
+        "Только список алертов",
+        "Конфигурационные файлы серверов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **Дашборд:**\n\n**Элементы:**\n- Графики\n- Таблицы\n- Heatmaps\n- Статусы\n\n**Инструменты:**\n- Grafana\n- Kibana\n\n💡 **Запомните:** Дашборд = «единая картина».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как работает сбор метрик в Prometheus (pull vs push)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Prometheus использует pull-модель: сервер периодически опрашивает цели по HTTP",
+        "Prometheus использует push-модель: цели отправляют метрики на сервер",
+        "Prometheus поддерживает только push через Pushgateway",
+        "Prometheus не собирает метрики напрямую"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **Pull-модель:**\n\n**Как:**\n- Prometheus scrapes /metrics\n- По интервалу (scrape_interval)\n\n**Преимущества:**\n- Легче найти «мертвые» цели\n- Централизованная конфигурация\n\n💡 **Запомните:** Prometheus = «pull по умолчанию».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое экспортер (exporter) в экосистеме Prometheus?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Агент, который собирает метрики с системы и предоставляет их в формате Prometheus (/metrics)",
+        "Инструмент для визуализации метрик",
+        "Хранилище метрик",
+        "Система алертинга"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📤 **Экспортеры:**\n\n**Популярные:**\n- Node Exporter (ОС)\n- cAdvisor (контейнеры)\n- Blackbox (probe)\n- MySQL/PostgreSQL Exporter\n\n**Формат:**\n- Prometheus exposition format\n\n💡 **Запомните:** Экспортер = «мост к Prometheus».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое SLI, SLO, SLA?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "SLI — измеряемый показатель; SLO — целевое значение; SLA — юридическое обязательство",
+        "SLI — целевое значение; SLO — измеряемый показатель",
+        "SLA — только технический показатель",
+        "Это разные названия одного и того же"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📐 **Уровни:**\n\n**SLI (Indicator):**\n- latency p99\n- availability\n\n**SLO (Objective):**\n- Цель (p99 < 100ms)\n\n**SLA (Agreement):**\n- Юридическое обязательство\n- 99.9% доступности\n\n💡 **Запомните:** SLI → SLO → SLA = «метрика → цель → договор».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как в Prometheus задать правило алерта?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "В файле конфигурации Prometheus или отдельном файле с правилами, используя PromQL",
+        "В Grafana через интерфейс",
+        "В файле конфигурации Alertmanager",
+        "В файле экспортера"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚨 **Alerting rules:**\n\n**Файл:**\n```yaml\ngroups:\n  - name: instance_down\n    rules:\n      - alert: InstanceDown\n        expr: up == 0\n        for: 5m\n```\n\n**PromQL** — язык выражений\n\n💡 **Запомните:** expr + for = «условие + время».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как работает Alertmanager?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Получает алерты, дедуплицирует, группирует, маршрутизирует и отправляет уведомления",
+        "Хранит метрики вместо Prometheus",
+        "Визуализирует алерты на дашборде",
+        "Собирает метрики с экспортеров"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📬 **Alertmanager:**\n\n**Функции:**\n- Дедупликация\n- Группировка\n- Ингибирование\n- Маршрутизация\n\n**Receivers:**\n- Slack, email\n- PagerDuty\n\n💡 **Запомните:** Alertmanager = «диспетчер алертов».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое Grafana?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Инструмент для визуализации данных из различных источников (Prometheus, Loki, Elasticsearch)",
+        "Система сбора метрик",
+        "Хранилище логов",
+        "База данных временных рядов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **Grafana:**\n\n**Источники:**\n- Prometheus\n- Loki (логи)\n- Elasticsearch\n- CloudWatch\n\n**Возможности:**\n- Дашборды\n- Встроенный алертинг\n\n💡 **Запомните:** Grafana = «визуализация».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое RED метод?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Метод мониторинга сервисов: Rate (запросов), Errors (ошибки), Duration (время ответа)",
+        "Метод развертывания приложений",
+        "Метод сжатия логов",
+        "Метод шифрования метрик"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔴 **RED метод:**\n\n**Rate:**\n- Запросов в секунду\n\n**Errors:**\n- Количество/процент ошибок\n\n**Duration:**\n- Время ответа (p50, p95, p99)\n\n💡 **Запомните:** RED = «для сервисов».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое USE метод?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Utilization (утилизация), Saturation (насыщение), Errors (ошибки) — для мониторинга ресурсов",
+        "User, System, Environment",
+        "Update, Scale, Execute",
+        "Unit, Service, Event"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔵 **USE метод:**\n\n**Utilization:**\n- Среднее использование (%)\n\n**Saturation:**\n- Степень перегрузки\n\n**Errors:**\n- Количество ошибок\n\n💡 **Запомните:** USE = «для ресурсов».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Чем логи отличаются от метрик?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Логи — структурированные записи событий; метрики — агрегированные числовые данные",
+        "Логи хранятся только в файлах, метрики — в базах данных",
+        "Логи нельзя анализировать автоматически",
+        "Метрики не имеют временных меток"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **Логи vs Метрики:**\n\n**Логи:**\n- Дискретные события\n- Богаты деталями\n- Большой объем\n\n**Метрики:**\n- Агрегированные числа\n- Меньше места\n- Для алертинга\n\n💡 **Запомните:** Оба нужны для observability.",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое распределенная трассировка?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Метод отслеживания запроса через множество микросервисов, позволяющий увидеть полный путь и время выполнения",
+        "Способ сбора метрик с распределенных систем",
+        "Метод шифрования логов",
+        "Инструмент для деплоя микросервисов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **Tracing:**\n\n**Trace:**\n- Полный путь запроса\n\n**Span:**\n- Единичная операция\n- Время начала, длительность\n\n**Инструменты:**\n- Jaeger, Zipkin\n- OpenTelemetry\n\n💡 **Запомните:** Tracing = «путь запроса».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как мониторить Kubernetes кластер в Prometheus?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать kube-state-metrics, node-exporter, cAdvisor, и scrape через ServiceMonitors (Prometheus Operator)",
+        "Только node-exporter достаточно",
+        "Prometheus не может мониторить Kubernetes",
+        "Использовать только kube-state-metrics"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "☸️ **K8s мониторинг:**\n\n**Компоненты:**\n- kube-state-metrics (объекты K8s)\n- node-exporter (узлы)\n- cAdvisor (контейнеры)\n- Prometheus Operator (CRD)\n\n💡 **Запомните:** Комбинация = «полная видимость».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как в Prometheus рассчитать процентили (p95 latency)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать histogram_quantile(0.95, rate(...)); процентили показывают «хвост» распределения",
+        "Использовать avg(http_request_duration_seconds)",
+        "Процентили нельзя рассчитать в Prometheus",
+        "Среднее значение всегда достаточно"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **Процентили:**\n\n**Формула:**\n```promql\nhistogram_quantile(0.95,\n  rate(http_duration_bucket[5m]))\n```\n\n**Зачем:**\n- Среднее маскирует медленные\n- p99 показывает реальный опыт\n\n💡 **Запомните:** p95/p99 > average.",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое downsampling в системах хранения временных рядов?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Агрегация данных с уменьшением разрешения для долгосрочного хранения",
+        "Все метрики хранятся с максимальным разрешением всегда",
+        "Downsampling не используется в современных системах",
+        "Агрегация выполняется только на стороне клиента"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📉 **Downsampling:**\n\n**Как:**\n- Raw (15s) → 30 дней\n- 5m → 1 год\n- 1h → 5 лет\n\n**Инструменты:**\n- Thanos Compactor\n- VictoriaMetrics\n\n💡 **Запомните:** Downsampling = «экономия места».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как в Grafana настроить алерты?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать встроенный Grafana Alerting (начиная с Grafana 8) с созданием правил через UI",
+        "Алерты в Grafana настраиваются только через Alertmanager",
+        "Grafana не имеет встроенного алертинга",
+        "Использовать только Prometheus Alertmanager без Grafana"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚨 **Grafana Alerting:**\n\n**Возможности:**\n- Правила через UI\n- Contact points\n- Notification policies\n\n**Интеграция:**\n- С Alertmanager\n- Мульти-источники\n\n💡 **Запомните:** Grafana 8+ = «встроенный алертинг».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое anomaly detection?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Автоматическое обнаружение аномалий с помощью статистических методов или машинного обучения",
+        "Ручное выставление порогов для каждой метрики",
+        "Только обнаружение выбросов в логах",
+        "Аномалии не могут быть обнаружены автоматически"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🤖 **Anomaly Detection:**\n\n**Методы:**\n- z-score\n- Moving average\n- Prophet (Facebook)\n- ML (Isolation Forest)\n\n**Инструменты:**\n- Datadog Watchdog\n- Grafana ML\n\n💡 **Запомните:** Аномалии = «без статичных порогов».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как работает ELK стек для логирования?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Logstash собирает и парсит логи; Elasticsearch хранит и индексирует; Kibana визуализирует",
+        "Kibana собирает логи, Elasticsearch хранит, Logstash визуализирует",
+        "Elasticsearch собирает, Logstash хранит, Kibana отправляет",
+        "Все компоненты делают одно и то же"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **ELK Stack:**\n\n**Logstash/Fluentd:**\n- Сбор, парсинг\n- Обогащение\n\n**Elasticsearch:**\n- Хранение\n- Индексация\n- Поиск\n\n**Kibana:**\n- Визуализация\n- Дашборды\n\n💡 **Запомните:** ELK = «централизованные логи».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое structured logging?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Логи в структурированном формате (JSON, logfmt), что позволяет автоматически парсить и фильтровать поля",
+        "Логи только в виде строк (plain text)",
+        "Structured logging — это шифрование логов",
+        "Structured logging не поддерживается в современных системах"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **Structured Logging:**\n\n**Формат (JSON):**\n```json\n{\n  \"timestamp\": \"2025-01-15T10:23:45Z\",\n  \"level\": \"error\",\n  \"service\": \"auth\",\n  \"message\": \"Login failed\"\n}\n```\n\n**Преимущества:**\n- Авто-парсинг\n- Легкая фильтрация\n\n💡 **Запомните:** JSON > plain text.",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как спроектировать мониторинг для highload?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать распределенные системы (Thanos/Cortex/Mimir), шардинг, репликацию, федерацию Prometheus",
+        "Один экземпляр Prometheus для всей инфраструктуры",
+        "Только облачные SaaS без on-premise",
+        "Не использовать мониторинг для highload"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏗️ **Highload мониторинг:**\n\n**Метрики:**\n- Несколько Prometheus\n- Thanos/Cortex для long-term\n\n**Логи:**\n- Elasticsearch кластер\n- Репликация\n\n**Важно:**\n- Без единой точки отказа\n\n💡 **Запомните:** Масштабируемость = «кластеризация».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Как мониторить бизнес-метрики в Prometheus?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Приложение должно экспортировать кастомные метрики (counter) на эндпоинт /metrics",
+        "Использовать только логи для бизнес-метрик",
+        "Prometheus не предназначен для бизнес-метрик",
+        "Использовать внешние системы аналитики"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💰 **Бизнес-метрики:**\n\n**Примеры:**\n- orders_total{status=\"success\"}\n- registrations_total\n- payment_amount\n\n**В приложении:**\n```python\ncounter.inc()\n```\n\n💡 **Запомните:** Бизнес в Prometheus = «кастомные метрики».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    },
+    {
+      "text": "Что такое OpenTelemetry?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Единый стандарт для генерации, сбора и экспорта телеметрии (метрики, логи, трассировки) с возможностью отправки в разные бэкенды",
+        "OpenTelemetry заменяет Prometheus и Jaeger",
+        "OpenTelemetry только для трассировки",
+        "OpenTelemetry — это платный SaaS"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔭 **OpenTelemetry:**\n\n**Что дает:**\n- Единый SDK\n- Метрики + логи + трассировки\n- Экспорт в любой бэкенд\n\n**Преимущества:**\n- Interoperability\n- Смена бэкенда без изменения кода\n\n💡 **Запомните:** OTel = «будущее observability».",
+      "profession_name": "DevOps",
+      "category_name": "Мониторинг"
+    }
+  ]
+}

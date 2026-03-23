@@ -1,8 +1,8 @@
 """add mode and time_limit to sessions
 
-Revision ID: {timestamp}
+Revision ID: 20260315_153348
 Revises: 006_make_session_id_nullable
-Create Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+Create Date: 2026-03-15 15:33:48
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '{timestamp}'
+revision: str = '20260315_153348'
 down_revision: Union[str, None] = '006_make_session_id_nullable'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None

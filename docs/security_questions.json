@@ -1,0 +1,487 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-23",
+  "total": 30,
+  "questions": [
+    {
+      "text": "Что такое принцип минимальных привилегий (Principle of Least Privilege)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Предоставление пользователю только тех прав, которые необходимы для выполнения его функций",
+        "Предоставление максимальных прав всем пользователям",
+        "Запрет на использование любых привилегий",
+        "Предоставление прав только администраторам компании"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **PoLP:**\n\n**Что дает:**\n- Снижение риска\n- Меньше поверхность атаки\n- Защита от ошибок\n\n**В DevOps:**\n- IAM-роли с минимальными политиками\n- Контейнеры без root\n\n💡 **Запомните:** PoLP = «ровно столько, сколько нужно».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое аутентификация и авторизация? В чем разница?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Аутентификация — проверка подлинности (кто ты); авторизация — проверка прав доступа (что разрешено)",
+        "Аутентификация — проверка прав доступа; авторизация — проверка подлинности",
+        "Это одно и то же",
+        "Аутентификация — это шифрование, авторизация — дешифрование"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "👤 **AuthN vs AuthZ:**\n\n**Аутентификация:**\n- Пароль, SSH-ключ\n- Токен, биометрия\n- «Кто вы?»\n\n**Авторизация:**\n- RBAC, ACL\n- «Что разрешено?»\n\n💡 **Запомните:** Сначала AuthN, потом AuthZ.",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое SSL/TLS и для чего они используются?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Криптографические протоколы для защиты передачи данных по сети",
+        "Протоколы для ускорения загрузки веб-страниц",
+        "Системы управления паролями",
+        "Антивирусные протоколы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔒 **SSL/TLS:**\n\n**Функции:**\n- Шифрование\n- Аутентификация\n- Целостность\n\n**Версии:**\n- SSL 3.0 — устарел\n- TLS 1.2/1.3 — современные\n\n💡 **Запомните:** TLS = «защищенный канал».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое SSH-ключи и как они обеспечивают безопасность?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Пара криптографических ключей (публичный и приватный) для аутентификации без передачи пароля",
+        "Ключи для шифрования файлов на диске",
+        "Ключи для доступа к BIOS",
+        "Пароли для входа в систему"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔑 **SSH-ключи:**\n\n**Приватный:**\n- Хранится у пользователя\n- Никогда не передается\n\n**Публичный:**\n- На сервере (~/.ssh/authorized_keys)\n\n💡 **Запомните:** Приватный = «никому не давать».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое уязвимость (vulnerability) и чем она отличается от угрозы (threat)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Уязвимость — слабость в системе; угроза — потенциальная возможность реализации атаки",
+        "Уязвимость — это атака, угроза — защита",
+        "Это одно и то же",
+        "Угроза — это слабость, уязвимость — атака"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚠️ **Уязвимость vs Угроза:**\n\n**Уязвимость:**\n- CVE-2021-44228 (Log4Shell)\n- Можно исправить\n\n**Угроза:**\n- Злоумышленник\n- Можно предотвратить\n\n💡 **Запомните:** Уязвимость = «слабость», Угроза = «риск».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое шифрование и в чем разница между симметричным и асимметричным?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Симметричное — один ключ; асимметричное — пара ключей (публичный и приватный)",
+        "Симметричное — пара ключей; асимметричное — один ключ",
+        "Асимметричное быстрее симметричного",
+        "Симметричное используется только для TLS"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **Шифрование:**\n\n**Симметричное (AES):**\n- Один ключ\n- Быстрое\n\n**Асимметричное (RSA):**\n- Пара ключей\n- Медленное\n- Для обмена ключами\n\n💡 **Запомните:** TLS = «асимметричное → симметричное».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое хэширование и чем оно отличается от шифрования?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Хэширование — необратимое преобразование фиксированной длины; шифрование — обратимое с ключом",
+        "Хэширование обратимо, шифрование — нет",
+        "Хэширование используется для передачи данных",
+        "Это одно и то же"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔢 **Хэширование:**\n\n**Особенности:**\n- Необратимо\n- Фиксированная длина\n- Детерминировано\n\n**Применение:**\n- Пароли (bcrypt, Argon2)\n- Целостность файлов\n\n💡 **Запомните:** Пароли → хэш, не шифрование!",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое CVE (Common Vulnerabilities and Exposures)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Общедоступный словарь уязвимостей, каждая имеет уникальный идентификатор (CVE-YYYY-XXXX)",
+        "Инструмент для сканирования уязвимостей",
+        "Стандарт шифрования данных",
+        "Система управления доступом"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **CVE:**\n\n**Формат:**\n- CVE-2021-44228\n- Уникальный ID\n\n**CVSS:**\n- Оценка 0-10\n- Критичность\n\n💡 **Запомните:** CVE = «идентификатор уязвимости».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое брандмауэр (firewall) и какие бывают типы?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Система контроля и фильтрации сетевого трафика; бывают сетевые (L3/L4) и прикладные (L7, WAF)",
+        "Программа для резервного копирования",
+        "Система мониторинга производительности",
+        "Инструмент для сжатия данных"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🛡️ **Firewall:**\n\n**Сетевые (L3/L4):**\n- iptables, Security Groups\n- IP, порты, протоколы\n\n**Прикладные (L7):**\n- WAF\n- HTTP, SQL анализ\n\n💡 **Запомните:** Firewall = «первая линия защиты».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое принцип Defense in Depth (эшелонированная защита)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Использование нескольких слоев защиты для того, чтобы компрометация одного слоя не привела к полному захвату",
+        "Использование одного мощного средства защиты",
+        "Защита только периметра сети",
+        "Полное отсутствие защиты внутри сети"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏰 **Defense in Depth:**\n\n**Слои:**\n- Сетевой (firewall)\n- Хостовый (SELinux)\n- Прикладной (WAF)\n- Данные (шифрование)\n- Аутентификация (MFA)\n\n💡 **Запомните:** Много слоев = «безопаснее».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое OWASP Top 10?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Список 10 наиболее критических рисков безопасности веб-приложений",
+        "Список 10 лучших инструментов мониторинга",
+        "Стандарт шифрования данных",
+        "Сертификация по безопасности"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚠️ **OWASP Top 10:**\n\n**Риски:**\n- Injection (SQLi)\n- Broken Authentication\n- Sensitive Data Exposure\n- XXE\n\n**Для DevOps:**\n- Настройка WAF\n- SAST/DAST\n\n💡 **Запомните:** OWASP = «топ уязвимостей веб».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое SAST и DAST?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "SAST — статический анализ кода; DAST — динамический анализ запущенного приложения",
+        "SAST — анализ после деплоя; DAST — анализ кода",
+        "SAST — только для Java; DAST — только для Python",
+        "SAST и DAST — инструменты мониторинга"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **SAST vs DAST:**\n\n**SAST:**\n- Анализ кода\n- В CI (build)\n- SonarQube, Semgrep\n\n**DAST:**\n- Анализ запущенного\n- После деплоя\n- OWASP ZAP\n\n💡 **Запомните:** SAST = «статика», DAST = «динамика».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое secrets management и как правильно хранить секреты?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Хранить секреты в специализированных системах (Vault, AWS Secrets Manager), никогда не в коде",
+        "Хранить секреты в открытом виде в репозитории",
+        "Хранить секреты в Dockerfile",
+        "Передавать секреты через аргументы командной строки"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **Secrets Management:**\n\n**Нельзя:**\n- В коде\n- В переменных окружения\n- В образах\n\n**Можно:**\n- HashiCorp Vault\n- AWS Secrets Manager\n- Kubernetes Secrets\n- CI/CD masked variables\n\n💡 **Запомните:** Секреты = «только в хранилище».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как работает аутентификация и авторизация в Kubernetes (RBAC, ServiceAccounts)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "RBAC управляет доступом через Roles/ClusterRoles и RoleBindings/ClusterRoleBindings",
+        "Kubernetes не имеет встроенной авторизации",
+        "Только статические токены для аутентификации",
+        "ServiceAccounts используются только для доступа к внешним сервисам"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "☸️ **K8s Security:**\n\n**Аутентификация:**\n- Сертификаты\n- ServiceAccount токены\n- OIDC\n\n**Авторизация (RBAC):**\n- Roles / ClusterRoles\n- RoleBindings\n- ServiceAccounts для подов\n\n💡 **Запомните:** Минимальные привилегии!",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое Docker security best practices?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Запуск без root, read-only rootfs, dropp capabilities (--cap-drop ALL)",
+        "Запускать контейнеры всегда от root, с привилегированным режимом",
+        "Использовать только --privileged для всех контейнеров",
+        "Безопасность контейнеров не важна"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🐳 **Docker Security:**\n\n**Best Practices:**\n- USER 10001 (не root)\n- --read-only\n- --cap-drop=ALL\n- Без --privileged\n- SecurityContext в K8s\n\n💡 **Запомните:** Не root = «безопаснее».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как защититься от SQL injection и XSS?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать параметризованные запросы для SQL; экранировать вывод для XSS",
+        "Использовать конкатенацию строк для SQL запросов",
+        "Отключить все проверки ввода",
+        "XSS защищается только на серверной стороне"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🛡️ **Защита:**\n\n**SQLi:**\n- Prepared statements\n- ORM (SQLAlchemy)\n- Никакой конкатенации!\n\n**XSS:**\n- Экранирование вывода\n- CSP заголовок\n- React/Angular (авто)\n\n💡 **Запомните:** Параметризация = «защита от SQLi».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое Zero Trust (нулевое доверие)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Модель «никогда не доверяй, всегда проверяй» — аутентификация для каждого запроса",
+        "Доверять всем запросам из внутренней сети",
+        "Доверять только пользователям с паролями",
+        "Использовать только VPN для доступа"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚫 **Zero Trust:**\n\n**Принципы:**\n- Проверять явно\n- Минимальные привилегии\n- Предполагать нарушение\n\n**Реализация:**\n- mTLS (Istio)\n- BeyondCorp\n- SPIFFE/SPIRE\n\n💡 **Запомните:** Zero Trust = «не доверяй никому».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое Network Policies в Kubernetes?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Правила, ограничивающие сетевой трафик между подами на уровне L3/L4",
+        "Network Policies заменяют firewall на хостах",
+        "Network Policies не поддерживаются в Kubernetes",
+        "Network Policies управляют только ingress трафиком"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔒 **Network Policies:**\n\n**Что делают:**\n- Ограничивают трафик\n- L3/L4 (IP, порт)\n- L7 с Cilium\n\n**Принцип:**\n- Deny all по умолчанию\n- Allow specific\n\n💡 **Запомните:** Network Policies = «микросегментация».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как сканировать Docker-образы на уязвимости в CI/CD?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать Trivy, Clair, Snyk, Docker Scout в пайплайне после сборки образа",
+        "Сканировать образы только вручную перед деплоем",
+        "Использовать только антивирус",
+        "Docker-образы безопасны по умолчанию"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **Сканирование образов:**\n\n**Инструменты:**\n- Trivy (быстрый)\n- Snyk, Clair\n- Docker Scout\n\n**В пайплайне:**\n```yaml\ntrivy image --severity HIGH,CRITICAL\n```\n\n💡 **Запомните:** Сканирование = «авто в CI».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое безопасность цепочки поставок (software supply chain security)?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Комплекс мер по защите всех этапов создания ПО: зависимости, инструменты сборки, CI/CD, артефакты",
+        "Только защита исходного кода",
+        "Только защита реестра Docker",
+        "Только подпись коммитов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **Supply Chain Security:**\n\n**Компоненты:**\n- Зависимости (npm audit)\n- Инструменты сборки\n- CI/CD пайплайн\n- Артефакты (подпись)\n\n**Стандарты:**\n- SLSA\n- SBOM\n\n💡 **Запомните:** Supply chain = «вся цепочка».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как работает mTLS (mutual TLS)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "mTLS — взаимная аутентификация клиента и сервера через сертификаты (обе стороны проверяют друг друга)",
+        "mTLS — это только шифрование трафика",
+        "mTLS заменяет API-ключи",
+        "mTLS работает только с внешними сервисами"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **mTLS:**\n\n**Как:**\n- Клиент + сервер → сертификаты\n- Взаимная проверка\n\n**Зачем:**\n- Идентификация сервисов\n- Шифрование\n\n**Где:**\n- Service Mesh (Istio)\n\n💡 **Запомните:** mTLS = «двусторонняя аутентификация».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое OAuth 2.0 и OpenID Connect (OIDC)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "OAuth 2.0 — протокол авторизации; OIDC — слой аутентификации поверх OAuth 2.0",
+        "OAuth 2.0 используется только для веб-приложений",
+        "OIDC не используется в Kubernetes",
+        "OAuth 2.0 заменяет TLS"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔑 **OAuth 2.0 / OIDC:**\n\n**OAuth 2.0:**\n- Авторизация\n- Access token\n\n**OIDC:**\n- Аутентификация\n- ID token\n\n**В K8s:**\n- Dex, Okta\n- SSO интеграция\n\n💡 **Запомните:** OAuth = «авторизация», OIDC = «аутентификация».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как работает HashiCorp Vault?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Vault — система управления секретами с динамическими секретами, шифрованием (transit), PKI",
+        "Vault — только хранилище паролей",
+        "Vault не интегрируется с Kubernetes",
+        "Vault заменяет базы данных"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏦 **HashiCorp Vault:**\n\n**Возможности:**\n- Статические секреты\n- Динамические секреты (БД, AWS)\n- PKI (сертификаты)\n- Transit (шифрование)\n\n**В K8s:**\n- CSI driver\n- Agent Injector\n\n💡 **Запомните:** Vault = «централизованные секреты».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как обеспечить безопасность CI/CD пайплайна?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Изолированные раннеры, защищенные переменные (masked, protected), подпись артефактов, минимальные привилегии",
+        "Использовать общие раннеры с доступом к production",
+        "Хранить секреты в коде",
+        "Не проверять артефакты на уязвимости"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔒 **CI/CD Security:**\n\n**Раннеры:**\n- Эфемерные\n- Изолированные\n\n**Секреты:**\n- Masked, protected\n- Vault интеграция\n\n**Артефакты:**\n- Подпись (Cosign)\n- Сканирование\n\n💡 **Запомните:** CI/CD = «критическая цель».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое SBOM (Software Bill of Materials)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Формальный список всех компонентов в приложении, позволяющий быстро реагировать на уязвимости",
+        "Список разработчиков проекта",
+        "Лицензионное соглашение",
+        "Инструмент мониторинга"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **SBOM:**\n\n**Форматы:**\n- SPDX\n- CycloneDX\n\n**Зачем:**\n- Реагирование на CVE\n- Управление лицензиями\n- Compliance\n\n**Генерация:**\n- cyclonedx-bom\n- Trivy\n\n💡 **Запомните:** SBOM = «состав ПО».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как работает инструмент Falco?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Falco — инструмент runtime security для обнаружения аномального поведения контейнеров на основе syscall",
+        "Falco — сканер уязвимостей образов",
+        "Falco — система управления секретами",
+        "Falco — инструмент для деплоя"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🦅 **Falco:**\n\n**Что делает:**\n- Отслеживает syscalls\n- Обнаруживает аномалии\n\n**Примеры:**\n- Запуск shell в контейнере\n- Чтение /etc/shadow\n\n**Алерты:**\n- Slack, Alertmanager\n\n💡 **Запомните:** Falco = «runtime security».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Что такое политики безопасности (OPA, Kyverno) в Kubernetes?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "OPA — движок политик (Rego); Kyverno — нативный для K8s политический движок через CRD",
+        "OPA заменяет RBAC",
+        "Kyverno не поддерживает validation и mutation",
+        "Политики не нужны в Kubernetes"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📜 **Политики K8s:**\n\n**OPA/Gatekeeper:**\n - Rego язык\n - Validation, Mutation\n\n**Kyverno:**\n - YAML политики\n - Проще в написании\n\n**Примеры:**\n- Запрет latest тега\n- Требовать лимиты\n\n💡 **Запомните:** Политики = «авто-проверка».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как работает шифрование данных в покое (encryption at rest) в Kubernetes?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В Kubernetes — шифрование секретов в etcd через EncryptionConfiguration; в облаках — шифрование дисков через KMS",
+        "Данные в etcd шифруются по умолчанию",
+        "В облаках шифрование дисков всегда включено без возможности отключения",
+        "Шифрование в покое не требуется"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **Encryption at Rest:**\n\n**K8s etcd:**\n- EncryptionConfiguration\n- aescbc, aesgcm, KMS\n\n**Облака:**\n- EBS шифрование\n- KMS ключи\n\n💡 **Запомните:** Secrets ≠ зашифрованы по умолчанию!",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как работает аутентификация в AWS IAM для EC2 и EKS?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "IAM Roles — временные учетные записи; EC2 Instance Profile — прикрепление роли; в EKS — IRSA для пода",
+        "IAM пользователи используются для EC2",
+        "IAM роли нельзя использовать для EKS",
+        "EC2 всегда имеет права root"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "☁️ **AWS IAM:**\n\n**EC2:**\n- Instance Profile\n- Временные credentials\n\n**EKS:**\n- IRSA (IAM Roles for ServiceAccounts)\n- OIDC → STS\n\n**Преимущество:**\n- Без долгоживущих ключей\n\n💡 **Запомните:** IRSA = «роли для пода».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    },
+    {
+      "text": "Как разработать план реагирования на инциденты (incident response)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Определить роли, этапы (подготовка, обнаружение, сдерживание, восстановление, уроки); автоматизировать сбор доказательств",
+        "Реагировать только на уровне поддержки",
+        "Импровизировать при каждом инциденте",
+        "Отключать систему при любом подозрении"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚨 **Incident Response:**\n\n**Этапы (NIST):**\n1. Подготовка\n2. Обнаружение\n3. Сдерживание\n4. Искоренение\n5. Восстановление\n6. Уроки (post-mortem)\n\n**Важно:**\n- Playbook'и\n- Автоматизация сбора\n\n💡 **Запомните:** IRP = «план до инцидента».",
+      "profession_name": "DevOps",
+      "category_name": "Безопасность"
+    }
+  ]
+}

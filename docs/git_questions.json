@@ -1,0 +1,487 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-23",
+  "total": 30,
+  "questions": [
+    {
+      "text": "Что такое Git?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Распределенная система контроля версий (VCS) для отслеживания изменений в коде",
+        "Язык программирования для DevOps",
+        "Система управления базами данных",
+        "Облачное хранилище файлов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **Git:**\n\n**Что это:**\n- Распределенная VCS\n- Создан Линусом Торвальдсом (2005)\n- Полная история локально\n\n**Преимущества:**\n- Работа офлайн\n- Высокая скорость\n- Надежность\n\n💡 **Запомните:** Git = «распределенная история кода».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Что такое репозиторий (repository) в Git?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Хранилище файлов и истории изменений проекта (обычно директория .git)",
+        "Облачный сервис для хранения кода",
+        "Файл с настройками Git",
+        "Ветка в которой ведется разработка"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🗄️ **Репозиторий:**\n\n**Содержит:**\n- Все файлы проекта\n- Полную историю\n- Ветки, теги\n\n**Типы:**\n- Локальный (.git)\n- Удаленный (GitHub, GitLab)\n\n💡 **Запомните:** Репозиторий = «файлы + история».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Что делает команда git init?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Создает новый локальный Git-репозиторий в текущей директории",
+        "Клонирует удаленный репозиторий",
+        "Инициализирует подключение к GitHub",
+        "Создает новую ветку"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔧 **git init:**\n\n**Что делает:**\n- Создает .git директорию\n- Пустой репозиторий\n- Можно начинать commit\n\n**Первая команда** при новом проекте\n\n💡 **Запомните:** init = «инициализация репозитория».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как проверить состояние (статус) файлов в рабочей директории?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "git status",
+        "git log",
+        "git diff",
+        "git show"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **git status:**\n\n**Показывает:**\n- Измененные файлы\n- Добавленные в индекс\n- Неотслеживаемые файлы\n- Текущую ветку\n\n💡 **Запомните:** status = «что изменилось?».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как добавить файл в индекс (staging area) для следующего коммита?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "git add filename",
+        "git commit filename",
+        "git stage filename",
+        "git include filename"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📥 **git add:**\n\n**Что делает:**\n- Добавляет в staging area\n- Готовит к коммиту\n\n**Варианты:**\n- `git add .` — все в директории\n- `git add -A` — все в репозитории\n\n💡 **Запомните:** add = «подготовить к коммиту».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как создать коммит с добавленными изменениями?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "git commit -m \"Сообщение коммита\"",
+        "git push -m \"Сообщение\"",
+        "git save -m \"Сообщение\"",
+        "git checkpoint -m \"Сообщение\""
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "✅ **git commit:**\n\n**Что делает:**\n- Фиксирует изменения\n- Создает уникальный хэш\n\n**Опции:**\n- `-m` — сообщение в строке\n- Без `-m` — открывает редактор\n\n💡 **Запомните:** commit = «зафиксировать изменения».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как посмотреть историю коммитов?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "git log",
+        "git history",
+        "git show",
+        "git status --history"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📜 **git log:**\n\n**Показывает:**\n- Хэш коммита\n- Автор, дата\n- Сообщение\n\n**Опции:**\n- `--oneline` — сжато\n- `--graph` — граф ветвления\n\n💡 **Запомните:** log = «история коммитов».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как переключиться на другую ветку?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "git checkout branch-name или git switch branch-name",
+        "git branch branch-name",
+        "git merge branch-name",
+        "git move branch-name"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔄 **Переключение веток:**\n\n**Команды:**\n- `git checkout` — классика\n- `git switch` — новая (Git 2.23+)\n\n**Важно:**\n- Закоммитьте изменения перед переключением\n\n💡 **Запомните:** checkout/switch = «сменить ветку».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как создать новую ветку?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "git branch new-branch (создать) и git checkout new-branch (переключиться) или git checkout -b new-branch (создать и переключиться)",
+        "git new-branch",
+        "git create branch new-branch",
+        "git switch -c new-branch"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌿 **Создание ветки:**\n\n**Способы:**\n- `git branch name` — создать\n- `git checkout -b name` — создать + переключиться\n- `git switch -c name` — аналог\n\n💡 **Запомните:** Ветка = «легковесный указатель».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как объединить изменения из одной ветки в другую?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "git checkout main; git merge feature",
+        "git merge main feature",
+        "git combine feature into main",
+        "git pull feature main"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **git merge:**\n\n**Процесс:**\n1. Переключиться на целевую\n2. `git merge source`\n\n**Результат:**\n- Merge commit\n- Или fast-forward\n\n💡 **Запомните:** merge = «слить ветки».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "В чем разница между git merge и git rebase?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Merge создает коммит слияния, сохраняя историю ветвления; Rebase переписывает историю, создавая линейную цепочку коммитов",
+        "Rebase создает коммит слияния, Merge — линейную историю",
+        "Merge удаляет исходную ветку",
+        "Rebase нельзя отменить"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **Merge vs Rebase:**\n\n**Merge:**\n- Сохраняет историю\n- Merge commit\n\n**Rebase:**\n- Линейная история\n- Переписывает хэши\n\n⚠️ **Не rebase публичные ветки!**\n\n💡 **Запомните:** Merge = «сохранить», Rebase = «линейно».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Что такое конфликт слияния (merge conflict) и как его разрешить?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Ситуация, когда Git не может автоматически объединить изменения в одном файле; требуется ручное разрешение",
+        "Ошибка при пуше в удаленный репозиторий",
+        "Невозможность создать новую ветку",
+        "Проблема с правами доступа"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚠️ **Merge Conflict:**\n\n**Когда:**\n- Разные изменения в одном месте\n\n**Разрешение:**\n1. Отредактировать файл\n2. `git add`\n3. `git commit`\n\n💡 **Запомните:** Conflict = «ручное слияние».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как отменить последний коммит, но сохранить изменения?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "git reset --soft HEAD~1",
+        "git revert HEAD",
+        "git reset --hard HEAD~1",
+        "git checkout HEAD~1"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔙 **git reset --soft:**\n\n**Что делает:**\n- Отменяет коммит\n- Сохраняет в индексе\n- Рабочая директория не меняется\n\n**--hard** — удаляет всё!\n\n💡 **Запомните:** --soft = «отменить, но сохранить».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как изменить сообщение последнего коммита?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "git commit --amend -m \"Новое сообщение\"",
+        "git commit --fixup",
+        "git update-message",
+        "git edit commit"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "✏️ **git commit --amend:**\n\n**Что делает:**\n- Меняет последний коммит\n- Новый хэш\n\n⚠️ **Опасно** после push!\n\n💡 **Запомните:** amend = «исправить коммит».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как временно спрятать незакоммиченные изменения?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "git stash",
+        "git hide",
+        "git save",
+        "git shelve"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **git stash:**\n\n**Команды:**\n- `git stash` — спрятать\n- `git stash pop` — достать\n- `git stash list` — список\n\n**Зачем:** Переключиться на другую ветку\n\n💡 **Запомните:** stash = «временное хранилище».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как посмотреть изменения между текущим состоянием и последним коммитом?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "git diff",
+        "git status",
+        "git show",
+        "git log -p"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **git diff:**\n\n**Варианты:**\n- `git diff` — рабочая vs индекс\n- `git diff --staged` — индекс vs HEAD\n- `git diff HEAD` — всё незакоммиченное\n\n💡 **Запомните:** diff = «показать различия».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как удалить файл из индекса, но оставить в рабочей директории?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "git reset HEAD filename или git restore --staged filename",
+        "git rm --cached filename",
+        "git remove filename",
+        "git unstage filename"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔓 **Удалить из индекса:**\n\n**Команды:**\n- `git reset HEAD file`\n- `git restore --staged file`\n\n**rm --cached** — перестать отслеживать\n\n💡 **Запомните:** reset HEAD = «убрать из staging».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как посмотреть, кто и когда изменил определенную строку в файле?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "git blame filename",
+        "git log -L",
+        "git annotate",
+        "git history --line"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **git blame:**\n\n**Показывает:**\n- Автора каждой строки\n- Хэш коммита\n- Дату изменения\n\n**Для:** Отладки, понимания кода\n\n💡 **Запомните:** blame = «кто это написал?».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как связать локальный репозиторий с удаленным?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "git remote add origin https://github.com/user/repo.git",
+        "git connect origin",
+        "git link origin",
+        "git remote set-url origin"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **git remote add:**\n\n**Команды:**\n- `git remote add origin URL`\n- `git remote -v` — показать\n\n**origin** — стандартное имя\n\n💡 **Запомните:** remote add = «добавить удаленный».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как отправить локальные коммиты в удаленный репозиторий?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "git push origin branch-name",
+        "git upload origin",
+        "git sync origin",
+        "git send origin"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚀 **git push:**\n\n**Команды:**\n- `git push origin main`\n- `git push -u origin main` — установить связь\n\n**Важно:** Сначала pull если есть изменения\n\n💡 **Запомните:** push = «отправить на сервер».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "В чем разница между git pull и git fetch?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "git fetch загружает изменения, но не сливает; git pull = git fetch + git merge",
+        "git pull только загружает, git fetch загружает и сливает",
+        "Разницы нет, это синонимы",
+        "git fetch работает только с тегами"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📥 **fetch vs pull:**\n\n**git fetch:**\n- Загружает коммиты\n- Не меняет рабочую директорию\n\n**git pull:**\n- fetch + merge\n- Сразу интегрирует\n\n💡 **Запомните:** fetch = «посмотреть», pull = «взять и слить».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Что такое detached HEAD и как из него выйти?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Состояние, когда HEAD указывает на коммит, а не на ветку; выйти: git switch - или git checkout branch",
+        "Ошибка Git, требующая переустановки",
+        "Состояние после неудачного merge",
+        "HEAD всегда указывает на ветку"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔓 **Detached HEAD:**\n\n**Когда:**\n- Checkout по хэшу/тегу\n- HEAD → коммит, не ветка\n\n**Выйти:**\n- `git switch branch`\n- `git switch -c new-branch`\n\n💡 **Запомните:** Detached = «без ветки».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как переписать историю коммитов с помощью интерактивного rebase?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "git rebase -i HEAD~N, затем в редакторе заменить pick на squash (s) для коммитов, которые нужно объединить",
+        "git merge --squash",
+        "git commit --amend для нескольких коммитов",
+        "git reset --soft и новый коммит"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔧 **git rebase -i:**\n\n**Команды редактора:**\n- pick — оставить\n- squash — объединить\n- reword — изменить сообщение\n- drop — удалить\n\n⚠️ **Опасно** для публичных веток!\n\n💡 **Запомните:** rebase -i = «переписать историю».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как отменить уже опубликованный коммит, не нарушая историю?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "git revert HEAD (создает новый коммит, отменяющий изменения предыдущего)",
+        "git reset --hard HEAD~1; git push --force",
+        "git commit --amend; git push --force",
+        "git checkout HEAD~1"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔙 **git revert:**\n\n**Что делает:**\n- Создает новый коммит\n- Отменяет изменения\n- История не меняется\n\n**Безопасно** для команды!\n\n💡 **Запомните:** revert = «отменить безопасно».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как найти коммит, который ввел баг, используя бинарный поиск?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "git bisect start; git bisect bad; git bisect good <old-commit>",
+        "git blame",
+        "git log --grep",
+        "git diff"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **git bisect:**\n\n**Процесс:**\n1. `git bisect start`\n2. `git bisect bad` (текущий)\n3. `git bisect good <old>`\n4. Отмечать good/bad\n\n💡 **Запомните:** bisect = «бинарный поиск бага».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Что такое Git hooks?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Скрипты, выполняемые автоматически при событиях Git (pre-commit, pre-push); для линтинга, тестов",
+        "Плагины для Git GUI",
+        "Механизм синхронизации с удаленным репозиторием",
+        "Тип Git-веток"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🪝 **Git Hooks:**\n\n**Клиентские:**\n- pre-commit\n- commit-msg\n- pre-push\n\n**Серверные:**\n- post-receive\n\n💡 **Запомните:** Hooks = «авто-скрипты при событиях».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как работает git reflog и когда он может спасти?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Локальный журнал перемещений HEAD; позволяет восстановить коммиты после reset или rebase",
+        "Удаленный журнал коммитов на сервере",
+        "Лог коммитов текущей ветки",
+        "Журнал ошибок Git"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📕 **git reflog:**\n\n**Что хранит:**\n- Все перемещения HEAD\n- Даже после reset --hard\n\n**Восстановление:**\n- `git reflog`\n- `git reset --hard <hash>`\n\n💡 **Запомните:** reflog = «спасение потерянных коммитов».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "В чем разница между git merge --squash и обычным git merge?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "--squash объединяет все коммиты из ветки в один коммит, не сохраняя историю исходной ветки",
+        "--squash удаляет исходную ветку",
+        "--squash создает коммит слияния",
+        "--squash выполняет rebase, а не merge"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🗜️ **merge --squash:**\n\n**Что делает:**\n- Все изменения в staging\n- Один коммит\n- История не переносится\n\n**Зачем:** Много мелких коммитов → один\n\n💡 **Запомните:** --squash = «всё в один коммит».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как работать с submodules (подмодулями) в Git?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Submodule — ссылка на другой Git-репозиторий; требует: git submodule update --init --recursive",
+        "Submodule полностью копирует код в основной репозиторий",
+        "Submodule не поддерживаются в современных версиях Git",
+        "Submodule автоматически синхронизируются при pull"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **Git Submodules:**\n\n**Команды:**\n- `git submodule add URL`\n- `git clone --recursive`\n- `git submodule update --init`\n\n**Недостатки:** Сложность работы\n\n💡 **Запомните:** Submodule = «репозиторий в репозитории».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    },
+    {
+      "text": "Как стратегически организовать Git-ветки в команде?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Git Flow — main, develop, feature, release, hotfix; GitHub Flow — main + feature; GitLab Flow — + environment ветки",
+        "Все команды используют одну модель ветвления",
+        "Git Flow — самая простая модель",
+        "GitHub Flow требует релизных веток"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌿 **Модели ветвления:**\n\n**Git Flow:**\n- main, develop\n- feature, release, hotfix\n\n**GitHub Flow:**\n- main + feature\n- PR → merge\n\n**GitLab Flow:**\n- + environment ветки\n\n💡 **Запомните:** Модель = «процесс команды».",
+      "profession_name": "DevOps",
+      "category_name": "Git"
+    }
+  ]
+}

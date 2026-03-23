@@ -2,6 +2,7 @@
 # Регистрация, вход, refresh токенов, управление профилем
 
 import re
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -21,6 +22,9 @@ from app.api.schemas import UserCreate, UserUpdate, UserResponse, TokenCookie
 from app.core.config import settings
 from app.core.limiter import limiter
 from app.api.deps import get_current_user as get_current_user_from_token
+from app.core.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # OAuth2 схема для получения токена из заголовка Authorization
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
@@ -109,6 +113,7 @@ def register(
     # Проверка существующего пользователя
     existing_user = db.query(User).filter(User.email == user_data.email).first()
     if existing_user:
+        logger.warning(f"⚠️  Попытка регистрации занятого email: {user_data.email}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email уже зарегистрирован"
@@ -124,6 +129,8 @@ def register(
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    logger.info(f"✅ Зарегистрирован новый пользователь: {user_data.email} (ID: {new_user.id})")
 
     # Устанавливаем CSRF токен для защиты от CSRF атак
     from app.core.csrf import csrf_protect
@@ -169,6 +176,7 @@ def login(
     """
     user = db.query(User).filter(User.email == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
+        logger.warning(f"⚠️  Неверная попытка входа для: {form_data.username}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверный email или пароль",
@@ -189,11 +197,13 @@ def login(
         max_age=cookie_config["max_age"],
         path=cookie_config["path"],
     )
-    
+
     # Устанавливаем CSRF токен для защиты от CSRF атак
     from app.core.csrf import csrf_protect
     csrf_token = csrf_protect.generate_csrf_token()
     csrf_protect.set_csrf_cookie(response, csrf_token)
+
+    logger.info(f"✅ Пользователь вошел в систему: {user.email} (ID: {user.id})")
 
     return {
         "access_token": access_token,

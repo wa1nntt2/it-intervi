@@ -1,40 +1,72 @@
 version: '3.8'
 
+# Docker Compose для production с PostgreSQL
+# Использование:
+#   docker-compose -f docker-compose.postgres.yml up -d
+
 services:
+  # PostgreSQL база данных
+  postgres:
+    image: postgres:15-alpine
+    container_name: it-interview-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"  # Доступен на порту 5433 (чтобы не конфликтовал с локальным PG)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init_postgres.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    environment:
+      - POSTGRES_DB=interview_trainer
+      - POSTGRES_USER=${POSTGRES_USER:-interview_admin}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?Required. Set in .env file}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-interview_admin} -d interview_trainer"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - it-interview-network
+    # Ресурсы (опционально)
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  # Backend (FastAPI)
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: it-interview-backend
+    restart: unless-stopped
     ports:
       - "8000:8000"
     volumes:
       # Бэкапы вопросов
       - ./backups:/app/backups
-      # Исходный код для разработки (hot reload)
-      - ./backend/app:/app/app
     environment:
-      # База данных
-      - DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/interview_trainer
+      # PostgreSQL подключение
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-interview_admin}:${POSTGRES_PASSWORD}@postgres:5432/interview_trainer
       # Миграции
       - SKIP_MIGRATIONS=false
-      # Отключить сидирование (автовосстановление вопросов)
-      - SKIP_SEED=true
       # JWT настройки - ОБЯЗАТЕЛЬНО измените в production!
-      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production-min-32-chars-for-development-only}
+      - SECRET_KEY=${SECRET_KEY:?Required. Set in .env file}
       - ALGORITHM=${ALGORITHM:-HS256}
       - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
       - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS:-7}
       # Режим отладки
-      - DEBUG=${DEBUG:-true}
+      - DEBUG=${DEBUG:-false}
       # CORS настройки
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000}
       - CORS_ALLOW_CREDENTIALS=${CORS_ALLOW_CREDENTIALS:-true}
       # Rate limiting
       - RATE_LIMIT_PER_MINUTE=${RATE_LIMIT_PER_MINUTE:-10}
       # Кэширование
       - CACHE_CAPACITY=${CACHE_CAPACITY:-100}
-    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
@@ -47,11 +79,13 @@ services:
     networks:
       - it-interview-network
 
+  # Frontend (React + Nginx)
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: it-interview-frontend
+    restart: unless-stopped
     ports:
       - "3000:80"
     depends_on:
@@ -59,34 +93,12 @@ services:
         condition: service_healthy
     environment:
       - VITE_API_URL=${VITE_API_URL:-http://localhost:8000}
-    restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1/health"]
       interval: 10s
       timeout: 5s
       retries: 3
       start_period: 10s
-    networks:
-      - it-interview-network
-
-  postgres:
-    image: postgres:15-alpine
-    container_name: it-interview-postgres
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=interview_trainer
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres123
-      - PGDATA=/var/lib/postgresql/data/pgdata
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d interview_trainer"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
     networks:
       - it-interview-network
 
@@ -100,3 +112,4 @@ networks:
 volumes:
   postgres_data:
     name: it-interview-postgres-data
+    driver: local

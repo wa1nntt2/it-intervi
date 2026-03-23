@@ -6,6 +6,23 @@ from datetime import datetime
 from typing import Optional, List, Any
 
 
+# === Схемы категории ===
+
+class CategoryBase(BaseModel):
+    """Базовая схема категории"""
+    id: int
+    name: str
+
+
+class CategoryResponse(CategoryBase):
+    """Схема ответа с данными категории"""
+    description: Optional[str] = None
+    profession_id: int
+
+    class Config:
+        from_attributes = True
+
+
 # === Схемы пользователя ===
 
 class UserBase(BaseModel):
@@ -121,10 +138,11 @@ class QuestionResponse(QuestionBase):
     options: list[str]  # Варианты ответов
     correct_option: Optional[int] = None  # Индекс правильного ответа
     category_ids: Optional[list[int]] = None  # ID категорий вопроса
+    categories: Optional[list[CategoryResponse]] = None  # Категории вопроса
 
     class Config:
         from_attributes = True
-        
+
     @model_validator(mode='before')
     @classmethod
     def extract_category_ids(cls, values: Any) -> Any:
@@ -143,7 +161,8 @@ class QuestionResponse(QuestionBase):
                     'explanation': getattr(values, 'explanation', None),
                     'options': values.options,
                     'correct_option': values.correct_option,
-                    'category_ids': [cat.id for cat in values.categories]
+                    'category_ids': [cat.id for cat in values.categories],
+                    'categories': [{'id': cat.id, 'name': cat.name, 'profession_id': cat.profession_id, 'description': getattr(cat, 'description', None)} for cat in values.categories]
                 }
                 return values_dict
         return values

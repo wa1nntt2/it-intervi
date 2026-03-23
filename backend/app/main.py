@@ -2,6 +2,7 @@
 # Точка входа для backend сервера
 
 import os
+import logging
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware  # Middleware для поддержки CORS
 from fastapi.responses import JSONResponse
@@ -12,6 +13,15 @@ from app.database.engine import Base, engine, SessionLocal
 from app.database.seed import seed_database
 from app.core.config import settings
 from app.core.limiter import limiter
+from app.core.logging_config import setup_logging, get_logger
+
+# Настройка логирования
+logger = setup_logging(
+    log_level="DEBUG" if settings.DEBUG else "INFO",
+    log_file="logs/app.log" if not settings.DEBUG else None,
+    json_format=not settings.DEBUG,  # JSON формат для production
+    log_sql=settings.DEBUG,  # Логирование SQL только в development
+)
 
 # Импорт моделей для создания таблиц базы данных
 from app.models import user, profession, question, answer, ordering_item, session, user_progress
@@ -50,9 +60,9 @@ def apply_migrations():
     # Отключаем миграции для тестов
     skip_migrations = os.getenv("SKIP_MIGRATIONS", "false").lower() == "true"
     if skip_migrations:
-        print("⏭️  Пропускаем миграции (SKIP_MIGRATIONS=true)")
+        logger.info("⏭️  Пропускаем миграции (SKIP_MIGRATIONS=true)")
         return
-    
+
     try:
         from alembic import command
         from alembic.config import Config
@@ -74,15 +84,15 @@ def apply_migrations():
             if current_rev is None:
                 # Миграции не применены - создаем таблицы старым способом
                 # для обратной совместимости
-                print("⚠️  Миграции не найдены, создаем таблицы через create_all()...")
+                logger.warning("⚠️  Миграции не найдены, создаем таблицы через create_all()...")
                 Base.metadata.create_all(bind=engine)
             else:
                 # Миграции уже применены
-                print(f"✅ Миграции применены (текущая ревизия: {current_rev})")
+                logger.info(f"✅ Миграции применены (текущая ревизия: {current_rev})")
 
     except Exception as e:
-        print(f"⚠️  Ошибка при проверке миграций: {e}")
-        print("Создаем таблицы через create_all()...")
+        logger.error(f"⚠️  Ошибка при проверке миграций: {e}", exc_info=True)
+        logger.warning("Создаем таблицы через create_all()...")
         Base.metadata.create_all(bind=engine)
 
 
@@ -105,6 +115,9 @@ def create_app() -> FastAPI:
     Фабрика приложения FastAPI.
     Создает и настраивает экземпляр приложения со всеми middleware и роутерами.
     """
+    logger.info(f"🚀 Запуск {settings.PROJECT_NAME} v{settings.VERSION}")
+    logger.info(f"Режим: {'DEBUG' if settings.DEBUG else 'PRODUCTION'}")
+    
     app = FastAPI(
         title=settings.PROJECT_NAME,
         version=settings.VERSION,
@@ -115,6 +128,7 @@ def create_app() -> FastAPI:
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, rate_limit_exception_handler)
     app.add_middleware(SlowAPIMiddleware)
+    logger.debug("✅ Rate limiter добавлен")
 
     # CORS - настройка для конкретных origin (разрешенные домены)
     cors_origins = [origin.strip() for origin in settings.CORS_ORIGINS.split(",")]
@@ -125,30 +139,35 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    logger.debug(f"✅ CORS настроен для: {cors_origins}")
 
     # Prometheus middleware для сбора метрик
     @app.middleware("http")
     async def track_requests(request: Request, call_next):
         """Middleware для сбора метрик каждого запроса"""
         start_time = time.time()
-        
+
         response = await call_next(request)
-        
+
         duration = time.time() - start_time
-        
+
         # Считаем запросы
         REQUEST_COUNT.labels(
             method=request.method,
             endpoint=request.url.path,
             status=response.status_code
         ).inc()
-        
+
         # Замеряем время
         REQUEST_TIME.labels(
             method=request.method,
             endpoint=request.url.path
         ).observe(duration)
-        
+
+        # Логгируем медленные запросы
+        if duration > 1.0:
+            logger.warning(f"🐌 Медленный запрос: {request.method} {request.url.path} - {duration:.2f}s")
+
         return response
 
     # Применение миграций или создание таблиц
@@ -156,9 +175,13 @@ def create_app() -> FastAPI:
 
     # Сидирование базы данных начальными данными (отключаем для тестов)
     if not os.environ.get("SKIP_SEED"):
+        logger.info("🌱 Сидирование базы данных...")
         db = SessionLocal()
         try:
             seed_database(db)
+            logger.info("✅ База данных засидирована")
+        except Exception as e:
+            logger.error(f"❌ Ошибка при сидировании БД: {e}", exc_info=True)
         finally:
             db.close()
 
@@ -170,6 +193,7 @@ def create_app() -> FastAPI:
     app.include_router(users.router, prefix="/api")
     app.include_router(progress.router, prefix="/api")
     app.include_router(interviews.router, prefix="/api")
+    logger.info("✅ API роутеры зарегистрированы")
 
     @app.get("/")
     def root():

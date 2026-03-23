@@ -1,0 +1,919 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-23",
+  "total": 60,
+  "questions": [
+    {
+      "text": "Что такое Docker?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Платформа для разработки, доставки и запуска приложений в контейнерах",
+        "Виртуальная машина для запуска Windows на Linux",
+        "Система управления базами данных",
+        "Язык программирования для DevOps"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🐳 **Docker** — платформа для контейнеризации.\n\n**Компоненты:**\n- Docker Engine (сервер)\n- Docker CLI (клиент)\n- Docker Hub (реестр)\n\n**Преимущества:**\n- Легковеснее VM\n- Единообразие окружения\n\n💡 **Запомните:** Docker = «контейнеры для приложений».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "В чем основное отличие контейнера Docker от виртуальной машины (VM)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Контейнеры используют ядро хостовой ОС; VM имеют собственное ядро",
+        "Контейнеры всегда работают медленнее виртуальных машин",
+        "Виртуальные машины не имеют изоляции процессов",
+        "Контейнеры не могут работать на Linux"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🆚 **Контейнеры vs VM:**\n\n**Контейнеры:**\n- Делят ядро хоста\n- Запуск за секунды\n- Минимальный overhead\n\n**VM:**\n- Своё ядро\n- Гипервизор\n- Сильная изоляция\n\n💡 **Запомните:** Контейнеры = «легковесные», VM = «полная изоляция».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое Docker-образ (image)?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Шаблон (read-only) для создания контейнеров",
+        "Запущенный экземпляр приложения",
+        "Лог-файл работы контейнера",
+        "Конфигурационный файл Docker Compose"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📀 **Docker Image** — неизменяемый шаблон.\n\n**Содержит:**\n- ОС (минимальный дистрибутив)\n- Зависимости\n- Код приложения\n\n**Хранение:** Слои (layers)\n\n💡 **Запомните:** Образ = «шаблон», контейнер = «экземпляр».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как создать Docker-образ из Dockerfile?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker build -t имя:тег .",
+        "docker create -t имя:тег .",
+        "docker run -t имя:тег .",
+        "docker commit -t имя:тег ."
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔨 **docker build:**\n\n**Синтаксис:** `docker build -t name:tag .`\n\n**Процесс:**\n- Читает Dockerfile\n- Выполняет инструкции\n- Кэширует слои\n\n💡 **Запомните:** `build -t` = «создать образ с тегом».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как запустить контейнер из образа?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker run образ",
+        "docker start образ",
+        "docker create образ",
+        "docker exec образ"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "▶️ **docker run:**\n\n**Что делает:**\n- Создаёт контейнер\n- Запускает его\n- Скачивает образ если нет\n\n**Пример:** `docker run -d -p 80:80 nginx`\n\n💡 **Запомните:** run = «создать + запустить».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что делает команда docker ps?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Показывает список запущенных контейнеров",
+        "Показывает список образов",
+        "Показывает список томов",
+        "Показывает логи контейнера"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **docker ps:**\n\n**Вывод:**\n- ID, имя, образ\n- Статус, порты\n\n**Опции:**\n- `-a` — все контейнеры\n- `-q` — только ID\n\n💡 **Запомните:** ps = «process status».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как остановить работающий контейнер?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker stop container_id",
+        "docker kill container_id",
+        "docker rm container_id",
+        "docker pause container_id"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🛑 **docker stop:**\n\n**Процесс:**\n1. SIGTERM (graceful)\n2. Через 10 сек SIGKILL\n\n**kill** — мгновенный SIGKILL\n\n💡 **Запомните:** stop = «вежливо», kill = «мгновенно».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как удалить контейнер?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker rm container_id",
+        "docker rmi container_id",
+        "docker stop container_id",
+        "docker prune container_id"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🗑️ **docker rm:**\n\n**Важно:**\n- Контейнер должен быть остановлен\n- `-f` — удалить работающий\n- `-v` — удалить тома\n\n💡 **Запомните:** rm = контейнеры, rmi = образы.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как посмотреть логи контейнера?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker logs container_id",
+        "docker inspect container_id",
+        "docker events container_id",
+        "docker stats container_id"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📜 **docker logs:**\n\n**Опции:**\n- `-f` — follow (реальное время)\n- `--tail N` — последние N строк\n- `--since` — за период\n\n💡 **Запомните:** logs = «stdout + stderr».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое Dockerfile?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Текстовый файл с инструкциями для сборки Docker-образа",
+        "Конфигурационный файл Docker Compose",
+        "Файл с переменными окружения",
+        "Лог сборки образа"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **Dockerfile:**\n\n**Инструкции:**\n- FROM (базовый образ)\n- RUN (команды)\n- COPY/ADD (файлы)\n- CMD (команда запуска)\n\n💡 **Запомните:** Dockerfile = «рецепт образа».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Какая инструкция в Dockerfile задает команду по умолчанию при запуске контейнера?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "CMD",
+        "ENTRYPOINT",
+        "RUN",
+        "START"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🎯 **CMD:**\n\n**Особенности:**\n- Задаёт команду по умолчанию\n- Может быть переопределена\n- Формы: shell и exec\n\n💡 **Запомните:** CMD = «команда по умолчанию».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как опубликовать порт контейнера на хост-систему?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker run -p 8080:80 nginx",
+        "docker run -P 8080:80 nginx",
+        "docker run -expose 8080 nginx",
+        "docker run --port 8080 nginx"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚪 **-p (publish):**\n\n**Формат:** `-p хост:контейнер`\n\n**Пример:** `-p 8080:80`\n- 8080 на хосте\n- 80 в контейнере\n\n💡 **Запомните:** `-p` = «проброс порта».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Какой флаг делает контейнер работающим в фоновом режиме?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "-d или --detach",
+        "-it",
+        "--background",
+        "-f"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔙 **-d (detach):**\n\n**Что делает:**\n- Запуск в фоне\n- Не привязан к терминалу\n- Продолжает после закрытия\n\n💡 **Запомните:** `-d` = «detached mode».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как войти в запущенный контейнер для отладки?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker exec -it container_id /bin/bash",
+        "docker attach container_id",
+        "docker run -it container_id /bin/bash",
+        "docker login container_id"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔧 **docker exec:**\n\n**Опции:**\n- `-i` — интерактивный\n- `-t` — псевдо-TTY\n\n**Пример:** `docker exec -it id bash`\n\n💡 **Запомните:** exec = «выполнить команду внутри».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое Docker Hub?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Облачный реестр для хранения и обмена Docker-образами",
+        "Система оркестрации контейнеров",
+        "Инструмент для мониторинга контейнеров",
+        "Плагин для CI/CD"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌐 **Docker Hub:**\n\n**Что содержит:**\n- Официальные образы\n- Пользовательские образы\n- Автоматические сборки\n\n💡 **Запомните:** Hub = «магазин образов».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как скачать Docker-образ без его запуска?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker pull image:tag",
+        "docker fetch image:tag",
+        "docker get image:tag",
+        "docker load image:tag"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⬇️ **docker pull:**\n\n**Что делает:**\n- Загружает из реестра\n- Сохраняет локально\n- Тег :latest по умолчанию\n\n💡 **Запомните:** pull = «скачать образ».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как удалить Docker-образ?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker rmi image:tag",
+        "docker rm image:tag",
+        "docker image prune",
+        "docker remove image"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🗑️ **docker rmi:**\n\n**Важно:**\n- Нельзя удалить используемый образ\n- `-f` — принудительно\n- `prune` — неиспользуемые\n\n💡 **Запомните:** rmi = «remove image».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое Docker volume?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Механизм для постоянного хранения данных контейнера",
+        "Тип сетевого хранилища",
+        "Инструмент для сжатия образов",
+        "Лог-файл Docker Engine"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💾 **Docker Volume:**\n\n**Преимущества:**\n- Существует независимо от контейнера\n- Управляется Docker\n- Для production\n\n💡 **Запомните:** Volume = «постоянное хранилище».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как создать именованный том и подключить его к контейнеру?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "docker volume create mydata затем docker run -v mydata:/data alpine",
+        "docker run -v /data alpine",
+        "docker run --mount source=mydata,target=/data alpine",
+        "docker volume mount mydata /data"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **Создание тома:**\n\n**Команды:**\n1. `docker volume create mydata`\n2. `docker run -v mydata:/data`\n\n💡 **Запомните:** volume create = «создать том».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "В чем разница между COPY и ADD в Dockerfile?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "COPY копирует файлы; ADD дополнительно поддерживает распаковку архивов и URL",
+        "ADD всегда предпочтительнее COPY",
+        "COPY может копировать из URL, ADD — нет",
+        "ADD не сохраняет права доступа"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **COPY vs ADD:**\n\n**COPY:**\n- Только локальные файлы\n- Предпочтительно\n\n**ADD:**\n- Распаковка tar\n- Загрузка из URL\n\n💡 **Запомните:** COPY = «просто», ADD = «доп. функции».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое слои (layers) в Docker-образе?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Каждая инструкция создает read-only слой; слои кэшируются",
+        "Слои — это копии контейнера для отката",
+        "Слои хранятся только в памяти",
+        "Каждый слой — это отдельный контейнер"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📚 **Слои образа:**\n\n**Как работает:**\n- Каждая инструкция = слой\n- Read-only слои\n- Read-write слой контейнера\n\n**Кэширование:** Ускоряет сборку\n\n💡 **Запомните:** Слои = «кэшируемые части образа».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как уменьшить размер Docker-образа?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать многоступенчатую сборку, минимальный базовый образ, объединять RUN команды",
+        "Использовать только образы на Ubuntu",
+        "Добавлять все файлы в один слой",
+        "Использовать только ADD вместо COPY"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📉 **Оптимизация размера:**\n\n**Методы:**\n- Multi-stage build\n- Alpine/distroless\n- Объединение RUN\n- .dockerignore\n\n💡 **Запомните:** Меньше слоев = меньше образ.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое Docker Compose?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Инструмент для определения и запуска многоконтейнерных приложений",
+        "Альтернатива Docker Engine",
+        "Система оркестрации на уровне кластера",
+        "Инструмент для мониторинга контейнеров"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📝 **Docker Compose:**\n\n**Что делает:**\n- YAML-конфигурация\n- Много контейнеров\n- Одна команда: `docker-compose up`\n\n💡 **Запомните:** Compose = «мультиконтейнерное приложение».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как в Docker Compose организовать зависимость сервисов?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать depends_on и healthcheck",
+        "Использовать links",
+        "Использовать wait в команде run",
+        "Зависимости автоматически обрабатываются"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **Зависимости:**\n\n**depends_on:**\n- Гарантирует порядок запуска\n- Не ждёт готовности\n\n**healthcheck:**\n- Ждёт готовности сервиса\n\n💡 **Запомните:** depends_on ≠ готовность.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "В чем разница между docker run, docker start и docker restart?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "run — создаёт и запускает новый; start — запускает существующий; restart — перезапускает",
+        "run и start делают одно и то же",
+        "restart создает новый контейнер",
+        "start удаляет контейнер после остановки"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "▶️ **Команды запуска:**\n\n**run:** create + start\n**start:** запуск остановленного\n**restart:** stop + start\n\n💡 **Запомните:** run = «новый», start = «старый», restart = «заново».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Какие типы Docker-сетей существуют по умолчанию?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "bridge, host, none, overlay",
+        "nat, public, private",
+        "vlan, vxlan, gre",
+        "tcp, udp, icmp"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌐 **Типы сетей:**\n\n**bridge:** изолированная сеть\n**host:** сеть хоста\n**none:** без сети\n**overlay:** для Swarm\n\n💡 **Запомните:** bridge = «по умолчанию».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как контейнеры в одной bridge-сети находят друг друга?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "По именам через встроенный DNS-сервер Docker (127.0.0.11)",
+        "По IP-адресам через ARP",
+        "Через /etc/hosts, который обновляется вручную",
+        "Через переменные окружения LINK"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔍 **DNS в Docker:**\n\n**Как работает:**\n- Встроенный DNS (127.0.0.11)\n- Разрешение по имени\n- Только в пользовательских сетях\n\n💡 **Запомните:** Имя контейнера = DNS-имя.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как передать переменные окружения в контейнер?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "docker run -e MY_VAR=value или использовать --env-file",
+        "docker run --env MY_VAR=value",
+        "docker setenv MY_VAR=value",
+        "docker export MY_VAR=value"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔧 **Переменные окружения:**\n\n**Способы:**\n- `-e VAR=value`\n- `--env-file file.env`\n- В Compose: environment\n\n💡 **Запомните:** `-e` = «переменная окружения».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое Docker Registry?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Серверное приложение для хранения образов; Docker Hub — публичный реестр",
+        "Docker Registry — это утилита командной строки",
+        "Docker Hub — это приватный реестр",
+        "Это одно и то же"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏪 **Registry vs Hub:**\n\n**Registry:**\n- Сервер для образов\n- Можно развернуть самому\n\n**Docker Hub:**\n- Публичный SaaS\n- От Docker Inc\n\n💡 **Запомните:** Registry = «сервер», Hub = «сервис».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как пометить образ для отправки в удаленный реестр?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "docker tag local-image:tag registry-host/username/repo:tag",
+        "docker label local-image:tag registry-host/username/repo:tag",
+        "docker rename local-image:tag registry-host/username/repo:tag",
+        "docker push local-image:tag registry-host/username/repo:tag"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏷️ **docker tag:**\n\n**Формат:**\n`registry/user/repo:tag`\n\n**Затем:**\n`docker push registry/user/repo:tag`\n\n💡 **Запомните:** tag = «пометить для push».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как ограничить ресурсы (CPU, память) для контейнера?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "docker run --memory=512m --cpus=1.5",
+        "docker run --limit-memory=512m --limit-cpu=1.5",
+        "docker resource --memory=512m",
+        "docker set --memory=512m"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📏 **Ограничение ресурсов:**\n\n**Опции:**\n- `--memory=512m`\n- `--cpus=1.5`\n- `--memory-swap`\n\n💡 **Запомните:** Ограничивайте ресурсы в production!",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как посмотреть использование ресурсов контейнерами в реальном времени?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "docker stats",
+        "docker top",
+        "docker inspect",
+        "docker events"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **docker stats:**\n\n**Показывает:**\n- CPU %\n- Память\n- Сеть I/O\n- Диск I/O\n\n💡 **Запомните:** stats = «мониторинг ресурсов».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как скопировать файл из контейнера на хост?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "docker cp container_id:/path/to/file /host/path",
+        "docker copy container_id:/path/to/file /host/path",
+        "docker export container_id > file.tar",
+        "docker save container_id > file.tar"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **docker cp:**\n\n**Синтаксис:**\n`docker cp container:/path /host/path`\n\n**Также:**\n- export/import для ФС\n- save/load для образов\n\n💡 **Запомните:** cp = «копировать файлы».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое healthcheck в Docker?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Инструкция для проверки работоспособности контейнера",
+        "Механизм автоматического обновления образов",
+        "Утилита для проверки безопасности",
+        "Инструмент для мониторинга ресурсов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💚 **Healthcheck:**\n\n**Статусы:**\n- starting\n- healthy\n- unhealthy\n\n**Использование:** Оркестрация\n\n💡 **Запомните:** healthcheck = «проверка здоровья».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как сохранить изменения в контейнере как новый образ?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "docker commit container_id new_image:tag",
+        "docker save container_id -o image.tar",
+        "docker export container_id | docker import - new_image:tag",
+        "docker build --commit container_id"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💾 **docker commit:**\n\n**Что делает:**\n- Сохраняет изменения\n- Создаёт образ\n\n⚠️ **Не рекомендуется** для production\n\n💡 **Запомните:** commit = «сохранить изменения».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "В чем разница между CMD и ENTRYPOINT в Dockerfile?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "ENTRYPOINT задаёт исполняемый файл, CMD — аргументы по умолчанию",
+        "CMD выполняется до ENTRYPOINT",
+        "ENTRYPOINT всегда требует CMD",
+        "Разницы нет, это синонимы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🎯 **ENTRYPOINT vs CMD:**\n\n**ENTRYPOINT:**\n- Исполняемый файл\n- Сложно переопределить\n\n**CMD:**\n- Аргументы по умолчанию\n- Легко переопределить\n\n💡 **Запомните:** ENTRYPOINT = «что», CMD = «как».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как пробросить устройство (например, GPU) в контейнер?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "docker run --device /dev/dri --gpus all",
+        "docker run -v /dev/dri:/dev/dri",
+        "docker run --privileged",
+        "docker run --device-add"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔌 **Проброс устройств:**\n\n**GPU:** `--gpus all`\n**Другие:** `--device /dev/имя`\n**--privileged:** опасно!\n\n💡 **Запомните:** --gpus для GPU, --device для других.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое Docker Swarm?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Нативный инструмент оркестрации контейнеров Docker для создания кластера",
+        "Альтернатива Docker Compose для одного хоста",
+        "Система мониторинга контейнеров",
+        "Реестр Docker-образов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🐝 **Docker Swarm:**\n\n**Возможности:**\n- Кластер хостов\n- Сервисы\n- Overlay-сети\n- Rolling updates\n\n💡 **Запомните:** Swarm = «оркестрация от Docker».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как управлять несколькими окружениями с помощью Docker Compose?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Использовать несколько файлов с флагом -f",
+        "Использовать разные ветки Git",
+        "Использовать разные теги образов",
+        "Использовать переменные окружения только в контейнерах"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📁 **Несколько окружений:**\n\n**Файлы:**\n- docker-compose.yml (базовый)\n- docker-compose.prod.yml\n\n**Запуск:** `-f file1 -f file2`\n\n💡 **Запомните:** -f = «переопределение».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как работает .dockerignore?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Исключает файлы из контекста сборки, ускоряя docker build",
+        "Игнорирует контейнеры при docker ps",
+        "Настраивает ignore-правила для томов",
+        "Исключает слои при сборке"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🚫 **.dockerignore:**\n\n**Зачем:**\n- Ускорение сборки\n- Меньше контекст\n- Безопасность (нет секретов)\n\n💡 **Запомните:** .dockerignore = «.gitignore для Docker».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как работает многоступенчатая сборка (multi-stage build)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использование нескольких FROM для копирования артефактов из промежуточных этапов",
+        "Запуск нескольких контейнеров одновременно",
+        "Поочередная сборка нескольких образов",
+        "Разделение сборки на несколько команд RUN"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏗️ **Multi-stage build:**\n\n**Как:**\n- Несколько FROM\n- COPY --from=stage\n- Только артефакты в финал\n\n**Преимущества:** Меньше размер, безопаснее\n\n💡 **Запомните:** Multi-stage = «сборка без мусора».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как оптимизировать кэширование слоев при сборке?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Размещать часто изменяемые инструкции в конце Dockerfile",
+        "Использовать --no-cache для всех сборок",
+        "Объединять все COPY в одну инструкцию",
+        "Не использовать .dockerignore"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "⚡ **Кэширование:**\n\n**Стратегия:**\n1. FROM\n2. RUN зависимостей\n3. COPY файлов зависимостей\n4. COPY кода\n\n💡 **Запомните:** Менее изменяемые → раньше.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как работает сетевой драйвер macvlan?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Позволяет контейнеру иметь собственный MAC-адрес и быть напрямую подключенным к физической сети",
+        "Создает виртуальный мост между контейнерами",
+        "Инкапсулирует трафик в VXLAN",
+        "Использует сеть хоста для всех контейнеров"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔗 **macvlan:**\n\n**Особенности:**\n- Свой MAC-адрес\n- Прямое подключение к сети\n- Высокая производительность\n\n💡 **Запомните:** macvlan = «контейнер как физическое устройство».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как работает docker system prune?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Удаляет все неиспользуемые объекты: контейнеры, образы, сети, тома",
+        "Обновляет все образы до последних версий",
+        "Очищает кэш Docker Engine",
+        "Удаляет все образы, включая используемые"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🧹 **docker system prune:**\n\n**Удаляет:**\n- Остановленные контейнеры\n- Dangling-образы\n- Неиспользуемые сети\n- Тома (с --volumes)\n\n⚠️ **Опасно** в production\n\n💡 **Запомните:** prune = «очистка мусора».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как настроить Docker для использования прокси-сервера?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В /etc/systemd/system/docker.service.d/http-proxy.conf или ~/.docker/config.json",
+        "Установить переменные окружения HTTP_PROXY только в терминале",
+        "В Dockerfile прописать ENV http_proxy",
+        "В docker-compose.yml указать proxy"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔀 **Прокси для Docker:**\n\n**Демон:**\n- /etc/systemd/.../http-proxy.conf\n\n**CLI:**\n- ~/.docker/config.json\n\n💡 **Запомните:** Демон ≠ CLI настройки.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое Docker Content Trust (DCT)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Механизм проверки подписи образов с помощью ключей и Notary",
+        "Система контроля доступа к реестру",
+        "Антивирус для сканирования образов",
+        "Механизм шифрования томов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **Docker Content Trust:**\n\n**Что делает:**\n- Подпись образов\n- Проверка целостности\n- Notary сервер\n\n**Включить:** DOCKER_CONTENT_TRUST=1\n\n💡 **Запомните:** DCT = «подписанные образы».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как реализовать graceful shutdown приложения в Docker?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Приложение должно корректно обрабатывать SIGTERM",
+        "Использовать docker stop с увеличенным временем",
+        "Использовать docker kill вместо stop",
+        "Настроить healthcheck"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🛑 **Graceful Shutdown:**\n\n**Процесс:**\n1. SIGTERM\n2. Завершение соединений\n3. Сохранение данных\n4. Через 10 сек SIGKILL\n\n💡 **Запомните:** Обрабатывайте SIGTERM!",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как работает docker save/load vs docker export/import?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "save/load сохраняют образ со слоями; export/import — только файловую систему",
+        "save сохраняет контейнеры, export — образы",
+        "load загружает контейнеры, import — образы",
+        "Разницы нет, это синонимы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💾 **save/load vs export/import:**\n\n**save/load:**\n- Образ со слоями\n- История\n\n**export/import:**\n- ФС контейнера\n- Один слой\n\n💡 **Запомните:** save = образы, export = контейнеры.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как в Docker Compose использовать profiles?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В Compose v3.4+ добавить profiles: в сервисы и запускать --profile имя",
+        "Использовать разные файлы docker-compose для каждого профиля",
+        "Использовать переменные окружения для включения/выключения",
+        "Использовать extends с разными переопределениями"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📋 **Profiles в Compose:**\n\n**Синтаксис:**\n```yaml\nservices:\n  debug:\n    profiles: [\"debug\"]\n```\n\n**Запуск:** `--profile debug`\n\n💡 **Запомните:** profiles = «опциональные сервисы».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Что такое rootless mode в Docker?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Режим запуска без привилегий root, повышающий безопасность",
+        "Режим запуска контейнеров без сетевого доступа",
+        "Режим, при котором контейнеры не имеют доступа к файловой системе",
+        "Режим отладки Docker Engine"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔒 **Rootless mode:**\n\n**Преимущества:**\n- Без root привилегий\n- Снижение рисков\n- User namespaces\n\n**Ограничения:** Не все драйверы работают\n\n💡 **Запомните:** Rootless = «безопаснее».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как мониторить Docker в production?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Prometheus + cAdvisor для метрик, Loki/ELK для логов",
+        "Только docker stats в cron",
+        "Использовать только docker logs",
+        "Использовать docker inspect для каждого контейнера"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📊 **Мониторинг:**\n\n**Метрики:**\n- cAdvisor\n- Prometheus\n- Grafana\n\n**Логи:**\n- fluentd/ELK/Loki\n\n💡 **Запомните:** Централизованный мониторинг!",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как реализовать секреты (secrets) в Docker Compose?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать secrets: в docker-compose.yml (v3.1+) с поддержкой Swarm",
+        "Хранить секреты в переменных окружения",
+        "Использовать docker run -e с паролями",
+        "Закодировать секреты в Dockerfile"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🔐 **Docker Secrets:**\n\n**Как:**\n- secrets: в compose.yml\n- Монтируются в /run/secrets/\n- Только Swarm mode\n\n**Альтернативы:** Vault, AWS Secrets Manager\n\n💡 **Запомните:** secrets ≠ environment!",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как работает драйвер хранения overlay2?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использует overlayFS для эффективного управления слоями образа",
+        "Драйвер для сетевого хранилища",
+        "Драйвер для шифрования томов",
+        "Драйвер для блочных устройств"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "📦 **overlay2:**\n\n**Как работает:**\n- overlayFS\n- Read-only слои + read-write\n- Copy-on-write\n\n**Требования:** ext4 или xfs\n\n💡 **Запомните:** overlay2 = «предпочтительный драйвер».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как отладить проблему «no space left on device»?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Проверить дисковое пространство, очистить неиспользуемые объекты, проверить inode",
+        "Переустановить Docker",
+        "Увеличить RAM хоста",
+        "Изменить драйвер хранения"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "💾 **No space left:**\n\n**Причины:**\n- Мало места (df -h)\n- Мало inode (df -i)\n- Огромные логи\n\n**Решение:** prune, ротация логов\n\n💡 **Запомните:** Мониторьте место и inode!",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как настроить Docker для работы с IPv6?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В /etc/docker/daemon.json добавить \"ipv6\": true, \"fixed-cidr-v6\"",
+        "Docker не поддерживает IPv6",
+        "Использовать только host-сеть",
+        "Добавить --ipv6 в каждую команду run"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🌐 **IPv6 в Docker:**\n\n**Настройка:**\n```json\n{\n  \"ipv6\": true,\n  \"fixed-cidr-v6\": \"2001:db8:1::/64\"\n}\n```\n\n💡 **Запомните:** IPv6 требует настройки демона.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как собрать Docker-образ для нескольких архитектур?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Использовать docker buildx build --platform linux/amd64,linux/arm64 --push",
+        "Собрать отдельно для каждой архитектуры и объединить вручную",
+        "Использовать docker manifest после отдельных сборок",
+        "Docker не поддерживает multi-arch образы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "🏗️ **Multi-arch сборка:**\n\n**buildx:**\n- QEMU эмуляция\n- Manifest list\n- Один тег для всех архитектур\n\n💡 **Запомните:** buildx = «кросс-платформенная сборка».",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    },
+    {
+      "text": "Как работает Docker в сочетании с Kubernetes?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Kubernetes использует CRI; dockershim удалён; предпочтительно containerd",
+        "Docker Engine напрямую интегрирован в kubelet",
+        "Kubernetes не поддерживает Docker",
+        "Docker заменяет kubelet"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "☸️ **Docker + Kubernetes:**\n\n**История:**\n- dockershim (удалён в 1.24)\n- containerd (CRI-совместимый)\n\n**Docker CLI:** Для разработки\n\n💡 **Запомните:** K8s использует containerd, не Docker Engine.",
+      "profession_name": "DevOps",
+      "category_name": "Docker"
+    }
+  ]
+}

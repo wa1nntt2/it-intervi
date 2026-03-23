@@ -1,0 +1,67 @@
+{
+  "version": "1.0",
+  "exported_at": "",
+  "total": 0,
+  "questions": [
+    {
+      "text": "Текст вашего вопроса?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Вариант ответа 1",
+        "Вариант ответа 2",
+        "Вариант ответа 3",
+        "Вариант ответа 4"
+      ],
+      "correct_option": 1,
+      "correct_order": null,
+      "explanation": "Пояснение к правильному ответу",
+      "profession_name": "Frontend Developer"
+    },
+    {
+      "text": "Другой вопрос?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Ответ 1",
+        "Ответ 2",
+        "Ответ 3",
+        "Ответ 4"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Пояснение",
+      "profession_name": "Backend Developer"
+    },
+    {
+      "text": "Вопрос с упорядочиванием?",
+      "question_type": "ordering",
+      "difficulty": "middle",
+      "options": [
+        "Элемент 1",
+        "Элемент 2",
+        "Элемент 3",
+        "Элемент 4"
+      ],
+      "correct_option": null,
+      "correct_order": [0, 1, 2, 3],
+      "explanation": "Правильный порядок элементов",
+      "profession_name": "Fullstack Developer"
+    },
+    {
+      "text": "Вопрос по DevOps?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Вариант 1",
+        "Вариант 2",
+        "Вариант 3",
+        "Вариант 4"
+      ],
+      "correct_option": 2,
+      "correct_order": null,
+      "explanation": "Пояснение к ответу",
+      "profession_name": "DevOps Engineer"
+    }
+  ]
+}

@@ -412,6 +412,43 @@ DEBUG=true
 
 ---
 
+## 💾 Бэкап базы данных
+
+### SQLite (по умолчанию)
+
+```bash
+# Быстрый бэкап
+./scripts/backup_db.sh
+
+# Бэкап вопросов в JSON
+./scripts/export_questions.py > questions_backup.json
+```
+
+### PostgreSQL (production)
+
+```bash
+# Создать бэкап
+./scripts/backup_postgres.sh --docker
+
+# Восстановить из бэкапа
+./scripts/restore_postgres.sh --latest
+
+# Показать доступные бэкапы
+./scripts/restore_postgres.sh --list
+```
+
+#### Автоматизация бэкапов (cron)
+
+```bash
+# Ежедневный бэкап в 2:00
+crontab -e
+0 2 * * * /home/vboxuser/it_interVI.it-interview-trainer/scripts/backup_postgres.sh --docker
+```
+
+📚 **Полное руководство:** [docs/POSTGRES_BACKUP_GUIDE.md](docs/POSTGRES_BACKUP_GUIDE.md)
+
+---
+
 ## 🐛 Troubleshooting
 
 ### Backend не запускается

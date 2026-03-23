@@ -9,6 +9,9 @@ from typing import Optional
 from app.database.engine import get_db
 from app.models.user import User
 from app.core.security import decode_token
+from app.core.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # OAuth2 схема для получения токена из заголовка Authorization
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login", auto_error=False)
@@ -34,6 +37,7 @@ async def get_current_user(
         HTTPException: Если токен невалиден или пользователь не найден
     """
     if not token:
+        logger.warning("⚠️  Попытка доступа без токена")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Токен не предоставлен",
@@ -42,6 +46,7 @@ async def get_current_user(
 
     payload = decode_token(token, expected_type="access")
     if payload is None:
+        logger.warning(f"⚠️  Неверный или истекший токен")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверный или истекший токен",
@@ -50,6 +55,7 @@ async def get_current_user(
 
     email: str = payload.get("sub")
     if email is None:
+        logger.warning(f"⚠️  Токен без email (sub)")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверный токен",
@@ -58,12 +64,14 @@ async def get_current_user(
 
     user = db.query(User).filter(User.email == email).first()
     if user is None:
+        logger.warning(f"⚠️  Пользователь не найден: {email}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Пользователь не найден",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    logger.debug(f"✅ Пользователь аутентифицирован: {user.email} (ID: {user.id})")
     return user
 
 
@@ -139,8 +147,10 @@ async def get_current_admin_user(
         HTTPException: Если пользователь не администратор
     """
     if not current_user.is_admin:
+        logger.warning(f"⚠️  Попытка доступа не-админа к admin endpoint: {current_user.email}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Требуется права администратора"
         )
+    logger.debug(f"✅ Админ доступ разрешен: {current_user.email}")
     return current_user

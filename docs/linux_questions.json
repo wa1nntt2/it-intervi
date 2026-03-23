@@ -1,0 +1,907 @@
+{
+  "version": "1.0",
+  "exported_at": "2026-03-23",
+  "total": 60,
+  "questions": [
+    {
+      "text": "Что делает команда cd /home/user?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Переходит в директорию /home/user",
+        "Копирует директорию /home/user",
+        "Удаляет директорию /home/user",
+        "Показывает содержимое директории /home/user"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Команда cd (Change Directory) используется для изменения текущей рабочей директории. В данном случае происходит переход в директорию /home/user.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что выведет команда echo \"Hello World\"?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Выведет строку \"Hello World\" в терминал",
+        "Запишет \"Hello World\" в файл",
+        "Удалит строку \"Hello World\"",
+        "Выведет список всех процессов с именем Hello"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Команда echo выводит переданные ей аргументы в стандартный вывод (терминал).",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Какая команда показывает список файлов в текущей директории?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "ls",
+        "pwd",
+        "cat",
+        "mv"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "ls (list) — команда для вывода содержимого директории.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что произойдет при выполнении команды touch file.txt?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Будет создан пустой файл file.txt (или обновлена временная метка)",
+        "Будет удален файл file.txt",
+        "Будет выведено содержимое файла file.txt",
+        "Будет изменено имя файла на file.txt"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "touch — команда для создания пустого файла или обновления временных меток существующего файла.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Какую команду нужно ввести, чтобы посмотреть имя текущего пользователя?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "whoami",
+        "who",
+        "id",
+        "user"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "whoami выводит имя пользователя, под которым выполняется текущий сеанс.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что означает команда mkdir new_folder?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Создает новую директорию new_folder",
+        "Удаляет директорию new_folder",
+        "Перемещает директорию new_folder",
+        "Копирует директорию new_folder"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "mkdir (make directory) создает новую директорию.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Какая команда используется для удаления файла?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "rm file.txt",
+        "del file.txt",
+        "remove file.txt",
+        "delete file.txt"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "rm (remove) удаляет файлы. Для удаления директорий требуется опция -r.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что выведет команда pwd?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Полный путь к текущей директории",
+        "Полный путь к домашней директории",
+        "Список всех процессов",
+        "Текущую дату и время"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "pwd (Print Working Directory) выводит абсолютный путь от корня / до текущей директории.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как посмотреть содержимое текстового файла?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "cat file.txt",
+        "ls file.txt",
+        "touch file.txt",
+        "rm file.txt"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "cat (concatenate) выводит содержимое файла в терминал.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что делает команда cp file1.txt file2.txt?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Копирует file1.txt в file2.txt",
+        "Перемещает file1.txt в file2.txt",
+        "Удаляет file1.txt",
+        "Переименовывает file1.txt в file2.txt"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "cp (copy) создает копию файла или директории.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Какая команда показывает список запущенных процессов?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "ps",
+        "ls",
+        "top",
+        "pid"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "ps (process status) выводит информацию о текущих процессах.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как переименовать файл old.txt в new.txt?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "mv old.txt new.txt",
+        "rename old.txt new.txt",
+        "cp old.txt new.txt",
+        "rm old.txt new.txt"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "В Linux mv (move) используется как для перемещения, так и для переименования файлов.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что произойдет при выполнении команды rm -r folder?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Рекурсивно удалит директорию folder и всё её содержимое",
+        "Создаст директорию folder",
+        "Переместит директорию folder",
+        "Покажет содержимое директории folder"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Опция -r (recursive) позволяет rm удалять директории вместе со всем содержимым.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Для чего используется команда man ls?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Показывает руководство (manual) по команде ls",
+        "Запускает команду ls",
+        "Показывает всех пользователей с именем ls",
+        "Удаляет команду ls"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "man (manual) — система документации Linux.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как вывести только первые 10 строк файла?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "head -n 10 file.txt",
+        "tail -n 10 file.txt",
+        "cat -n 10 file.txt",
+        "less -n 10 file.txt"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "head выводит первые строки файла (по умолчанию 10).",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что означает команда chmod 755 script.sh?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Устанавливает права доступа для файла script.sh (rwxr-xr-x)",
+        "Удаляет файл script.sh",
+        "Показывает права доступа файла",
+        "Изменяет владельца файла"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "chmod (change mode) изменяет права доступа. 755 = rwxr-xr-x.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как посмотреть свободное место на диске?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "df -h",
+        "du -h",
+        "free -h",
+        "ls -lh"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "df (disk free) показывает использование дисковых разделов.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Какая команда показывает историю введенных команд?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "history",
+        "log",
+        "cat ~/.bashrc",
+        "commands"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "history выводит список ранее выполненных команд с номерами строк.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что делает символ | (pipe) в Linux?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "Передает вывод одной команды на ввод другой",
+        "Объединяет две команды в одну",
+        "Запускает команду в фоне",
+        "Перенаправляет вывод в файл"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Pipe (конвейер) передает вывод одной команды на вход другой.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как найти текстовый файл по имени в текущей директории?",
+      "question_type": "mcq",
+      "difficulty": "intern",
+      "options": [
+        "find . -name \"*.txt\"",
+        "grep \"*.txt\"",
+        "locate \"*.txt\"",
+        "which \"*.txt\""
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "find — мощный инструмент поиска файлов по имени и другим критериям.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что выведет команда grep -r \"error\" /var/log/?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Рекурсивно найдет все строки с \"error\" в файлах /var/log/",
+        "Удалит все строки с \"error\" из логов",
+        "Заменит \"error\" на пустую строку",
+        "Покажет только имена файлов, содержащих \"error\""
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "grep (global regular expression print) ищет текст по шаблону. Опция -r выполняет рекурсивный поиск.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "В чем разница между kill и kill -9?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "kill отправляет SIGTERM, kill -9 отправляет SIGKILL",
+        "kill завершает процесс, kill -9 перезапускает процесс",
+        "kill работает только с PID, kill -9 с именем процесса",
+        "Разницы нет, это синонимы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "SIGTERM (15) позволяет процессу выполнить очистку, SIGKILL (9) немедленно убивает процесс.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как посмотреть, какие порты слушает сервер?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "netstat -tlnp или ss -tlnp",
+        "ps aux | grep port",
+        "lsof -i",
+        "iptables -L"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "netstat -tlnp показывает TCP порты, слушающие соединения.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что такое inode в Linux?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Структура данных, хранящая метаинформацию о файле",
+        "Имя файла в директории",
+        "Символическая ссылка на файл",
+        "Тип файловой системы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Inode содержит метаданные: права доступа, владельца, размер, временные метки.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как добавить пользователя в группу docker?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "usermod -aG docker username",
+        "useradd -g docker username",
+        "adduser username docker",
+        "groupmod -a docker username"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "usermod -aG добавляет пользователя в дополнительную группу.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что выведет команда ps aux | wc -l?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Количество строк вывода ps aux (примерное количество процессов)",
+        "Количество символов в выводе ps aux",
+        "Количество слов в выводе ps aux",
+        "Количество запущенных терминалов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "wc -l считает строки. ps aux выводит одну строку на процесс плюс заголовок.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как сделать так, чтобы скрипт выполнялся автоматически каждую минуту?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Добавить запись в crontab (* * * * * /path/to/script)",
+        "Добавить скрипт в /etc/init.d/",
+        "Использовать команду at",
+        "Добавить в /etc/profile"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "cron — планировщик задач. * * * * * означает каждую минуту.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "В чем разница между жесткой (hard link) и символической (soft link) ссылкой?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Жесткая ссылка — дополнительное имя для того же inode; символическая — файл с путем",
+        "Жесткая ссылка работает только с директориями, символическая — с файлами",
+        "Символическая ссылка не может указывать на файл на другом диске",
+        "Жесткую ссылку нельзя удалить"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Жесткая ссылка не занимает места и работает пока есть хотя бы одна ссылка. Символическая — отдельный файл.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как посмотреть, какие библиотеки использует бинарный файл?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "ldd /path/to/binary",
+        "ls -l /path/to/binary",
+        "file /path/to/binary",
+        "objdump /path/to/binary"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "ldd (list dynamic dependencies) показывает разделяемые библиотеки.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что означает ошибка \"Permission denied\" при попытке выполнить ./script.sh?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "У файла отсутствует бит выполнения (execute)",
+        "Файл не существует",
+        "Недостаточно места на диске",
+        "Файл поврежден"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Для выполнения скрипта необходим бит x (execute). chmod +x добавляет его.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как посмотреть переменные окружения?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "env или printenv",
+        "echo $PATH",
+        "set",
+        "export"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "env выводит все переменные окружения, унаследованные дочерними процессами.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как заархивировать папку data в data.tar.gz?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "tar -czf data.tar.gz data",
+        "tar -xzf data.tar.gz data",
+        "gzip data.tar.gz data",
+        "zip data.tar.gz data"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "tar -czf: -c (create), -z (gzip), -f (file).",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что делает команда chown user:group file.txt?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Изменяет владельца и группу файла",
+        "Изменяет права доступа файла",
+        "Удаляет файл",
+        "Копирует файл с новым владельцем"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "chown (change owner) изменяет владельца и группу файла.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как узнать, какой процесс слушает порт 80?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "sudo lsof -i :80 или sudo netstat -tlnp | grep :80",
+        "ps aux | grep 80",
+        "ss -tunap | grep 80",
+        "killall httpd"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "lsof -i :80 показывает процесс, использующий порт 80.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что такое SSH ключи и зачем они нужны?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "Пара криптографических ключей для безопасной аутентификации без пароля",
+        "Специальные ключи для шифрования диска",
+        "Ключи для активации лицензий ПО",
+        "Ключи для доступа к BIOS"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "SSH использует асимметричное шифрование для аутентификации без пароля.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как вывести все строки из файла, кроме строк с \"debug\"?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "grep -v \"debug\" file.txt",
+        "grep \"debug\" file.txt",
+        "sed 's/debug//' file.txt",
+        "awk '/debug/' file.txt"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "grep -v (invert) выводит строки, не соответствующие шаблону.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как сделать так, чтобы процесс продолжал работать после закрытия терминала?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "nohup command & или использовать screen/tmux",
+        "command &",
+        "command > /dev/null",
+        "bg command"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "nohup игнорирует сигнал SIGHUP при закрытии терминала.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как посмотреть последние 50 строк файла лога в реальном времени?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "tail -f -n 50 /var/log/syslog",
+        "head -f -n 50 /var/log/syslog",
+        "cat -f /var/log/syslog",
+        "less +F /var/log/syslog"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "tail -f отслеживает новые строки в реальном времени.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Какая команда показывает путь к исполняемому файлу команды?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "which command или whereis command",
+        "find / -name command",
+        "locate command",
+        "type command"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "which ищет в $PATH и выводит первый найденный путь.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как проверить, доступен ли удаленный хост по сети?",
+      "question_type": "mcq",
+      "difficulty": "junior",
+      "options": [
+        "ping hostname или nc -zv hostname port",
+        "ssh hostname",
+        "traceroute hostname",
+        "route hostname"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "ping отправляет ICMP echo-запросы для проверки связности.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как отследить, какие файлы открывает конкретный процесс?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "lsof -p PID",
+        "strace -p PID",
+        "ps -p PID",
+        "netstat -p PID"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "lsof (list open files) показывает все открытые файловые дескрипторы процесса.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "В чем разница между sudo и su?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "sudo выполняет команду от root с правами текущего пользователя; su переключает на root",
+        "sudo переключает пользователя, su выполняет одну команду",
+        "sudo работает только в графическом интерфейсе",
+        "Разницы нет, это синонимы"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "sudo требует пароль текущего пользователя и выполняет одну команду. su запускает новую оболочку.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как найти все файлы больше 100 МБ в /var?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "find /var -type f -size +100M",
+        "find /var -size +100M",
+        "ls -lh /var | grep 100M",
+        "du -sh /var/* | grep 100M"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "find с -size +100M ищет файлы больше 100 МБ.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как работает загрузчик GRUB и что делает команда update-grub?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "GRUB загружает ядро; update-grub генерирует конфигурацию",
+        "GRUB управляет памятью; update-grub обновляет ядро",
+        "GRUB — это файловая система; update-grub проверяет диски",
+        "GRUB — это менеджер пакетов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "GRUB — загрузчик, update-grub сканирует /boot и создает конфигурацию.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что такое systemd и как добавить сервис в автозагрузку?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Systemd — менеджер инициализации; systemctl enable service добавляет в автозагрузку",
+        "Systemd — файловая система; systemctl start service",
+        "Systemd — планировщик задач; systemctl restart service",
+        "Systemd — сетевой экран"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Systemd — стандартный init-менеджер. systemctl enable добавляет в автозагрузку.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как проанализировать, почему система медленно загружается?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "systemd-analyze blame или systemd-analyze critical-chain",
+        "dmesg | grep error",
+        "top",
+        "uptime"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "systemd-analyze blame показывает время загрузки каждого сервиса.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как работает TCP трехстороннее рукопожатие (three-way handshake)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "SYN → SYN-ACK → ACK",
+        "SYN → ACK → SYN",
+        "ACK → SYN → ACK",
+        "SYN → ACK → FIN"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "TCP устанавливает соединение через SYN, SYN-ACK, ACK перед передачей данных.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как заблокировать IP-адрес с помощью iptables?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "iptables -A INPUT -s IP -j DROP",
+        "iptables -A OUTPUT -d IP -j DROP",
+        "iptables -L INPUT -s IP",
+        "iptables -F INPUT -s IP"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "iptables -A INPUT добавляет правило в цепочку входящих пакетов.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "В чем разница между top и htop?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "htop — более современная версия с интерактивным интерфейсом и цветами",
+        "top показывает только память, htop — только CPU",
+        "htop работает только в графическом режиме",
+        "top — утилита для Windows"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "htop добавляет цветную индикацию, прокрутку и удобное управление.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как восстановить случайно удаленный файл, если процесс продолжает его держать открытым?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Найти PID через lsof | grep deleted и скопировать из /proc/PID/fd/",
+        "Использовать undelete",
+        "Перезагрузить систему",
+        "Восстановить из бэкапа"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "В Linux файл доступен через /proc/PID/fd/ пока процесс держит его открытым.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как настроить лимиты ресурсов для пользователя (например, максимальное число открытых файлов)?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В файле /etc/security/limits.conf или через ulimit",
+        "В /etc/sysctl.conf",
+        "В /etc/hosts",
+        "В /etc/fstab"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "/etc/security/limits.conf задает жесткие и мягкие лимиты для пользователей.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что такое ядро Linux (kernel) и в чем разница между kernel space и user space?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Ядро работает в привилегированном режиме с доступом к оборудованию; приложения изолированы",
+        "Ядро — это оболочка командной строки",
+        "Пространство пользователя имеет прямой доступ к диску",
+        "Разницы нет, это одно и то же"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Ядро управляет ресурсами, пользовательские процессы взаимодействуют через системные вызовы.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как сгенерировать SSL-сертификат для тестирования с помощью OpenSSL?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes",
+        "openssl genrsa -out cert.pem 4096",
+        "openssl s_client -connect localhost:443",
+        "openssl verify cert.pem"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "req -x509 создает самоподписанный сертификат на 365 дней.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как работает команда strace и для чего она нужна?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Трассирует системные вызовы и сигналы процесса",
+        "Показывает стек вызовов функций",
+        "Отлаживает работу сети",
+        "Профилирует использование памяти"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "strace перехватывает системные вызовы (open, read, write) для диагностики.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как настроить сетевой мост (bridge) для виртуальных машин?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "ip link add br0 type bridge и ip link set eth0 master br0",
+        "Использовать iptables для NAT",
+        "Настроить маршрутизацию через route",
+        "Использовать ifconfig для объединения интерфейсов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Сетевой мост объединяет интерфейсы на L2 как виртуальный коммутатор.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что такое SELinux или AppArmor и как временно отключить?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "SELinux — механизм принудительного контроля доступа; setenforce 0 для отключения",
+        "SELinux — файловая система; systemctl stop selinux",
+        "SELinux — брандмауэр",
+        "SELinux — менеджер пакетов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "setenforce 0 переводит SELinux в Permissive mode (логирование без блокировок).",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как создать RAID 1 (зеркало) в Linux с помощью mdadm?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1",
+        "mdadm --assemble /dev/md0 /dev/sdb1 /dev/sdc1",
+        "mdadm --manage /dev/md0 --add /dev/sdb1",
+        "mdadm --detail /dev/md0"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "mdadm управляет программным RAID. RAID 1 — зеркалирование данных.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как настроить логирование на удаленный сервер с помощью rsyslog?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "В /etc/rsyslog.conf добавить *.* @remote-host:514",
+        "В /etc/syslog.conf добавить remote-host",
+        "Использовать logger",
+        "Настроить через journalctl"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Rsyslog: *.* означает все facility и severity, @ для UDP, @@ для TCP.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Что такое cgroups и как они связаны с Docker?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "Cgroups ограничивают ресурсы (CPU, память); Docker использует их для изоляции контейнеров",
+        "Cgroups — это тип файловой системы",
+        "Cgroups — сетевой интерфейс",
+        "Cgroups — менеджер процессов"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "Cgroups (control groups) — механизм ядра для ограничения ресурсов процессов.",
+      "profession_name": "DevOps"
+    },
+    {
+      "text": "Как проанализировать дамп памяти (core dump) с помощью gdb?",
+      "question_type": "mcq",
+      "difficulty": "middle",
+      "options": [
+        "gdb /path/to/binary /path/to/core",
+        "gdb --core /path/to/core",
+        "gdb --pid PID",
+        "gdb --args binary core"
+      ],
+      "correct_option": 0,
+      "correct_order": null,
+      "explanation": "gdb позволяет анализировать состояние упавшей программы через core dump.",
+      "profession_name": "DevOps"
+    }
+  ]
+}

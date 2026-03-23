@@ -16,6 +16,9 @@ from app.api.schemas import (
 )
 from app.api.deps import get_current_user, get_current_admin_user
 from app.core.exceptions import NotFoundException, ImportException, ValidationException
+from app.core.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 router = APIRouter(prefix="/questions", tags=["questions"])
 
@@ -23,31 +26,58 @@ router = APIRouter(prefix="/questions", tags=["questions"])
 @router.get("/", response_model=PaginatedQuestions)
 def get_questions(
     profession_id: Optional[int] = Query(None),
+    search: Optional[str] = Query(None, description="Поиск по тексту вопроса"),
+    category_id: Optional[int] = Query(None, description="Фильтр по категории"),
+    difficulty: Optional[str] = Query(None, description="Фильтр по сложности"),
+    question_type: Optional[str] = Query(None, description="Фильтр по типу вопроса"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db)
 ):
     """
-    Получить вопросы с пагинацией.
-    
+    Получить вопросы с пагинацией и фильтрами.
+
     Args:
         profession_id: Фильтр по профессии
+        search: Поиск по тексту вопроса
+        category_id: Фильтр по категории
+        difficulty: Фильтр по сложности
+        question_type: Фильтр по типу вопроса
         page: Номер страницы (начиная с 1)
         page_size: Размер страницы (1-100)
         db: Сессия базы данных
     """
+    logger.debug(f"📖 Запрос вопросов: profession_id={profession_id}, search={search}, page={page}, page_size={page_size}")
+
     query = db.query(Question)
     if profession_id:
         query = query.filter(Question.profession_id == profession_id)
     
+    # Поиск по тексту вопроса
+    if search:
+        query = query.filter(Question.text.ilike(f"%{search}%"))
+    
+    # Фильтр по категории
+    if category_id:
+        query = query.filter(Question.categories.any(id=category_id))
+    
+    # Фильтр по сложности
+    if difficulty:
+        query = query.filter(Question.difficulty == difficulty)
+    
+    # Фильтр по типу вопроса
+    if question_type:
+        query = query.filter(Question.question_type == question_type)
+
     # Получаем общее количество
     total = query.count()
     total_pages = ceil(total / page_size) if total > 0 else 1
-    
+
     # Применяем пагинацию
     offset = (page - 1) * page_size
     questions = query.options(joinedload(Question.categories)).offset(offset).limit(page_size).all()
-    
+
+    logger.debug(f"✅ Получено {len(questions)} вопросов из {total} всего")
     return PaginatedQuestions(
         items=questions,
         meta={
@@ -65,6 +95,8 @@ def create_question(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_admin_user)  # Требуется админ
 ):
+    logger.info(f"📝 Создание вопроса для профессии ID={question.profession_id} (админ: {current_user.email})")
+    
     question_data = question.model_dump()
     category_ids = question_data.pop('category_ids', None)
 
@@ -80,7 +112,9 @@ def create_question(
         new_question.categories.extend(categories)
         db.commit()
         db.refresh(new_question)
+        logger.debug(f"🏷️  Привязано категорий: {len(categories)}")
 
+    logger.info(f"✅ Вопрос создан: ID={new_question.id}")
     return new_question
 
 
@@ -142,10 +176,14 @@ def get_question_templates():
 
 @router.get("/{question_id}", response_model=QuestionResponse)
 def get_question(question_id: int, db: Session = Depends(get_db)):
+    logger.debug(f"📖 Запрос вопроса ID={question_id}")
+    
     question = db.query(Question).options(joinedload(Question.categories)).filter(Question.id == question_id).first()
     if not question:
+        logger.warning(f"⚠️  Вопрос не найден: ID={question_id}")
         raise HTTPException(status_code=404, detail="Вопрос не найден")
-    
+
+    logger.debug(f"✅ Вопрос получен: ID={question.id}")
     return question
 
 
@@ -156,8 +194,11 @@ def update_question(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_admin_user)  # Требуется админ
 ):
+    logger.info(f"✏️  Обновление вопроса ID={question_id} (админ: {current_user.email})")
+    
     question = db.query(Question).filter(Question.id == question_id).first()
     if not question:
+        logger.warning(f"⚠️  Вопрос не найден для обновления: ID={question_id}")
         raise HTTPException(status_code=404, detail="Вопрос не найден")
 
     update_data = question_data.model_dump(exclude_unset=True)
@@ -177,9 +218,11 @@ def update_question(
         if category_ids:
             categories = db.query(Category).filter(Category.id.in_(category_ids)).all()
             question.categories.extend(categories)
+            logger.debug(f"🏷️  Обновлены категории: {len(categories)}")
 
     db.commit()
     db.refresh(question)
+    logger.info(f"✅ Вопрос обновлен: ID={question.id}")
     return question
 
 
@@ -189,8 +232,11 @@ def delete_question(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_admin_user)  # Требуется админ
 ):
+    logger.info(f"🗑️  Удаление вопроса ID={question_id} (админ: {current_user.email})")
+    
     question = db.query(Question).filter(Question.id == question_id).first()
     if not question:
+        logger.warning(f"⚠️  Вопрос не найден для удаления: ID={question_id}")
         raise HTTPException(status_code=404, detail="Вопрос не найден")
 
     # Удаляем связанные ответы
@@ -200,6 +246,8 @@ def delete_question(
     # Удаляем вопрос
     db.delete(question)
     db.commit()
+    
+    logger.info(f"✅ Вопрос удален: ID={question_id}")
     return {"message": "Вопрос успешно удален"}
 
 
@@ -276,20 +324,27 @@ async def import_questions_json(
     current_user: User = Depends(get_current_admin_user)  # Требуется админ
 ):
     """Импорт вопросов из JSON. Доступно только администраторам."""
+    logger.info(f"📥 Импорт вопросов из JSON: {file.filename} (админ: {current_user.email})")
+    
     if not file.filename.endswith('.json'):
+        logger.warning(f"⚠️  Неверный формат файла: {file.filename}")
         raise ValidationException("Файл должен быть в формате JSON")
 
     try:
         content = await file.read()
         data = json.loads(content.decode('utf-8'))
+        logger.debug(f"📊 Размер загруженных данных: {len(content)} байт")
 
         if isinstance(data, dict) and "questions" in data:
             questions_data = data["questions"]
         elif isinstance(data, list):
             questions_data = data
         else:
+            logger.warning(f"⚠️  Неверная структура JSON")
             raise ValidationException("Неверный формат JSON")
 
+        logger.info(f"📊 В файле {len(questions_data)} вопросов")
+        
         created = []
         errors = []
 
@@ -335,10 +390,12 @@ async def import_questions_json(
                 created.append(question.text)
 
             except Exception as e:
+                logger.error(f"❌ Ошибка импорта вопроса #{idx}: {e}")
                 errors.append({"index": idx, "error": str(e)})
 
         db.commit()
 
+        logger.info(f"✅ Импорт завершен: {len(created)} создано, {len(errors)} ошибок")
         return ImportResult(
             message="Импорт завершен",
             created=len(created),
@@ -348,8 +405,10 @@ async def import_questions_json(
         )
 
     except json.JSONDecodeError:
+        logger.error("❌ Неверный формат JSON")
         raise ValidationException("Неверный формат JSON")
     except Exception as e:
+        logger.error(f"❌ Ошибка импорта данных: {e}", exc_info=True)
         raise ImportException("Ошибка импорта данных", errors=[{"error": str(e)}])
 
 

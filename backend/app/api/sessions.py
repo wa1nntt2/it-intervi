@@ -18,6 +18,9 @@ from app.api.schemas import SessionResponse, PaginatedSessions, SessionListItem
 from app.core.security import decode_token
 from app.api.deps import get_current_user_optional
 from app.core.config import settings
+from app.core.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])  # Префикс /api/sessions
 
@@ -51,34 +54,22 @@ def get_session_stats(
 ):
     """
     Получить статистику по сессиям.
-
-    Вычисляет:
-    - Общее количество сессий по статусам
-    - Средний балл в процентах (оптимизировано через SQL)
-    - Количество сессий за сегодня/неделю/месяц
-
-    Args:
-        db: Сессия базы данных
-        authorization: JWT токен (опционально)
-
-    Returns:
-        SessionStatsResponse: Статистика по сессиям
     """
-    from sqlalchemy import case
+    logger.debug("📊 Запрос статистики сессий")
     
+    from sqlalchemy import case
+
     total = db.query(func.count(Session.id)).scalar() or 0
     active = db.query(func.count(Session.id)).filter(Session.status == "active").scalar() or 0
     completed = db.query(func.count(Session.id)).filter(Session.status == "completed").scalar() or 0
     failed = db.query(func.count(Session.id)).filter(Session.status == "failed").scalar() or 0
 
-    # Средняя оценка в процентах - ОДИН SQL запрос вместо N+1
-    # Используем SQL агрегацию для вычисления среднего процента
+    # Средняя оценка в процентах
     average_score_query = db.query(
         func.avg(
             case(
                 (
                     Session.status == "completed",
-                    # Вычисляем процент: (score / total_questions) * 100
                     case(
                         (func.json_array_length(Session.question_ids) > 0,
                          (Session.score * 100.0) / func.json_array_length(Session.question_ids)),
@@ -89,7 +80,7 @@ def get_session_stats(
             )
         ).filter(Session.status == "completed")
     ).scalar()
-    
+
     average_score = round(average_score_query, 1) if average_score_query is not None else 0
 
     # Сегодня
@@ -111,6 +102,8 @@ def get_session_stats(
         Session.created_at >= month_ago
     ).scalar() or 0
 
+    logger.debug(f"✅ Статистика: total={total}, active={active}, completed={completed}")
+    
     return SessionStatsResponse(
         total=total,
         active=active,
@@ -136,26 +129,9 @@ def get_sessions(
 ):
     """
     Получить список сессий с фильтрами и пагинацией.
-
-    Доступные фильтры:
-    - status: "active", "completed", "failed"
-    - profession_id: ID профессии
-    - user_id: ID пользователя
-    - date_from/date_to: Диапазон дат
-
-    Args:
-        status_filter: Фильтр по статусу
-        profession_id: Фильтр по профессии
-        user_id: Фильтр по пользователю
-        date_from: Дата начала диапазона
-        date_to: Дата конца диапазона
-        page: Номер страницы
-        page_size: Размер страницы (1-100)
-        db: Сессия базы данных
-
-    Returns:
-        PaginatedSessions: Пагинированный список сессий
     """
+    logger.debug(f"📖 Запрос сессий: status={status_filter}, page={page}, page_size={page_size}")
+    
     query = db.query(Session).options(
         joinedload(Session.profession),
         joinedload(Session.user)
@@ -175,11 +151,13 @@ def get_sessions(
     # Получаем общее количество
     total = query.count()
     total_pages = ceil(total / page_size) if total > 0 else 1
-    
+
     # Применяем пагинацию
     offset = (page - 1) * page_size
     sessions = query.order_by(Session.created_at.desc()).offset(offset).limit(page_size).all()
 
+    logger.debug(f"✅ Получено {len(sessions)} сессий из {total} всего")
+    
     result = []
     for s in sessions:
         result.append(SessionListItem(
@@ -215,18 +193,17 @@ def create_session(
 ):
     """
     Создать новую сессию тестирования.
-
-    Выбирает N случайных вопросов по профессии и сложности.
-    Если вопросов выбранной сложности нет, берутся все вопросы профессии.
-
-    Args:
-        session_data: Данные сессии (profession_id, difficulty, total_questions)
-        db: Сессия базы данных
-        user: Текущий пользователь (опционально)
-
-    Returns:
-        SessionResponse: Созданная сессия с ID вопросов
     """
+    logger.info(
+        f"🎯 Создание сессии для профессии ID={session_data.profession_id}",
+        extra={
+            "user_id": user.id if user else None,
+            "difficulty": session_data.difficulty,
+            "mode": session_data.mode,
+            "total_questions": session_data.total_questions
+        }
+    )
+    
     import random
 
     # Фильтрация вопросов по профессии и сложности
@@ -246,15 +223,16 @@ def create_session(
         )
 
     questions = query.all()
+    logger.debug(f"📊 Найдено {len(questions)} вопросов для профессии")
 
     # Если нет вопросов выбранной сложности, берем все вопросы профессии
     if not questions:
+        logger.warning(f"⚠️  Нет вопросов выбранной сложности {session_data.difficulty}, берем все")
         questions = db.query(Question).filter(
             Question.profession_id == session_data.profession_id
         ).all()
 
     # Перемешиваем вопросы и берём первые N
-    # Используем total_questions из запроса или значение по умолчанию из настроек
     num_questions = session_data.total_questions if session_data.total_questions else settings.QUESTIONS_PER_SESSION
     random.shuffle(questions)
     selected_questions = questions[:num_questions]
@@ -270,6 +248,8 @@ def create_session(
     db.add(new_session)
     db.commit()
     db.refresh(new_session)
+    
+    logger.info(f"✅ Сессия создана: ID={new_session.id}, вопросов={len(selected_questions)}")
     return new_session
 
 
@@ -277,20 +257,15 @@ def create_session(
 def get_session(session_id: int, db: Session = Depends(get_db)):
     """
     Получить сессию по ID.
-    
-    Args:
-        session_id: ID сессии
-        db: Сессия базы данных
-    
-    Returns:
-        SessionResponse: Данные сессии
-    
-    Raises:
-        HTTPException: Если сессия не найдена (404)
     """
+    logger.debug(f"📖 Запрос сессии ID={session_id}")
+    
     session = db.query(Session).filter(Session.id == session_id).first()
     if not session:
+        logger.warning(f"⚠️  Сессия не найдена: ID={session_id}")
         raise HTTPException(status_code=404, detail="Сессия не найдена")
+    
+    logger.debug(f"✅ Сессия получена: ID={session.id}")
     return session
 
 
@@ -303,25 +278,20 @@ class CompleteSessionRequest(BaseModel):
 def complete_session(session_id: int, request: CompleteSessionRequest, db: Session = Depends(get_db)):
     """
     Завершить сессию с указанием результата.
-    
-    Args:
-        session_id: ID сессии
-        request: Данные о результате (score)
-        db: Сессия базы данных
-    
-    Returns:
-        dict: Сообщение об успешном завершении
-    
-    Raises:
-        HTTPException: Если сессия не найдена (404)
     """
+    logger.info(f"🏁 Завершение сессии ID={session_id}, score={request.score}")
+    
     session = db.query(Session).filter(Session.id == session_id).first()
     if not session:
+        logger.warning(f"⚠️  Сессия не найдена для завершения: ID={session_id}")
         raise HTTPException(status_code=404, detail="Сессия не найдена")
+    
     session.status = "completed"
     session.score = request.score
     session.completed_at = datetime.utcnow()
     db.commit()
+    
+    logger.info(f"✅ Сессия завершена: ID={session_id}, score={request.score}/{len(session.question_ids)}")
     return {"message": "Сессия завершена"}
 
 
@@ -329,20 +299,16 @@ def complete_session(session_id: int, request: CompleteSessionRequest, db: Sessi
 def delete_session(session_id: int, db: Session = Depends(get_db)):
     """
     Удалить сессию.
-    
-    Args:
-        session_id: ID сессии
-        db: Сессия базы данных
-    
-    Returns:
-        dict: Сообщение об успешном удалении
-    
-    Raises:
-        HTTPException: Если сессия не найдена (404)
     """
+    logger.info(f"🗑️  Удаление сессии ID={session_id}")
+    
     session = db.query(Session).filter(Session.id == session_id).first()
     if not session:
+        logger.warning(f"⚠️  Сессия не найдена для удаления: ID={session_id}")
         raise HTTPException(status_code=404, detail="Сессия не найдена")
+    
     db.delete(session)
     db.commit()
+    
+    logger.info(f"✅ Сессия удалена: ID={session_id}")
     return {"message": "Сессия удалена"}
